@@ -1,0 +1,8 @@
+file 'D:/watcher-bot/test/sm.png'
+duration 3
+
+file 'D:/watcher-bot/test/an.png'
+duration 3
+
+file 'D:/watcher-bot/test/az.png'
+duration 2

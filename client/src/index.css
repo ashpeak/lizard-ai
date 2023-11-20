@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;700&display=swap');
+
+body {
+    font-family: 'Nunito', sans-serif;
+    overflow: hidden;
+}
+
+::-webkit-scrollbar {
+    width: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #404040;
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+html {
+    scrollbar-width: none;
+}
+
+.script-input:empty:not(:focus)::before {
+    content: attr(data-placeholder);
+    opacity: 0.7;
+}
+
+.modal {
+    width: clamp(50%, 700px, 90%);
+    height: min(90%, 700px, 70%);
+}
+
+.scroll-hide::-webkit-scrollbar {
+    display: none;
+}
+
+/* For IE, Edge and Firefox */
+.scroll-hide {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}

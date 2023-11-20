@@ -1,0 +1,36 @@
+{
+  "name": "blink-ai",
+  "version": "1.0.0",
+  "description": "This is a web dev project that uses ffmpeg to generate videos for social media platforms using ai.",
+  "main": "server.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js",
+    "start": "node index.js"
+  },
+  "keywords": [
+    "blink-ai",
+    "blink"
+  ],
+  "author": "Ashish Kumar Singh",
+  "license": "ISC",
+  "dependencies": {
+    "cloudinary": "^1.41.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "ffmpeg-static": "^5.2.0",
+    "ffprobe-static": "^3.1.0",
+    "fluent-ffmpeg": "^2.1.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.0.1",
+    "multer": "^1.4.5-lts.1",
+    "videoshow": "^0.1.12"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
