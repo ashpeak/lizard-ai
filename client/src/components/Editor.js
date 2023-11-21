@@ -14,8 +14,15 @@ import { Toaster, toast } from 'sonner';
 import createVideo from '../lib/create';
 import { uploadImage } from '../lib/create';
 import { getImages } from "../lib/user";
+import {
+  useMutation,
+  useQueryClient,
+  useQuery,
+} from '@tanstack/react-query'
 
 export default function Editor() {
+
+  const queryClient = useQueryClient();
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -88,13 +95,11 @@ export default function Editor() {
     setScript(newScript);
   }
 
+  const { isPending, data, isError } = useQuery({ queryKey: ['todos'], queryFn: getImages });
+
   useEffect(() => {
-    setTimeout(() => {
-      getImages().then(res => {
-        setImages(res);
-      });
-    }, 7000);
-  }, []);
+    setImages(data);
+  }, [data]);
 
   return (
     <div>
@@ -266,7 +271,14 @@ export default function Editor() {
       </div>
 
       <Toaster richColors position="bottom-right" />
-      {modal && <Modal handleClose={() => setModal(false)} selectImage={selectImage} images={images} handleImage={handleImage} />}
+      {modal && <Modal
+        handleClose={() => setModal(false)}
+        selectImage={selectImage}
+        images={images}
+        handleImage={handleImage}
+        isPending={isPending}
+        isError={isError}
+      />}
     </div>
   )
 }

@@ -1,11 +1,14 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { motion } from 'framer-motion';
 import Backdrop from '../Backdrop/Backdrop';
 import { AiOutlineClose } from 'react-icons/ai';
 import ImageCard from '../ImageCard';
 import { BiSolidImageAlt } from 'react-icons/bi';
+import { IoLibrary } from 'react-icons/io5';
 
-export default function Modal({ handleClose, handleImage, images, selectImage }) {
+export default function Modal({ handleClose, handleImage, images, selectImage, isPending, isError }) {
+
+    const [active, setActive] = useState("my");
 
     return (
         <Backdrop onClick={handleClose}>
@@ -21,9 +24,15 @@ export default function Modal({ handleClose, handleImage, images, selectImage })
             >
                 <div className='w-full'>
                     <div className='flex opacity-70 justify-between items-center border-b border-border-light dark:border-border-dark pr-4 bg-[#e7e5e5] dark:bg-[#292928] w-full rounded-t-xl'>
-                        <div className='flex items-center gap-1 opacity-100 rounded-ss-xl px-4 py-2 hover:bg-neutral-300 transition-all duration-200 cursor-pointer hover:dark:bg-neutral-700'>
-                            <BiSolidImageAlt size={15} />
-                            <h2>My library</h2>
+                        <div className='flex items-center'>
+                            <button onClick={() => setActive("my")} className={(active === "my" ? "border-b-2 border-text-light dark:border-border-light" : "") + ' flex items-center gap-1 opacity-100 rounded-ss-xl px-4 py-2 hover:bg-neutral-300 transition-colors duration-200 cursor-pointer hover:dark:bg-neutral-700'}>
+                                <BiSolidImageAlt size={15} />
+                                <h2>My library</h2>
+                            </button>
+                            <button onClick={() => setActive("stock")} className={(active === "stock" ? "border-b-2 border-text-light dark:border-border-light" : "") + ' flex items-center gap-1 opacity-100 px-4 py-2 hover:bg-neutral-300 transition-colors duration-200 cursor-pointer hover:dark:bg-neutral-700'}>
+                                <IoLibrary size={15} />
+                                <h2>Stock library</h2>
+                            </button>
                         </div>
                         <motion.button className='p-[0.3rem] transition-colors duration-200 hover:dark:bg-[#535353] hover:text-[#fff] hover:bg-[#4d4d4d] focus:outline-none rounded-full' onClick={handleClose} whileTap={{ translateY: 1.1 }}>
                             <AiOutlineClose size={15} />
@@ -36,7 +45,7 @@ export default function Modal({ handleClose, handleImage, images, selectImage })
                         </div>
                     </div>
                     <div className='px-2 md:px-4 py-3 flex flex-wrap gap-x-5 gap-y-5 overflow-y-scroll scroll-hide h-[19rem] md:h-[24rem]'>
-                        {images.map((image, index) => (
+                        {images.length > 0 && images.map((image, index) => (
                             <button type='button' onClick={() => {
                                 selectImage(image);
                                 handleClose();
@@ -46,7 +55,11 @@ export default function Modal({ handleClose, handleImage, images, selectImage })
                         ))}
                         {images.length === 0 && (
                             <div className='w-full flex justify-center items-center'>
-                                <p className='text-base opacity-70'>No images</p>
+                                <p className='text-base opacity-70'>
+                                    {isPending && "Loading images..."}
+                                    {isError && "Failed to load resources."}
+                                    {images.length === 0 && !isPending && !isError && "No images found."}
+                                </p>
                             </div>
                         )}
                     </div>
