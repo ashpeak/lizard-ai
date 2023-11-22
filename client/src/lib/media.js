@@ -17,14 +17,15 @@ export const getUserImages = async () => {
     }
 }
 
-export const getStockMedia = async () => {
+export const getStockMedia = async (search) => {
     try {
         const res = await axios.post(process.env.REACT_APP_API + '/media', {
+            search: search
+        }, {
             headers: {
                 token: Cookies.get('token')
-            }
+            },
         });
-        console.log("this is data: ", res.data);
         if (res.status !== 200) {
             return [];
         } else return res.data;

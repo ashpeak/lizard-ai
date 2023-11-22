@@ -12,7 +12,13 @@ import {
 const container = document.getElementById('root');
 const root = ReactDOM.createRoot(container);
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false, // default: true
+    },
+  },
+});
 
 root.render(
   <StrictMode>

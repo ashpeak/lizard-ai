@@ -12,7 +12,7 @@ export default function MyLibrary({ handleClose, handleImage, images, selectImag
             </div>
 
             <div className='px-2 bg-primary-dark md:px-4 py-3 flex flex-wrap gap-x-5 gap-y-5 overflow-y-scroll scroll-hide h-screen'>
-                {images.length > 0 && images.map((image, index) => (
+                {images?.length > 0 && images.map((image, index) => (
                     <button type='button' key={index} className='h-fit' onClick={() => {
                         selectImage(image);
                         handleClose();
@@ -20,12 +20,12 @@ export default function MyLibrary({ handleClose, handleImage, images, selectImag
                         <ImageCard key={Date.now()} title={"image.name"} href={image} />
                     </button>
                 ))}
-                {images.length === 0 && (
+                {images?.length === 0 && (
                     <div className='w-full flex justify-center items-center'>
                         <p className='text-base opacity-70'>
                             {isPending && "Loading images..."}
                             {isError && "Failed to load resources."}
-                            {images.length === 0 && !isPending && !isError && "No images found."}
+                            {images?.length === 0 && !isPending && !isError && "No images found."}
                         </p>
                     </div>
                 )}

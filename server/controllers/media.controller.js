@@ -1,8 +1,14 @@
 const axios = require('axios');
+const jwt = require('jsonwebtoken');
 
 const MediaController = {};
 
 MediaController.getMedia = async (req, res) => {
+
+    const token = req.headers.token;
+    const { id } = jwt.verify(token, process.env.JWT_SECRET);
+
+    if (!id) return res.status(401).json({ msg: "Unauthorized" });
 
     let headersList = {
         "Accept": "application/json, text/plain, */*",
@@ -14,10 +20,11 @@ MediaController.getMedia = async (req, res) => {
         "referer": "https://app.fliki.ai"
     }
 
+    const { search } = req.body;
     let bodyContent = JSON.stringify({
         "operation": "mediaStockList",
         "params": {
-            "text": "dog",
+            "text": search,
             "type": "video",
             "page": 1,
             "contentId": "654f8baa804862be5a91e4be",

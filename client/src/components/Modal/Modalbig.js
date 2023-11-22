@@ -6,18 +6,10 @@ import { BiSolidImageAlt } from 'react-icons/bi';
 import { IoLibrary } from 'react-icons/io5';
 import MyLibrary from '../MyLibrary';
 import StockLibrary from '../StockLibrary';
-import { getStockMedia } from '../../lib/media';
-import {
-    useQueryClient,
-    useQuery,
-} from '@tanstack/react-query';
 
-export default function Modal({ handleClose, handleImage, images, selectImage, pending, error }) {
 
-    const queryClient = useQueryClient();
-    const [active, setActive] = useState("my");
-
-    const { isPending, data, isError } = useQuery({ queryKey: ['stockMedia'], queryFn: getStockMedia });
+export default function Modal({ handleClose, handleImage, images, selectImage, pending, error, mediaQuery, mutation }) {
+    const [active, setActive] = useState("stock");
 
     return (
         <Backdrop onClick={handleClose}>
@@ -34,13 +26,13 @@ export default function Modal({ handleClose, handleImage, images, selectImage, p
                 <div className='w-full'>
                     <div className='flex opacity-70 justify-between items-center border-b border-border-light dark:border-border-dark pr-4 bg-[#e7e5e5] dark:bg-[#292928] w-full rounded-t-xl'>
                         <div className='flex items-center'>
-                            <button onClick={() => setActive("my")} className={(active === "my" ? "border-b border-text-light dark:border-border-light" : "") + ' flex items-center gap-1 opacity-100 rounded-ss-xl px-4 py-2 hover:bg-neutral-300 transition-colors duration-200 cursor-pointer hover:dark:bg-neutral-700'}>
-                                <BiSolidImageAlt size={15} />
-                                <h2>My library</h2>
-                            </button>
-                            <button onClick={() => setActive("stock")} className={(active === "stock" ? "border-b border-text-light dark:border-border-light" : "") + ' flex items-center gap-1 opacity-100 px-4 py-2 hover:bg-neutral-300 transition-colors duration-200 cursor-pointer hover:dark:bg-neutral-700'}>
+                            <button onClick={() => setActive("stock")} className={(active === "stock" ? "border-b border-text-light dark:border-border-light" : "") + ' flex items-center gap-1 rounded-ss-xl opacity-100 px-4 py-2 hover:bg-neutral-300 transition-colors duration-200 cursor-pointer hover:dark:bg-neutral-700'}>
                                 <IoLibrary size={15} />
                                 <h2>Stock library</h2>
+                            </button>
+                            <button onClick={() => setActive("my")} className={(active === "my" ? "border-b border-text-light dark:border-border-light" : "") + ' flex items-center gap-1 opacity-100 px-4 py-2 hover:bg-neutral-300 transition-colors duration-200 cursor-pointer hover:dark:bg-neutral-700'}>
+                                <BiSolidImageAlt size={15} />
+                                <h2>My library</h2>
                             </button>
                         </div>
                         <motion.button className='p-[0.3rem] transition-colors duration-200 hover:dark:bg-[#535353] hover:text-[#fff] hover:bg-[#4d4d4d] focus:outline-none rounded-full' onClick={handleClose} whileTap={{ translateY: 1.1 }}>
@@ -58,10 +50,9 @@ export default function Modal({ handleClose, handleImage, images, selectImage, p
                             isError={error} />
                     ) : (
                         <StockLibrary
-                            data={data}
-                            isPending={isPending}
-                            isError={isError}
+                            mediaQuery={mediaQuery}
                             selectImage={selectImage}
+                            mutation={mutation}
                             handleClose={handleClose} />
                     )}
                 </div>

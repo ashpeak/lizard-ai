@@ -14,20 +14,20 @@ import { Toaster, toast } from 'sonner';
 import createVideo from '../lib/create';
 import { uploadImage } from '../lib/create';
 import { getUserImages } from "../lib/media";
+import { getStockMedia } from "../lib/media";
 import {
-  useQueryClient,
   useQuery,
+  useMutation,
 } from '@tanstack/react-query';
 
 export default function Editor() {
-
-  const queryClient = useQueryClient();
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [timeline, setTimeline] = useState(0);
   const [modal, setModal] = useState(false);
   const [images, setImages] = useState([]);
+  const [search, setSearch] = useState('');
   const [editingIndex, setEditingIndex] = useState(0);
   const [script, setScript] = useState([
     {
@@ -95,7 +95,13 @@ export default function Editor() {
   }
 
   const { isPending, data, isError } = useQuery({ queryKey: ['todos'], queryFn: getUserImages });
+  const mediaQuery = useQuery({ queryKey: ['stockMedia'], queryFn: () => getStockMedia(search), refetchOnWindowFocus: false });
 
+  const mutation = (search) => setSearch(search);
+
+  useEffect(() => {
+    mediaQuery.refetch();
+  }, [search]);
   useEffect(() => {
     setImages(data);
   }, [data]);
@@ -266,6 +272,7 @@ export default function Editor() {
         <div className='rounded-xl col-span-2 border border-border-light dark:border-border-dark h-full'>
 
         </div>
+        {/* {mutation.mutate("dsdsj")} */}
 
       </div>
 
@@ -277,6 +284,8 @@ export default function Editor() {
         handleImage={handleImage}
         pending={isPending}
         error={isError}
+        mediaQuery={mediaQuery}
+        mutation={mutation}
       />}
     </div>
   )
