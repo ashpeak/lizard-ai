@@ -5,6 +5,7 @@ const cors = require("cors");
 const create = require("./routes/createVideo.v1");
 const image = require("./routes/uploadImage");
 const userAuth = require("./routes/userAuth");
+const media = require("./routes/media");
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use(cors({ origin: 'http://localhost:3000' }));
 app.use("/v1", create);
 app.use("/image", image);
 app.use("/user", userAuth);
+app.use("/media", media);
 
 app.get("/", (req, res) => {
     res.send("Hello World");

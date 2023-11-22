@@ -1,14 +1,23 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import Backdrop from '../Backdrop/Backdrop';
 import { AiOutlineClose } from 'react-icons/ai';
-import ImageCard from '../ImageCard';
 import { BiSolidImageAlt } from 'react-icons/bi';
 import { IoLibrary } from 'react-icons/io5';
+import MyLibrary from '../MyLibrary';
+import StockLibrary from '../StockLibrary';
+import { getStockMedia } from '../../lib/media';
+import {
+    useQueryClient,
+    useQuery,
+} from '@tanstack/react-query';
 
-export default function Modal({ handleClose, handleImage, images, selectImage, isPending, isError }) {
+export default function Modal({ handleClose, handleImage, images, selectImage, pending, error }) {
 
+    const queryClient = useQueryClient();
     const [active, setActive] = useState("my");
+
+    const { isPending, data, isError } = useQuery({ queryKey: ['stockMedia'], queryFn: getStockMedia });
 
     return (
         <Backdrop onClick={handleClose}>
@@ -19,17 +28,17 @@ export default function Modal({ handleClose, handleImage, images, selectImage, i
                 initial={{ y: 50, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 exit={{ y: 50, opacity: 0 }}
-                className='bg-secondary-light dark:bg-secondary-dark border border-border-light dark:border-border-dark modal rounded-xl m-auto flex flex-col items-center'
+                className='bg-secondary-light dark:bg-secondary-dark border border-border-light dark:border-border-dark modal rounded-xl flex flex-col items-center'
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className='w-full'>
                     <div className='flex opacity-70 justify-between items-center border-b border-border-light dark:border-border-dark pr-4 bg-[#e7e5e5] dark:bg-[#292928] w-full rounded-t-xl'>
                         <div className='flex items-center'>
-                            <button onClick={() => setActive("my")} className={(active === "my" ? "border-b-2 border-text-light dark:border-border-light" : "") + ' flex items-center gap-1 opacity-100 rounded-ss-xl px-4 py-2 hover:bg-neutral-300 transition-colors duration-200 cursor-pointer hover:dark:bg-neutral-700'}>
+                            <button onClick={() => setActive("my")} className={(active === "my" ? "border-b border-text-light dark:border-border-light" : "") + ' flex items-center gap-1 opacity-100 rounded-ss-xl px-4 py-2 hover:bg-neutral-300 transition-colors duration-200 cursor-pointer hover:dark:bg-neutral-700'}>
                                 <BiSolidImageAlt size={15} />
                                 <h2>My library</h2>
                             </button>
-                            <button onClick={() => setActive("stock")} className={(active === "stock" ? "border-b-2 border-text-light dark:border-border-light" : "") + ' flex items-center gap-1 opacity-100 px-4 py-2 hover:bg-neutral-300 transition-colors duration-200 cursor-pointer hover:dark:bg-neutral-700'}>
+                            <button onClick={() => setActive("stock")} className={(active === "stock" ? "border-b border-text-light dark:border-border-light" : "") + ' flex items-center gap-1 opacity-100 px-4 py-2 hover:bg-neutral-300 transition-colors duration-200 cursor-pointer hover:dark:bg-neutral-700'}>
                                 <IoLibrary size={15} />
                                 <h2>Stock library</h2>
                             </button>
@@ -38,31 +47,23 @@ export default function Modal({ handleClose, handleImage, images, selectImage, i
                             <AiOutlineClose size={15} />
                         </motion.button>
                     </div>
-                    <div className='border-b border-border-light dark:border-border-dark w-full'>
-                        <div className='w-2/3 md:w-1/2 px-2 md:px-4 pt-2 pb-3'>
-                            <label className="block opacity-70 mb-2 text-sm font-medium text-gray-900 dark:text-white" for="small_size">Upload</label>
-                            <input className="block opacity-90 w-full text-xs text-gray-900 border border-gray-300 rounded-r-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" onChange={(e) => handleImage(e)} id="small_size" type="file" accept="image/*" />
-                        </div>
-                    </div>
-                    <div className='px-2 md:px-4 py-3 flex flex-wrap gap-x-5 gap-y-5 overflow-y-scroll scroll-hide h-[19rem] md:h-[24rem]'>
-                        {images.length > 0 && images.map((image, index) => (
-                            <button type='button' onClick={() => {
-                                selectImage(image);
-                                handleClose();
-                            }}>
-                                <ImageCard key={Date.now()} title={"image.name"} href={image} />
-                            </button>
-                        ))}
-                        {images.length === 0 && (
-                            <div className='w-full flex justify-center items-center'>
-                                <p className='text-base opacity-70'>
-                                    {isPending && "Loading images..."}
-                                    {isError && "Failed to load resources."}
-                                    {images.length === 0 && !isPending && !isError && "No images found."}
-                                </p>
-                            </div>
-                        )}
-                    </div>
+
+                    {active === "my" ? (
+                        <MyLibrary
+                            handleClose={handleClose}
+                            handleImage={handleImage}
+                            images={images}
+                            selectImage={selectImage}
+                            isPending={pending}
+                            isError={error} />
+                    ) : (
+                        <StockLibrary
+                            data={data}
+                            isPending={isPending}
+                            isError={isError}
+                            selectImage={selectImage}
+                            handleClose={handleClose} />
+                    )}
                 </div>
             </motion.div>
         </Backdrop>

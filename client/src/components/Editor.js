@@ -13,12 +13,11 @@ import Modal from './Modal/Modalbig';
 import { Toaster, toast } from 'sonner';
 import createVideo from '../lib/create';
 import { uploadImage } from '../lib/create';
-import { getImages } from "../lib/user";
+import { getUserImages } from "../lib/media";
 import {
-  useMutation,
   useQueryClient,
   useQuery,
-} from '@tanstack/react-query'
+} from '@tanstack/react-query';
 
 export default function Editor() {
 
@@ -95,7 +94,7 @@ export default function Editor() {
     setScript(newScript);
   }
 
-  const { isPending, data, isError } = useQuery({ queryKey: ['todos'], queryFn: getImages });
+  const { isPending, data, isError } = useQuery({ queryKey: ['todos'], queryFn: getUserImages });
 
   useEffect(() => {
     setImages(data);
@@ -276,8 +275,8 @@ export default function Editor() {
         selectImage={selectImage}
         images={images}
         handleImage={handleImage}
-        isPending={isPending}
-        isError={isError}
+        pending={isPending}
+        error={isError}
       />}
     </div>
   )

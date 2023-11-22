@@ -7,7 +7,7 @@ ffmpeg.setFfprobePath(ffprobePath);
 
 const files = [
     { path: 'sm.png', loop: 10 },
-    { path: 'an.png', loop: 3 },
+    { path: 'small.png', loop: 3 },
     { path: 'az.png', loop: 3 },
 ];
 

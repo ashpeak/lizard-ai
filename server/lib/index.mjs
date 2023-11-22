@@ -15,13 +15,12 @@ const files = [
 // setup videoshow options
 var videoOptions = {
   fps: 24,
-  transition: false,
   videoBitrate: 1024,
   videoCodec: 'libx264',
   captionDelay: 350,
   transition: true,
   transitionDuration: 0.2,
-  size: '640x640',
+  size: '1080x1920',
   audioBitrate: '128k',
   audioChannels: 2,
   pixelFormat: 'yuv420p',
