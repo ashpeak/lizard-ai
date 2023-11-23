@@ -28,7 +28,10 @@ export default function Editor() {
   });
   const [images, setImages] = useState([]);
   const [editingIndex, setEditingIndex] = useState(0);
-  const [bgMusic, setBgMusic] = useState('');
+  const [bgMusic, setBgMusic] = useState({
+    name: '',
+    preview: ''
+  });
   const [search, setSearch] = useState({
     query: '',
     type: 'video'
@@ -98,6 +101,8 @@ export default function Editor() {
     setScript(newScript);
   }
 
+  const selectBGMusic = (name, music) => setBgMusic({ name, preview: music});
+
   const { isPending, data, isError } = useQuery({ queryKey: ['todos'], queryFn: getUserImages, refetchOnWindowFocus: false });
   const mediaQuery = useQuery({ queryKey: ['stockMedia'], queryFn: () => getStockMedia(search), refetchOnWindowFocus: false });
 
@@ -163,7 +168,7 @@ export default function Editor() {
               </div>
               <div className='flex items-center mt-2'>
                 <button type='button' onClick={() => setModal({ open: true, type: 'music' })} className='px-[0.6rem] py-[0.2rem] rounded-2xl text-xs cursor-pointer border border-text-light dark:border-text-dark opacity-70 hover:opacity-100'>
-                  <p className="">Beautiful Morning</p>
+                  <p className="">{bgMusic.name ? bgMusic.name.substring(0,30) : 'Choose audio'}</p>
                 </button>
               </div>
             </div>
@@ -287,6 +292,7 @@ export default function Editor() {
         selectImage={selectImage}
         images={images}
         handleImage={handleImage}
+        selectBGMusic={selectBGMusic}
         pending={isPending}
         error={isError}
         type={modal.type}

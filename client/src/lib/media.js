@@ -36,11 +36,11 @@ export const getStockMedia = async (search) => {
     }
 }
 
-export const getStockMusic = async (search) => {
+export const getStockMusic = async (query, filter) => {
     try {
         const res = await axios.post(process.env.REACT_APP_API + '/media/music', {
-            query: search.query,
-            filter: search.filter
+            query: query,
+            filter: filter
         }, {
             headers: {
                 token: Cookies.get('token')

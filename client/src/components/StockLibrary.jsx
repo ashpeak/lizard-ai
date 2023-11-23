@@ -47,7 +47,7 @@ export default function StockLibrary({ mediaQuery, selectImage, handleClose, mut
                 </form>
             </div>
 
-            <div className='px-2 bg-primary-dark md:px-4 py-3 flex flex-wrap gap-x-5 gap-y-5 overflow-y-scroll scroll-hide h-[70vh]'>
+            <div className='px-2 bg-primary-dark md:px-4 py-3 flex flex-wrap gap-5 overflow-y-scroll scroll-hide h-[70vh]'>
                 {data?.length > 0 && data.map((media, index) => (
                     <button type='button' key={index} className='h-fit' onClick={() => {
                         selectImage(media.thumbnail);

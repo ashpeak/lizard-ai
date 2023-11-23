@@ -9,7 +9,7 @@ import StockLibrary from '../StockLibrary';
 import StockMusicLibrary from '../StockMusicLibrary';
 
 
-export default function Modal({ handleClose, handleImage, images, selectImage, pending, error, mediaQuery, mutation, type }) {
+export default function Modal({ handleClose, handleImage, selectBGMusic, images, selectImage, pending, error, mediaQuery, mutation, type }) {
     const [active, setActive] = useState("stock");
 
     return (
@@ -59,7 +59,7 @@ export default function Modal({ handleClose, handleImage, images, selectImage, p
                     )}
                     {(active === "stock" && type === "music") && (
                         <StockMusicLibrary
-                            selectImage={selectImage}
+                            selectBGMusic={selectBGMusic}
                             handleClose={handleClose} />
                     )}
                 </div>
