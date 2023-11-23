@@ -1,18 +1,20 @@
 import React from 'react'
 import { FiArrowRight } from 'react-icons/fi'
 import ImageCard from './ImageCard';
+import { useQuery } from '@tanstack/react-query';
+import { getStockMusic } from '../lib/media';
 
-export default function StockLibrary({ mediaQuery, selectImage, handleClose, mutation }) {
-    const { data, isPending, isError } = mediaQuery;
+export default function StockMusicLibrary({ selectImage, handleClose }) {
     const [search, setSearch] = React.useState({
         query: '',
-        type: 'video'
+        filter: 'music'
     });
 
     const handleSearch = (e) => {
         e.preventDefault();
-        mutation(search);
     }
+
+    const { isPending, data, isError } = useQuery({ queryKey: ['stockMusic'], queryFn: () => getStockMusic(search), refetchOnWindowFocus: false });
 
     return (
         <div>
@@ -25,23 +27,19 @@ export default function StockLibrary({ mediaQuery, selectImage, handleClose, mut
                             onChange={(e) => setSearch({ ...search, query: e.target.value })}
                             type="text"
                             required
-                            placeholder='Search for media (eg: Mountain)' />
+                            placeholder='Search for music (eg: rock, reverb, lovely)' />
                         <button type='submit' className='p-2 hover:bg-neutral-300 hover:dark:bg-neutral-700 transition-colors duration-200 flex items-center justify-center rounded-full'>
                             <FiArrowRight size={20} className='opacity-80' />
                         </button>
                     </div>
                     <div className='flex items-center gap-x-3 pl-4 mb-3'>
                         <label className='cursor-pointer flex items-center gap-[0.35rem]'>
-                            <input type='radio' onChange={(e) => setSearch({...search, type: e.target.value})} name='type' value='video' className='accent-red-500' defaultChecked />
-                            <p>Video</p>
+                            <input type='radio' onChange={(e) => setSearch({ ...search, type: e.target.value })} name='type' value='music' className='accent-red-500' defaultChecked />
+                            <p>Music</p>
                         </label>
                         <label className='cursor-pointer flex items-center gap-[0.35rem]'>
-                            <input type='radio' onChange={(e) => setSearch({...search, type: e.target.value})} name='type' value='image' className='accent-red-500' />
-                            <p>Image</p>
-                        </label>
-                        <label className='cursor-pointer flex items-center gap-[0.35rem]'>
-                            <input type='radio' onChange={(e) => setSearch({...search, type: e.target.value})} name='type' value='gif' className='accent-red-500' />
-                            <p>GIF</p>
+                            <input type='radio' onChange={(e) => setSearch({ ...search, type: e.target.value })} name='type' value='sfx' className='accent-red-500' />
+                            <p>Sound effects</p>
                         </label>
                     </div>
                 </form>

@@ -15,20 +15,24 @@ import createVideo from '../lib/create';
 import { uploadImage } from '../lib/create';
 import { getUserImages } from "../lib/media";
 import { getStockMedia } from "../lib/media";
-import {
-  useQuery,
-  useMutation,
-} from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 
 export default function Editor() {
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [timeline, setTimeline] = useState(0);
-  const [modal, setModal] = useState(false);
+  const [modal, setModal] = useState({
+    open: false,
+    type: 'media'
+  });
   const [images, setImages] = useState([]);
-  const [search, setSearch] = useState('');
   const [editingIndex, setEditingIndex] = useState(0);
+  const [bgMusic, setBgMusic] = useState('');
+  const [search, setSearch] = useState({
+    query: '',
+    type: 'video'
+  });
   const [script, setScript] = useState([
     {
       text: '',
@@ -84,7 +88,7 @@ export default function Editor() {
 
   const handleImageSelection = (index) => {
     setEditingIndex(index);
-    setModal(true);
+    setModal({ open: true, type: 'media' });
   }
 
   const deleteScript = (index) => {
@@ -94,7 +98,7 @@ export default function Editor() {
     setScript(newScript);
   }
 
-  const { isPending, data, isError } = useQuery({ queryKey: ['todos'], queryFn: getUserImages });
+  const { isPending, data, isError } = useQuery({ queryKey: ['todos'], queryFn: getUserImages, refetchOnWindowFocus: false });
   const mediaQuery = useQuery({ queryKey: ['stockMedia'], queryFn: () => getStockMedia(search), refetchOnWindowFocus: false });
 
   const mutation = (search) => setSearch(search);
@@ -119,7 +123,7 @@ export default function Editor() {
             <h2>Filename</h2>
           </div>
           <div className='flex gap-2'>
-            <button type='button' onClick={() => setModal(true)} className='flex gap-2 items-center px-3 py-1 rounded-2xl bg-rose-500 text-white hover:bg-rose-600 transition-all duration-200'>
+            <button type='button' onClick={() => setModal({ open: true, type: 'media' })} className='flex gap-2 items-center px-3 py-1 rounded-2xl bg-rose-500 text-white hover:bg-rose-600 transition-all duration-200'>
               <FaMagic size={20} />
               <p>Ai create</p>
             </button>
@@ -158,12 +162,13 @@ export default function Editor() {
                 <div className='text-xs cursor-pointer invisible hover:opacity-100 transition-opacity duration-200 group-hover:visible opacity-70'>delete</div>
               </div>
               <div className='flex items-center mt-2'>
-                <div className='px-[0.6rem] py-[0.2rem] rounded-2xl text-xs cursor-pointer border border-text-light dark:border-text-dark opacity-70 hover:opacity-100'>
+                <button type='button' onClick={() => setModal({ open: true, type: 'music' })} className='px-[0.6rem] py-[0.2rem] rounded-2xl text-xs cursor-pointer border border-text-light dark:border-text-dark opacity-70 hover:opacity-100'>
                   <p className="">Beautiful Morning</p>
-                </div>
+                </button>
               </div>
             </div>
           </div>
+
           <div className='rounded-xl'>
             <div className='bg-secondary-light flex justify-between items-center px-4 rounded-t-xl py-1 dark:bg-secondary-dark border-t border-x border-border-light dark:border-border-dark'>
               <p className='text-size-sm lg:text-size-base opacity-[0.7]'>Voice Over</p>
@@ -277,13 +282,14 @@ export default function Editor() {
       </div>
 
       <Toaster richColors position="bottom-right" />
-      {modal && <Modal
-        handleClose={() => setModal(false)}
+      {modal.open && <Modal
+        handleClose={() => setModal({ open: false, type: 'media' })}
         selectImage={selectImage}
         images={images}
         handleImage={handleImage}
         pending={isPending}
         error={isError}
+        type={modal.type}
         mediaQuery={mediaQuery}
         mutation={mutation}
       />}

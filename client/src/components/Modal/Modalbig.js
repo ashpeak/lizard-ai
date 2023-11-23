@@ -6,9 +6,10 @@ import { BiSolidImageAlt } from 'react-icons/bi';
 import { IoLibrary } from 'react-icons/io5';
 import MyLibrary from '../MyLibrary';
 import StockLibrary from '../StockLibrary';
+import StockMusicLibrary from '../StockMusicLibrary';
 
 
-export default function Modal({ handleClose, handleImage, images, selectImage, pending, error, mediaQuery, mutation }) {
+export default function Modal({ handleClose, handleImage, images, selectImage, pending, error, mediaQuery, mutation, type }) {
     const [active, setActive] = useState("stock");
 
     return (
@@ -40,7 +41,7 @@ export default function Modal({ handleClose, handleImage, images, selectImage, p
                         </motion.button>
                     </div>
 
-                    {active === "my" ? (
+                    {(active === "my" && type === "media") && (
                         <MyLibrary
                             handleClose={handleClose}
                             handleImage={handleImage}
@@ -48,11 +49,17 @@ export default function Modal({ handleClose, handleImage, images, selectImage, p
                             selectImage={selectImage}
                             isPending={pending}
                             isError={error} />
-                    ) : (
+                    )}
+                    {(active === "stock" && type === "media") && (
                         <StockLibrary
                             mediaQuery={mediaQuery}
                             selectImage={selectImage}
                             mutation={mutation}
+                            handleClose={handleClose} />
+                    )}
+                    {(active === "stock" && type === "music") && (
+                        <StockMusicLibrary
+                            selectImage={selectImage}
                             handleClose={handleClose} />
                     )}
                 </div>
