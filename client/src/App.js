@@ -6,6 +6,7 @@ import Navbar from './components/Navbar';
 import Login from './components/Login';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import Files from './components/Files';
 
 function App() {
 
@@ -35,8 +36,8 @@ function App() {
       <div className='dark:bg-primary-dark bg-primary-light min-h-screen px-3 md:px-5 text-text-light dark:text-text-dark'>
         <Navbar />
         <Routes>
-
           <Route path="/" element={<Home />} />
+          <Route path="/files" element={<Files />} />
           <Route path="/login" element={<Login />} />
           <Route path="/editor" element={<Editor />} />
         </Routes>

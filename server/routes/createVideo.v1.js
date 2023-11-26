@@ -1,14 +1,8 @@
 const { Router } = require("express");
+const videoController = require("../controllers/createVideo.v1");
+
 const router = Router();
-const upload = require('../lib/multer');
 
-router.post("/videos", upload.single("image"), async (req, res) => {
-    console.log(req.file.filename);
-    return res.status(200).json({ msg: "ok" });
-});
-
-router.get("/videos", async (req, res) => {
-    return res.status(200).json({ msg: "ok" });
-});
+router.post("/create", videoController.createVideo);
 
 module.exports = router;

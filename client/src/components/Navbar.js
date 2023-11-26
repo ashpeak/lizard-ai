@@ -11,8 +11,9 @@ export default function Navbar() {
         </div>
         <div className='flex gap-3'>
           <ThemeSwitcher />
-          <Link to="/login">Login</Link>
+          <Link to="/files">Files</Link>
           <Link to="/editor">Editor</Link>
+          <Link to="/login">Login</Link>
         </div>
       </div>
     </div>

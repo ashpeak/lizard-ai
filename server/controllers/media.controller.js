@@ -6,6 +6,7 @@ const MediaController = {};
 MediaController.getMedia = async (req, res) => {
 
     const token = req.headers.token;
+    if(!token) return res.status(401).json({ msg: "Unauthorized" });
     const { id } = jwt.verify(token, process.env.JWT_SECRET);
 
     if (!id) return res.status(401).json({ msg: "Unauthorized" });
@@ -47,6 +48,7 @@ MediaController.getMedia = async (req, res) => {
 MediaController.getMusic = async (req, res) => {
 
     const token = req.headers.token;
+    if(!token) return res.status(401).json({ msg: "Unauthorized" });
     const { id } = jwt.verify(token, process.env.JWT_SECRET);
 
     if (!id) return res.status(401).json({ msg: "Unauthorized" });

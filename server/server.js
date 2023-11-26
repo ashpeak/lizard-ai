@@ -6,6 +6,7 @@ const create = require("./routes/createVideo.v1");
 const image = require("./routes/uploadImage");
 const userAuth = require("./routes/userAuth");
 const media = require("./routes/media");
+const project = require("./routes/project");
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.use("/v1", create);
 app.use("/image", image);
 app.use("/user", userAuth);
 app.use("/media", media);
+app.use("/project", project);
 
 app.get("/", (req, res) => {
     res.send("Hello World");

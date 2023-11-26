@@ -7,6 +7,7 @@ import { IoLibrary } from 'react-icons/io5';
 import MyLibrary from '../MyLibrary';
 import StockLibrary from '../StockLibrary';
 import StockMusicLibrary from '../StockMusicLibrary';
+import { GiMagicGate } from "react-icons/gi";
 
 
 export default function Modal({ handleClose, handleImage, selectBGMusic, images, selectImage, pending, error, mediaQuery, mutation, type }) {
@@ -61,6 +62,13 @@ export default function Modal({ handleClose, handleImage, selectBGMusic, images,
                         <StockMusicLibrary
                             selectBGMusic={selectBGMusic}
                             handleClose={handleClose} />
+                    )}
+
+                    {(active === "my" && type === "music") && (
+                        <div className='flex flex-col opacity-70 gap-3 items-center justify-center h-[80vh]'>
+                            <h1 className='text-lg font-semibold'>Coming soon...</h1>
+                            <GiMagicGate size={50} />
+                        </div>
                     )}
                 </div>
             </motion.div>

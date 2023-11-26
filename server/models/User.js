@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Project = require('./Project');
 
 const UserSchema = new mongoose.Schema({
     username: String,
@@ -9,8 +10,11 @@ const UserSchema = new mongoose.Schema({
     avatar: String,
     role: String,
     uploadedFiles: [],
+    projects: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Project'
+    }],
     createdAt: Date,
-    updatedAt: Date,
 });
 
 const User = mongoose.model('Userr', UserSchema);

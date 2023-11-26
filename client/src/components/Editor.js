@@ -11,8 +11,7 @@ import { MdFullscreen, MdFullscreenExit, MdPlayCircleFilled, MdPauseCircleFilled
 import { Link } from 'react-router-dom';
 import Modal from './Modal/Modalbig';
 import { Toaster, toast } from 'sonner';
-import createVideo from '../lib/create';
-import { uploadImage } from '../lib/create';
+import { uploadImage, createVideo } from '../lib/create';
 import { getUserImages } from "../lib/media";
 import { getStockMedia } from "../lib/media";
 import { useQuery } from '@tanstack/react-query';
@@ -38,7 +37,7 @@ export default function Editor() {
   });
   const [script, setScript] = useState([
     {
-      text: '',
+      dialogue: '',
       duration: 0,
       image: '',
       height: 'auto'
@@ -69,7 +68,7 @@ export default function Editor() {
   const addScript = (index) => {
     const newScript = [...script];
     newScript.splice(index + 1, 0, {
-      text: '',
+      dialogue: '',
       duration: 0
     });
     setScript(newScript);
@@ -77,7 +76,7 @@ export default function Editor() {
 
   const handleScriptInput = (e, index) => {
     const newScript = [...script];
-    newScript[index].text = e.target.value;
+    newScript[index].dialogue = e.target.value;
     setScript(newScript);
     newScript[index].height = e.target.scrollHeight + 'px';
     setScript(newScript);
@@ -101,7 +100,21 @@ export default function Editor() {
     setScript(newScript);
   }
 
-  const selectBGMusic = (name, music) => setBgMusic({ name, preview: music});
+  const download = async (script, bgMusic) => {
+    toast.promise(
+      createVideo(script, bgMusic),
+      {
+        loading: 'Preparing your video... Hang tight!',
+        success: 'Creating your video. We\'ll notify you upon completion for download. Feel free to close this editor now.',
+        error: (err) => {
+          return "Error while creating video";
+        },
+        duration: 6000
+      }
+    );
+  }
+
+  const selectBGMusic = (name, music) => setBgMusic({ name, preview: music });
 
   const { isPending, data, isError } = useQuery({ queryKey: ['todos'], queryFn: getUserImages, refetchOnWindowFocus: false });
   const mediaQuery = useQuery({ queryKey: ['stockMedia'], queryFn: () => getStockMedia(search), refetchOnWindowFocus: false });
@@ -132,7 +145,7 @@ export default function Editor() {
               <FaMagic size={20} />
               <p>Ai create</p>
             </button>
-            <button type='button' onClick={() => createVideo(script)} className='flex gap-2 items-center px-3 py-1 text-text-light dark:text-text-dark opacity-70 hover:opacity-100 transition-all duration-200'>
+            <button type='button' onClick={() => download(script, bgMusic)} className='flex gap-2 items-center px-3 py-1 text-text-light dark:text-text-dark opacity-70 hover:opacity-100 transition-all duration-200'>
               <BiSolidDownload size={20} />
               <p>Download</p>
             </button>
@@ -164,11 +177,11 @@ export default function Editor() {
                   <BsMusicNote size={15} />
                   <p className='text-text-light dark:text-text-dark opacity-70'>Background Music</p>
                 </div>
-                <div className='text-xs cursor-pointer invisible hover:opacity-100 transition-opacity duration-200 group-hover:visible opacity-70'>delete</div>
+                <button type='button' onClick={() => setBgMusic('')} className='text-xs cursor-pointer invisible hover:opacity-100 transition-opacity duration-200 group-hover:visible opacity-70'>delete</button>
               </div>
               <div className='flex items-center mt-2'>
                 <button type='button' onClick={() => setModal({ open: true, type: 'music' })} className='px-[0.6rem] py-[0.2rem] rounded-2xl text-xs cursor-pointer border border-text-light dark:border-text-dark opacity-70 hover:opacity-100'>
-                  <p className="">{bgMusic.name ? bgMusic.name.substring(0,30) : 'Choose audio'}</p>
+                  <p className="">{bgMusic.name ? bgMusic.name.substring(0, 30) : 'Choose audio'}</p>
                 </button>
               </div>
             </div>
@@ -221,7 +234,7 @@ export default function Editor() {
                 </div>
                 <div className='flex items-center mt-2'>
                   <div className='px-[0.6rem] py-[0.2rem] w-full flex cursor-text rounded-lg text-base border border-text-light dark:border-text-dark border-opacity-70 dark:border-opacity-30 hover:border-opacity-100 hover:dark:border-opacity-70'>
-                    <textarea className='text-text-light resize-none overflow-y-hidden w-full bg-transparent dark:text-text-dark outline-0 overflow-x-hidden' style={{ height: item.height }} rows={1} onChange={(e) => handleScriptInput(e, index)} value={item.text} />
+                    <textarea className='text-text-light resize-none overflow-y-hidden w-full bg-transparent dark:text-text-dark outline-0 overflow-x-hidden' style={{ height: item.height }} rows={1} onChange={(e) => handleScriptInput(e, index)} value={item.dialogue} />
                   </div>
                 </div>
               </div>

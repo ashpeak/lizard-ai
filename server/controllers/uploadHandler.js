@@ -2,7 +2,6 @@ const { unlink } = require("fs/promises");
 const { join } = require("path");
 const cloudinary = require("../configs/cloudinary.config");
 const connectDB = require("../configs/db");
-const mongoose = require("mongoose");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 
@@ -12,6 +11,8 @@ const uploadToCloudinary = async (req, res) => {
     let retryCount = 0;
     const name = req.file.filename;
     const token = req.headers.token;
+    
+    if(!token) return res.status(401).json({ msg: "Unauthorized" });
     const { id } = jwt.verify(token, process.env.JWT_SECRET);
 
     if (!id) return res.status(401).json({ msg: "Unauthorized" });

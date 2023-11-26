@@ -6,7 +6,7 @@ export default function StockLibrary({ mediaQuery, selectImage, handleClose, mut
     const { data, isPending, isError } = mediaQuery;
     const [search, setSearch] = React.useState({
         query: '',
-        type: 'video'
+        type: 'image'
     });
 
     const handleSearch = (e) => {
@@ -32,11 +32,11 @@ export default function StockLibrary({ mediaQuery, selectImage, handleClose, mut
                     </div>
                     <div className='flex items-center gap-x-3 pl-4 mb-3'>
                         <label className='cursor-pointer flex items-center gap-[0.35rem]'>
-                            <input type='radio' onChange={(e) => setSearch({...search, type: e.target.value})} name='type' value='video' className='accent-red-500' defaultChecked />
+                            <input type='radio' onChange={(e) => setSearch({...search, type: e.target.value})} name='type' value='video' className='accent-red-500' />
                             <p>Video</p>
                         </label>
                         <label className='cursor-pointer flex items-center gap-[0.35rem]'>
-                            <input type='radio' onChange={(e) => setSearch({...search, type: e.target.value})} name='type' value='image' className='accent-red-500' />
+                            <input type='radio' onChange={(e) => setSearch({...search, type: e.target.value})} name='type' value='image' className='accent-red-500' defaultChecked />
                             <p>Image</p>
                         </label>
                         <label className='cursor-pointer flex items-center gap-[0.35rem]'>
@@ -47,10 +47,10 @@ export default function StockLibrary({ mediaQuery, selectImage, handleClose, mut
                 </form>
             </div>
 
-            <div className='px-2 bg-primary-dark md:px-4 py-3 flex flex-wrap gap-5 overflow-y-scroll scroll-hide h-[70vh]'>
+            <div className='px-2 bg-primary-light dark:bg-primary-dark md:px-4 py-3 flex flex-wrap gap-5 overflow-y-scroll scroll-hide h-[70vh]'>
                 {data?.length > 0 && data.map((media, index) => (
                     <button type='button' key={index} className='h-fit' onClick={() => {
-                        selectImage(media.thumbnail);
+                        selectImage(media.download);
                         handleClose();
                     }}>
                         <ImageCard key={Date.now()} title={media.name} href={media.thumbnail} service={media.service} />
