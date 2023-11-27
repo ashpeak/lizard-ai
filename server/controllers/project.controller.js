@@ -43,6 +43,7 @@ project.getAll = async (req, res) => {
 
         if (!id) return res.status(401).json({ msg: "Unauthorized" });
 
+        await connectDB();
         const projects = await Project.find({ user: id });
 
         if (!projects) return res.status(500).json({ message: 'No projects found' });

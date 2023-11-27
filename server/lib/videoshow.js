@@ -23,8 +23,6 @@ const createVideo = async (images, music, subtitle, outputPath) => {
         format: 'mp4'
     }
 
-    console.log("woooooho", `${process.cwd()}\\created\\output.mp4`);
-
     videoshow(images, videoOptions)
         // .subtitles(subtitle)
         .input(music)
@@ -34,7 +32,6 @@ const createVideo = async (images, music, subtitle, outputPath) => {
         })
         .on('error', function (err, stdout, stderr) {
             console.error('Error:', err)
-            console.error('ffmpeg stderr:', stderr)
         })
         .on('end', function (output) {
             console.error('Video created in:', output)

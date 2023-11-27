@@ -7,6 +7,7 @@ import Login from './components/Login';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import Files from './components/Files';
+import Mixer from './components/Test';
 
 function App() {
 
@@ -40,6 +41,7 @@ function App() {
           <Route path="/files" element={<Files />} />
           <Route path="/login" element={<Login />} />
           <Route path="/editor" element={<Editor />} />
+          <Route path="/test" element={<Mixer />} />
         </Routes>
       </div>
     </BrowserRouter>

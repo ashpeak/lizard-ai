@@ -14,6 +14,7 @@ export default function Navbar() {
           <Link to="/files">Files</Link>
           <Link to="/editor">Editor</Link>
           <Link to="/login">Login</Link>
+          <Link to="/test">Test</Link>
         </div>
       </div>
     </div>
