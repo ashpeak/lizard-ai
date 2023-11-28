@@ -2,7 +2,7 @@ const axios = require('axios');
 const { join } = require("path");
 const { createWriteStream } = require("fs");
 
-const text2speech = async (text, projectId, userId) => {
+const text2speech = async (text, name) => {
     return new Promise(async (resolve, reject) => {
         try {
             let headersList = {
@@ -18,7 +18,7 @@ const text2speech = async (text, projectId, userId) => {
                 "Authorization": `Bearer ${process.env.SPEECHIFY_AUTH_KEY}`
             }
 
-            let bodyContent = JSON.stringify({ "ssml": `<speak><prosody rate=\"5.000000000000007%\">${text}</prosody></speak>`, "voice": { "name": "Jason", "engine": "azure", "language": "en-US" }, "forcedAudioFormat": "mp3" });
+            let bodyContent = JSON.stringify({ "ssml": `<speak>${text}</speak>`, "voice": { "name": "Jason", "engine": "azure", "language": "en-US" }, "forcedAudioFormat": "mp3" });
 
             let reqOptions = {
                 url: process.env.SPEECHIFY_API_URL,
@@ -30,8 +30,7 @@ const text2speech = async (text, projectId, userId) => {
 
             let response = await axios.request(reqOptions);
 
-            const fileName = `${userId}${projectId}${Date.now()}.mp3`;
-            let filePath = join(process.cwd(), "audioGenerated", fileName);
+            let filePath = join(process.cwd(), "audioGenerated", `${name}_speech.mp3`);
 
             const writeStream = createWriteStream(filePath);
 
@@ -45,7 +44,7 @@ const text2speech = async (text, projectId, userId) => {
 
             // Listen for the 'finish' event to know when writing is complete
             writeStream.on('finish', () => {
-                resolve(fileName);
+                resolve(`${name}_speech.mp3`);
             });
 
         } catch (err) {

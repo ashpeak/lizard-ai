@@ -30,7 +30,7 @@ const createVideo = async (images, music, subtitle, outputPath) => {
         .on('start', function (command) {
             console.log('ffmpeg process started:', command)
         })
-        .on('error', function (err, stdout, stderr) {
+        .on('error', function (err) {
             console.error('Error:', err)
         })
         .on('end', function (output) {

@@ -13,8 +13,8 @@ const myFFmpeg = {};
 myFFmpeg.mergeAudio = (audio1, audio2, name) => {
     return new Promise((resolve, reject) => {
         try {
-            const volume1 = 1.0;
-            const volume2 = 0.3;
+            const volume1 = 1;
+            const volume2 = 0.2;
             const startFrom = 5;
             const output = join(process.cwd(), "audioGenerated", `${name.split('.')[0]}_merged.mp3`);
 

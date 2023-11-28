@@ -15,8 +15,10 @@ import { uploadImage, createVideo } from '../lib/create';
 import { getUserImages } from "../lib/media";
 import { getStockMedia } from "../lib/media";
 import { useQuery } from '@tanstack/react-query';
+import { useParams } from 'react-router-dom';
 
 export default function Editor() {
+  const { id } = useParams();
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -101,8 +103,22 @@ export default function Editor() {
   }
 
   const download = async (script, bgMusic) => {
+
+    if (!bgMusic.preview) return toast.error('Please select a background music');
+
+    for (const item of script) {
+      if (!item.image) {
+        toast.error('Please select a media file for each scene');
+        return;
+      }
+      if (!item.dialogue || item.dialogue.length < 5) {
+        toast.error('Please enter a dialogue for each scene');
+        return;
+      }
+    }
+
     toast.promise(
-      createVideo(script, bgMusic),
+      createVideo(script, bgMusic, id),
       {
         loading: 'Preparing your video... Hang tight!',
         success: 'Creating your video. We\'ll notify you upon completion for download. Feel free to close this editor now.',
@@ -164,6 +180,7 @@ export default function Editor() {
         <div className='col-span-3 h-[79vh] md:pr-2 overflow-y-scroll md:pb-12 pb-5 flex flex-col gap-y-5'>
 
           <div className='rounded-xl'>
+
             <div className='bg-secondary-light flex justify-between items-center px-4 rounded-t-xl py-1 dark:bg-secondary-dark border-t border-x border-border-light dark:border-border-dark'>
               <p className='text-size-sm lg:text-size-base opacity-[0.7]'>Audio</p>
               <div className='flex gap-2 opacity-70 items-center'>
@@ -171,6 +188,7 @@ export default function Editor() {
                 <p className='text-size-sm lg:text-size-base'>Layer</p>
               </div>
             </div>
+
             <div className='p-4 overflow-x-hidden hover:border-opacity-70 hover:dark:border-opacity-70 transition-all duration-200 border border-border-light dark:border-border-dark hover:border-rose-500 hover:dark:border-rose-500 rounded-b-2xl group'>
               <div className='flex text-[0.875rem] items-center justify-between'>
                 <div className='flex items-center gap-2'>
@@ -185,6 +203,7 @@ export default function Editor() {
                 </button>
               </div>
             </div>
+
           </div>
 
           <div className='rounded-xl'>
@@ -234,7 +253,7 @@ export default function Editor() {
                 </div>
                 <div className='flex items-center mt-2'>
                   <div className='px-[0.6rem] py-[0.2rem] w-full flex cursor-text rounded-lg text-base border border-text-light dark:border-text-dark border-opacity-70 dark:border-opacity-30 hover:border-opacity-100 hover:dark:border-opacity-70'>
-                    <textarea className='text-text-light resize-none overflow-y-hidden w-full bg-transparent dark:text-text-dark outline-0 overflow-x-hidden' style={{ height: item.height }} rows={1} onChange={(e) => handleScriptInput(e, index)} value={item.dialogue} />
+                    <textarea required minLength={5} className='text-text-light resize-none overflow-y-hidden w-full bg-transparent dark:text-text-dark outline-0 overflow-x-hidden' style={{ height: item.height }} rows={1} onChange={(e) => handleScriptInput(e, index)} value={item.dialogue} />
                   </div>
                 </div>
               </div>
@@ -295,7 +314,6 @@ export default function Editor() {
         <div className='rounded-xl col-span-2 border border-border-light dark:border-border-dark h-full'>
 
         </div>
-        {/* {mutation.mutate("dsdsj")} */}
 
       </div>
 

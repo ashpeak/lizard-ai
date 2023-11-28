@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from 'react';
 
 const Mixer = () => {
-    const [volume1, setVolume1] = useState(0.5);
-    const [volume2, setVolume2] = useState(0.8);
+    const [volume1, setVolume1] = useState(1);
+    const [volume2, setVolume2] = useState(0.1);
 
-    const audio1 = new Audio('./audio/f.mp3');
-    const audio2 = new Audio('./audio/s.mp3');
+    // const audio1 = new Audio('audio/f.mp3');
+    // const audio2 = new Audio('audio/s.mp3');
+    const audio1 = new Audio('https://dm0qx8t0i9gc9.cloudfront.net/previews/audio/SiX0YRGyPkccxaman/audioblocks-background-beat-60-sec_HUgx2kFDo_NWM.mp3?type=preview&origin=AUDIOBLOCKS&timestamp_ms=1701131920367&publicKey=34acan3LytGU0uHTGfeRAvwOEkvEWmyRrBu34gNyRJmOwP2QMPU62mzFr5zKdmur&organizationId=106979&apiVersion=2.0&stockItemId=347300457&resolution=&endUserId=7f903380050cf7c47cbbe711fe85aa413ee94795&projectId=65653066d2d6a82b89bdfd6b&searchId=6efc5b81-c13f-4ede-a3f6-457f01281b11&searchPageId=c1091281-53c1-43ba-8d7c-5d7727b7b455');
+    const audio2 = new Audio('https://tracks.melod.ie/track_versions/1419/MEL169_09_1_The_Quirky_Kid_%28Full%29_Luna_Pan.mp3?1632618839');
 
     const playAudio = (audio, volume, startTime) => {
         audio.pause();
         audio.currentTime = startTime || 0;
         audio.volume = volume;
-        audio.play();
+        audio?.play();
     };
 
     const handleVolumeChange1 = (e) => {
@@ -24,7 +26,7 @@ const Mixer = () => {
 
     const handlePlay = () => {
         playAudio(audio1, volume1, 0);
-        playAudio(audio2, volume2, 10);
+        playAudio(audio2, volume2, 30);
     };
 
     const handleStop = () => {
@@ -55,9 +57,7 @@ const Mixer = () => {
             audio1.removeEventListener('ended', handleAudio1End);
 
             audio1.pause();
-            audio1.src = '';
             audio2.pause();
-            audio2.src = '';
         };
     }, [audio1, audio2]);
 

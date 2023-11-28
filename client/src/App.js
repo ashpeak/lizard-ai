@@ -40,7 +40,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/files" element={<Files />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/editor" element={<Editor />} />
+          <Route path="/editor/:id" element={<Editor />} />
           <Route path="/test" element={<Mixer />} />
         </Routes>
       </div>

@@ -1,16 +1,17 @@
 const fs = require('fs');
 const axios = require('axios');
+const jwt = require('jsonwebtoken');
 const { join } = require("path");
+const connectDB = require('../configs/db');
+const Project = require('../models/Project');
 const mediaHandler = require('../lib/mediaHandler');
 const createVideo = require('../lib/videoshow');
 const text2speech = require('../lib/text2speech');
 const { mergeAudio } = require('../lib/ffmpeg');
 
 const videoController = {};
-const downloadPromises = [];
 
-
-const downloadMedia = async (url, ext, res) => {
+const downloadMedia = async (url, name, ext, res) => {
     if (!url || url === '') {
         return res.status(400).send('Invalid parameters for one of the scenes');
     }
@@ -18,14 +19,8 @@ const downloadMedia = async (url, ext, res) => {
     // Make a GET request to the URL
     const response = await axios.get(url, { responseType: 'stream' });
 
-    // Define the file path and name
-    let fileName;
-    if (ext === 'mp3') {
-        fileName = `ashishTONY.${ext}`;
-    } else {
-        fileName = `ashishTONY${Date.now()}.${ext}`;
-    }
-    let filePath = join(process.cwd(), "uploads", fileName);
+    // Define the file path
+    let filePath = join(process.cwd(), "uploads", `${name}.${ext}`);
 
     // Create a write stream to save the file
     const writer = fs.createWriteStream(filePath);
@@ -35,28 +30,62 @@ const downloadMedia = async (url, ext, res) => {
 
     // Create a promise for this download
     const downloadPromise = new Promise((resolve, reject) => {
-        writer.on('finish', resolve);
+        writer.on('close', resolve);
         writer.on('error', reject);
     });
 
     // Add the promise to the array
-    downloadPromises.push(downloadPromise);
+    return downloadPromise;
+}
+
+const validateRequest = async (token, projectId) => {
+    if (!token || !projectId) {
+        return { isValid: false, id: null };
+    }
+    // Verify the token
+    const { id } = jwt.verify(token, process.env.JWT_SECRET);
+
+    if (!id) {
+        return { isValid: false, id: null };
+    }
+
+    // Check if the user has access to the project
+    await connectDB();
+    const project = await Project.findOne({ _id: projectId, user: id });
+
+    if (!project) {
+        return { isValid: false, id: null };
+    }
+
+    return { isValid: true, id };
 }
 
 
 videoController.createVideo = async (req, res) => {
 
+    const { token, id: projectId } = req.headers;
+    let scriptDialogue = '';
+    const downloadPromises = [];
+
+    const { isValid, id } = await validateRequest(token, projectId);
+    if (!isValid) {
+        return res.status(400).send('Invalid request');
+    }
+
     const { script, bgMusic } = req.body;
     try {
 
         // Iterate over each file in the request
-        for (const scene of script) {
-            const { image } = scene;
+        script.forEach((scene, index) => {
+            const { image, dialogue } = scene;
+            const name = id + projectId + index;
+            scriptDialogue += dialogue;
             // Download the image
-            await downloadMedia(image, 'jpg', res);
-        }
+            downloadPromises.push(downloadMedia(image, name, 'jpg', res));
+        });
 
-        await downloadMedia(bgMusic.preview, 'mp3', res);
+        // Download background music
+        downloadPromises.push(downloadMedia(bgMusic.preview, id + projectId + '_bg', 'mp3', res));
 
         // Wait for all download promises to resolve
         await Promise.all(downloadPromises);
@@ -64,8 +93,7 @@ videoController.createVideo = async (req, res) => {
         // Send a success response
         res.status(200).send({ msg: "Video creation in progress" });
 
-
-        const images = await mediaHandler.getAllImages('ashishTONY');
+        const images = await mediaHandler.getAllImages(id + projectId);
 
         for (const image of images) {
             await mediaHandler.resizeImage(image, 9 / 16);
@@ -74,12 +102,11 @@ videoController.createVideo = async (req, res) => {
         const files = images.map(image => ({ path: `${process.cwd()}\\uploads\\${image}`, loop: 4 }));
 
         // Create the text to speech audio
-        const text = 'There are many real-life examples of a stack. Consider the simple example of plates stacked over one another in a canteen. The plate which is at the top is the first one to be removed, i.e. the plate which has been placed at the bottommost position remains in the stack for the longest period of time. So, it can be simply seen to follow the LIFO/FILO order.';
-        const speechAudio = await text2speech(text, '1234', '123');
+        const speechAudio = await text2speech(scriptDialogue, id + projectId);
         const speechAudioPath = join(process.cwd(), 'audioGenerated', speechAudio);
 
-        const musicPath = join(process.cwd(), 'uploads', 'ashishTONY.mp3');
-        const outputPath = join(process.cwd(), 'created', 'output.mp4');
+        const musicPath = join(process.cwd(), 'uploads', `${id}${projectId}_bg.mp3`);
+        const outputPath = join(process.cwd(), 'created', `${id}${projectId}_created.mp4`);
         const subtitle = join(process.cwd(), 'test', 'subtitle.srt');
 
         // Combine the speech audio and bg music

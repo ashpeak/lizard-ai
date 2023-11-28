@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-const createVideo = async (script, bgMusic) => {
+const createVideo = async (script, bgMusic, id) => {
 
   const arr = [];
   script.map((item, index) => arr.push({ dialogue: item.dialogue, image: item.image }));
@@ -15,6 +15,8 @@ const createVideo = async (script, bgMusic) => {
     const response = await axios.post(process.env.REACT_APP_API + '/v1/create', data, {
       headers: {
         'Content-Type': 'application/json',
+        token: Cookies.get('token'),
+        id: id
       }
     });
 
