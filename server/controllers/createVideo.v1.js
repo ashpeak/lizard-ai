@@ -95,9 +95,13 @@ videoController.createVideo = async (req, res) => {
 
         const images = await mediaHandler.getAllImages(id + projectId);
 
-        for (const image of images) {
-            await mediaHandler.resizeImage(image, 9 / 16);
-        }
+        // for (const image of images) {
+        //     await mediaHandler.prepareImage(image, 9 / 16);
+        // }
+        // script.forEach((scene, index) => {
+        //     const name = id + projectId + index;
+        //     mediaHandler.prepareImage(name + '.jpg', 9 / 16);
+        // });
 
         const files = images.map(image => ({ path: `${process.cwd()}\\uploads\\${image}`, loop: 4 }));
 

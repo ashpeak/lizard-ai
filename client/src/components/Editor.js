@@ -42,6 +42,8 @@ export default function Editor() {
       dialogue: '',
       duration: 0,
       image: '',
+      type: 'video',
+      download: '',
       height: 'auto'
     }
   ]);
@@ -84,9 +86,11 @@ export default function Editor() {
     setScript(newScript);
   }
 
-  const selectImage = (image) => {
+  const selectImage = (thumb, download, type) => {
     const newScript = [...script];
-    newScript[editingIndex].image = image;
+    newScript[editingIndex].image = thumb;
+    newScript[editingIndex].download = download;
+    newScript[editingIndex].type = type;
     setScript(newScript);
   }
 
