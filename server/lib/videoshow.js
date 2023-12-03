@@ -1,7 +1,7 @@
 const ffmpegPath = require('ffmpeg-static');
 const ffprobePath = require('ffprobe-static').path;
 const ffmpeg = require('fluent-ffmpeg');
-const videoshow = require('videoshow');
+// const videoshow = require('videoshow');
 
 ffmpeg.setFfmpegPath(ffmpegPath);
 ffmpeg.setFfprobePath(ffprobePath);

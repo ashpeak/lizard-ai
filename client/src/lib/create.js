@@ -4,11 +4,15 @@ import Cookies from 'js-cookie';
 const createVideo = async (script, bgMusic, id) => {
 
   const arr = [];
-  script.map((item, index) => arr.push({ dialogue: item.dialogue, image: item.image }));
+  script.map((item, index) => arr.push({ index: index + 1, dialogue: item.dialogue, media: item.download, type: item.type }));
 
   const data = {
     script: arr,
-    bgMusic: bgMusic
+    bgMusic: bgMusic,
+    volumeMix: {
+      speech: 1,
+      bgMusic: 0.7
+    }
   };
 
   try {

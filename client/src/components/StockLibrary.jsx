@@ -52,7 +52,6 @@ export default function StockLibrary({ mediaQuery, selectImage, handleClose, mut
                     <button type='button' key={index} className='h-fit' onClick={() => {
                         const download = media.service === 'storyblocks' ? media.preview : media.download;
                         selectImage(media.thumbnail, download, media.type);
-                        console.log(media);
                         handleClose();
                     }}>
                         <ImageCard key={Date.now()} title={media.name} href={media.thumbnail} service={media.service} />

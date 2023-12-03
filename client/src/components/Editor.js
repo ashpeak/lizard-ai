@@ -40,9 +40,8 @@ export default function Editor() {
   const [script, setScript] = useState([
     {
       dialogue: '',
-      duration: 0,
       image: '',
-      type: 'video',
+      type: '',
       download: '',
       height: 'auto'
     }
@@ -116,7 +115,7 @@ export default function Editor() {
         return;
       }
       if (!item.dialogue || item.dialogue.length < 5) {
-        toast.error('Please enter a dialogue for each scene');
+        toast.error('Please enter a dialogue atleast 5 characters long for each scene');
         return;
       }
     }

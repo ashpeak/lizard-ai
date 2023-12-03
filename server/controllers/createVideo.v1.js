@@ -5,7 +5,7 @@ const { join } = require("path");
 const connectDB = require('../configs/db');
 const Project = require('../models/Project');
 const mediaHandler = require('../lib/mediaHandler');
-const createVideo = require('../lib/videoshow');
+const { createVideo } = require('../lib/ffmpeg');
 const text2speech = require('../lib/text2speech');
 const { mergeAudio } = require('../lib/ffmpeg');
 
@@ -20,7 +20,12 @@ const downloadMedia = async (url, name, ext, res) => {
     const response = await axios.get(url, { responseType: 'stream' });
 
     // Define the file path
-    let filePath = join(process.cwd(), "uploads", `${name}.${ext}`);
+    let extension = '';
+    if (ext === "video") extension = "mp4";
+    else if (ext === "image") extension = "jpg";
+    else if (ext === "audio") extension = "mp3";
+
+    let filePath = join(process.cwd(), "uploads", `${name}.${extension}`);
 
     // Create a write stream to save the file
     const writer = fs.createWriteStream(filePath);
@@ -64,7 +69,6 @@ const validateRequest = async (token, projectId) => {
 videoController.createVideo = async (req, res) => {
 
     const { token, id: projectId } = req.headers;
-    let scriptDialogue = '';
     const downloadPromises = [];
 
     const { isValid, id } = await validateRequest(token, projectId);
@@ -72,20 +76,20 @@ videoController.createVideo = async (req, res) => {
         return res.status(400).send('Invalid request');
     }
 
-    const { script, bgMusic } = req.body;
+    const { script, bgMusic, volumeMix } = req.body;
     try {
 
         // Iterate over each file in the request
-        script.forEach((scene, index) => {
-            const { image, dialogue } = scene;
+        script.forEach((scene) => {
+            const { index, media, type, dialogue } = scene;
             const name = id + projectId + index;
-            scriptDialogue += dialogue;
             // Download the image
-            downloadPromises.push(downloadMedia(image, name, 'jpg', res));
+            // downloadPromises.push(downloadMedia(media, name, type, res));
+            // downloadPromises.push(text2speech(dialogue, name));
         });
 
         // Download background music
-        downloadPromises.push(downloadMedia(bgMusic.preview, id + projectId + '_bg', 'mp3', res));
+        // downloadPromises.push(downloadMedia(bgMusic.preview, id + projectId + '_bg', 'audio', res));
 
         // Wait for all download promises to resolve
         await Promise.all(downloadPromises);
@@ -93,31 +97,28 @@ videoController.createVideo = async (req, res) => {
         // Send a success response
         res.status(200).send({ msg: "Video creation in progress" });
 
-        const images = await mediaHandler.getAllImages(id + projectId);
-
         // for (const image of images) {
         //     await mediaHandler.prepareImage(image, 9 / 16);
         // }
-        // script.forEach((scene, index) => {
-        //     const name = id + projectId + index;
-        //     mediaHandler.prepareImage(name + '.jpg', 9 / 16);
-        // });
 
-        const files = images.map(image => ({ path: `${process.cwd()}\\uploads\\${image}`, loop: 4 }));
+        for (const scene of script) {
+            const name = id + projectId + scene.index;
+            if (scene.type === 'image') {
+                // await mediaHandler.prepareImage(name, '.jpg', 0.5625);
+            } else if (scene.type === 'gif') {
+                // await mediaHandler.prepareImage(name, '.gif', 0.5625);
+            } else if (scene.type === 'video') {
+                // await mediaHandler.prepareVideo(name, '.mp4', 0.5625);
+            }
+        }
 
         // Create the text to speech audio
-        const speechAudio = await text2speech(scriptDialogue, id + projectId);
-        const speechAudioPath = join(process.cwd(), 'audioGenerated', speechAudio);
-
         const musicPath = join(process.cwd(), 'uploads', `${id}${projectId}_bg.mp3`);
-        const outputPath = join(process.cwd(), 'created', `${id}${projectId}_created.mp4`);
         const subtitle = join(process.cwd(), 'test', 'subtitle.srt');
-
-        // Combine the speech audio and bg music
-        const merged_audio = await mergeAudio(speechAudioPath, musicPath, speechAudio);
+        const outputPath = join(process.cwd(), 'created', `${id}${projectId}.mp4`);
 
         // Create the final video
-        createVideo(files, merged_audio, subtitle, outputPath);
+        createVideo(script, id + projectId, musicPath, volumeMix, subtitle, outputPath);
 
     } catch (error) {
         console.log(error);
