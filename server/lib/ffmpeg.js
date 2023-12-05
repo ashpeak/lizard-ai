@@ -57,7 +57,6 @@ myFFmpeg.createVideo = (script, prefix, musicPath, volumeMix, subtitlePath, outp
         command.input(musicPath);
 
         command
-            // .inputOptions('-filter_complex', '[0:v:0][1:v:0]concat=n=2:v=1:a=0[vou];[vou]subtitles=./files/subtitle.srt:force_style=\'Fontsize=8,PrimaryColour=&Hffffff&\'[vout]')
             .inputOptions('-filter_complex', `${streams}concat=n=${length}:v=1:a=1[vou][aou];[aou]volume=${volumeMix.speech}[a0];[${length}:a]atrim=start=10,volume=${volumeMix.bgMusic}[a1];[a0][a1]amix=inputs=2:duration=shortest[aout]`)
             .outputOptions('-map', '[vou]', '-map', '[aout]', '-r', '24', '-c:v', 'libx264', '-b:v', '500k', '-pix_fmt', 'yuv420p')
             .output(outputPath)

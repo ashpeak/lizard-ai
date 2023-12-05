@@ -97,18 +97,14 @@ videoController.createVideo = async (req, res) => {
         // Send a success response
         res.status(200).send({ msg: "Video creation in progress" });
 
-        // for (const image of images) {
-        //     await mediaHandler.prepareImage(image, 9 / 16);
-        // }
-
         for (const scene of script) {
             const name = id + projectId + scene.index;
             if (scene.type === 'image') {
-                // await mediaHandler.prepareImage(name, '.jpg', 0.5625);
+                await mediaHandler.prepareImage(scene, name, '.jpg', 0.5625);
             } else if (scene.type === 'gif') {
-                // await mediaHandler.prepareImage(name, '.gif', 0.5625);
+                await mediaHandler.prepareImage(scene, name, '.gif', 0.5625);
             } else if (scene.type === 'video') {
-                // await mediaHandler.prepareVideo(name, '.mp4', 0.5625);
+                await mediaHandler.prepareVideo(scene, name, '.mp4', 0.5625);
             }
         }
 

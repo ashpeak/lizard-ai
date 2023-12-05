@@ -4,6 +4,7 @@ const { join } = require("path");
 const ffmpegPath = require('ffmpeg-static');
 const ffprobePath = require('ffprobe-static').path;
 const ffmpeg = require('fluent-ffmpeg');
+const { createSubtitle } = require('./subtitle');
 const { unlink } = require("fs").promises;
 
 ffmpeg.setFfmpegPath(ffmpegPath);
@@ -35,7 +36,7 @@ const getAudioDuration = (inputFilePath) => {
     });
 };
 
-mediaHandler.prepareImage = async (inputName, ext, aspectRatio) => {
+mediaHandler.prepareImage = async (scene, inputName, ext, aspectRatio) => {
     return new Promise(async (resolve, reject) => {
         try {
             // Define the input/output path
@@ -83,17 +84,20 @@ mediaHandler.prepareImage = async (inputName, ext, aspectRatio) => {
     });
 }
 
-mediaHandler.prepareVideo = async (inputName, ext, aspectRatio) => {
+mediaHandler.prepareVideo = async (scene, inputName, ext, aspectRatio) => {
+
     const path = join(process.cwd(), 'uploads', inputName + ext);
     const audioDuration = await getAudioDuration(join(process.cwd(), 'audioGenerated', `${inputName}.mp3`));
     const { height, width } = await getVideoMetadata(path);
     const newWidth = Math.round(height * aspectRatio);
     const temp = Math.round((width - newWidth) / 2);
+    const subtitlePath = await createSubtitle(scene.dialogue, inputName);
+
     return new Promise((resolve, reject) => {
         ffmpeg()
             .input(path)
             .input(join(process.cwd(), 'audioGenerated', `${inputName}.mp3`))
-            .outputOptions('-vf', `crop=in_w-${temp}-${temp}:in_h,scale=720:1280`)
+            .outputOptions('-vf', `crop=in_w-${temp}-${temp}:in_h,scale=720:1280,subtitles=${subtitlePath}`)
             // .outputOptions('-vf', `crop=in_w-${temp}-${temp}:in_h,subtitles=./files/subtitle.srt:force_style=\'Fontsize=16\,Fontname=Nunito\,PrimaryColour=&Hffffff&\,Outline=1\,OutlineColour=&H000000&\,BackColour=&H000000&\,Bold=1\,MarginV=40\,MarginL=40\,MarginR=40\,MarginB=40\'`)
             .outputOptions('-map', '0:v:0', '-map', '1:a:0', '-c:a', 'aac', '-c:v', 'libx264', '-t', audioDuration, '-pix_fmt', 'yuv420p', '-r', '24', '-b:v', '500k')
             .output(join(process.cwd(), 'temp', `${inputName}.mp4`))
