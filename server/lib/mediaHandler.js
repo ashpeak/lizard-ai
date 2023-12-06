@@ -42,6 +42,7 @@ mediaHandler.prepareImage = async (scene, inputName, ext, aspectRatio) => {
             // Define the input/output path
             const path = join(process.cwd(), 'uploads', inputName + ext);
             const audioDuration = await getAudioDuration(join(process.cwd(), 'audioGenerated', `${inputName}.mp3`));
+            const subtitlePath = await createSubtitle(scene.dialogue, inputName);
 
             // Read the image from the input path
             const imageBuffer = await fs.readFile(path);
@@ -58,14 +59,9 @@ mediaHandler.prepareImage = async (scene, inputName, ext, aspectRatio) => {
             ffmpeg()
                 .input(path)
                 .input(join(process.cwd(), 'audioGenerated', `${inputName}.mp3`))
-                // .input('./files/subtitle.srt')
                 .inputFPS(1)
-                // .outputOptions('-vf', 'loop=loop=20,scale=720:1280,subtitles=./files/subtitle.srt:force_style=\'Fontsize=16\,Fontname=Nunito\,PrimaryColour=&Hffffff&\,Outline=1\,OutlineColour=&H000000&\,BackColour=&H000000&\,Bold=1\,MarginV=40\,MarginL=40\,MarginR=40\,MarginB=40\'', '-r', '24')
-                .outputOptions('-vf', 'loop=loop=20,scale=720:1280', '-r', '24', '-t', audioDuration, '-y')
+                .outputOptions('-vf', `loop=loop=20,scale=720:1280,subtitles=${subtitlePath}`, '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-c:v', 'libx264', '-r', '27', '-t', audioDuration, '-b:v', '2000k', '-b:a', '128k', '-y')
                 .output(join(process.cwd(), 'temp', `${inputName}.mp4`))
-                .videoCodec('libx264')
-                .audioCodec('aac')
-                .outputOptions('-pix_fmt', 'yuv420p')
                 .on('end', () => {
                     console.log('Finished processing', inputName + ext);
                     resolve();
@@ -98,8 +94,7 @@ mediaHandler.prepareVideo = async (scene, inputName, ext, aspectRatio) => {
             .input(path)
             .input(join(process.cwd(), 'audioGenerated', `${inputName}.mp3`))
             .outputOptions('-vf', `crop=in_w-${temp}-${temp}:in_h,scale=720:1280,subtitles=${subtitlePath}`)
-            // .outputOptions('-vf', `crop=in_w-${temp}-${temp}:in_h,subtitles=./files/subtitle.srt:force_style=\'Fontsize=16\,Fontname=Nunito\,PrimaryColour=&Hffffff&\,Outline=1\,OutlineColour=&H000000&\,BackColour=&H000000&\,Bold=1\,MarginV=40\,MarginL=40\,MarginR=40\,MarginB=40\'`)
-            .outputOptions('-map', '0:v:0', '-map', '1:a:0', '-c:a', 'aac', '-c:v', 'libx264', '-t', audioDuration, '-pix_fmt', 'yuv420p', '-r', '24', '-b:v', '500k')
+            .outputOptions('-map', '0:v:0', '-map', '1:a:0', '-c:a', 'aac', '-c:v', 'libx264', '-t', audioDuration, '-pix_fmt', 'yuv420p', '-r', '27', '-b:v', '2000k', '-b:a', '128k', '-strict', 'experimental')
             .output(join(process.cwd(), 'temp', `${inputName}.mp4`))
             .on('end', () => {
                 console.log('Finished processing', inputName + ext);

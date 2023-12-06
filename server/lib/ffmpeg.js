@@ -41,24 +41,27 @@ myFFmpeg.mergeAudio = (audio1, audio2, name) => {
     });
 };
 
-myFFmpeg.createVideo = (script, prefix, musicPath, volumeMix, subtitlePath, outputPath) => {
+myFFmpeg.createVideo = (script, prefix, musicPath, volumeMix, outputPath) => {
     try {
         const command = ffmpeg();
 
         const length = script.length;
-        let streams = '';
+        let streams = '';   // [0:v:0][0:a:0][1:v:0][1:a:0]...
+        let sar = '';       // setsar=sar=1/1
         script.forEach((scene, index) => {
             const name = prefix + (index + 1);
             command.input(join(process.cwd(), 'temp', `${name}.mp4`));
-            streams += `[${index}:v][${index}:a]`;
+            sar += `[${index}:v:0]setsar=sar=1/1[v${index}];`;
+            streams += `[v${index}][${index}:a:0]`;
         });
 
         // Add the background music
         command.input(musicPath);
 
+        // '[0:v:0]setsar=sar=1/1[v0];[1:v:0]setsar=sar=1/1[v1];[v0][0:a:0][v1][1:a:0]concat=n=2:v=1:a=1[vout][aout]'
         command
-            .inputOptions('-filter_complex', `${streams}concat=n=${length}:v=1:a=1[vou][aou];[aou]volume=${volumeMix.speech}[a0];[${length}:a]atrim=start=10,volume=${volumeMix.bgMusic}[a1];[a0][a1]amix=inputs=2:duration=shortest[aout]`)
-            .outputOptions('-map', '[vou]', '-map', '[aout]', '-r', '24', '-c:v', 'libx264', '-b:v', '500k', '-pix_fmt', 'yuv420p')
+            .inputOptions('-filter_complex', `${sar}${streams}concat=n=${length}:v=1:a=1[vou][aou];[aou]volume=${volumeMix.speech}[a0];[${length}:a:0]atrim=start=10,volume=${volumeMix.bgMusic}[a1];[a0][a1]amix=inputs=2:duration=shortest[aout]`)
+            .outputOptions('-map', '[vou]', '-map', '[aout]', '-r', '27', '-strict', 'experimental', '-c:v', 'libx264', '-b:v', '2000k', '-b:a', '128k', '-pix_fmt', 'yuv420p')
             .output(outputPath)
             .on('start', () => {
                 console.log('Final video creation started.....');
@@ -66,8 +69,10 @@ myFFmpeg.createVideo = (script, prefix, musicPath, volumeMix, subtitlePath, outp
             .on('end', () => {
                 console.log('Video created successfully');
             })
-            .on('error', (err) => {
-                console.error(err);
+            .on('error', (err, stdout, stderr) => {
+                console.error('Error:', err);
+                console.error('ffmpeg stdout:', stdout);
+                console.error('ffmpeg stderr:', stderr);
             })
             .run();
     } catch (error) {

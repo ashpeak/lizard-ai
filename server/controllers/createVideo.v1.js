@@ -84,12 +84,12 @@ videoController.createVideo = async (req, res) => {
             const { index, media, type, dialogue } = scene;
             const name = id + projectId + index;
             // Download the image
-            // downloadPromises.push(downloadMedia(media, name, type, res));
-            // downloadPromises.push(text2speech(dialogue, name));
+            downloadPromises.push(downloadMedia(media, name, type, res));
+            downloadPromises.push(text2speech(dialogue, name));
         });
 
         // Download background music
-        // downloadPromises.push(downloadMedia(bgMusic.preview, id + projectId + '_bg', 'audio', res));
+        downloadPromises.push(downloadMedia(bgMusic.preview, id + projectId + '_bg', 'audio', res));
 
         // Wait for all download promises to resolve
         await Promise.all(downloadPromises);
@@ -110,11 +110,10 @@ videoController.createVideo = async (req, res) => {
 
         // Create the text to speech audio
         const musicPath = join(process.cwd(), 'uploads', `${id}${projectId}_bg.mp3`);
-        const subtitle = join(process.cwd(), 'test', 'subtitle.srt');
         const outputPath = join(process.cwd(), 'created', `${id}${projectId}.mp4`);
 
         // Create the final video
-        createVideo(script, id + projectId, musicPath, volumeMix, subtitle, outputPath);
+        createVideo(script, id + projectId, musicPath, volumeMix, outputPath);
 
     } catch (error) {
         console.log(error);
