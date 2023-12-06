@@ -27,6 +27,7 @@
 *.mp3
 *.ass
 *.srt
+*.mkv
 
 npm-debug.log*
 yarn-debug.log*
