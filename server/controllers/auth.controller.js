@@ -1,6 +1,8 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const connectDB = require('../configs/db');
+const { join } = require("path");
+const fs = require('fs');
 
 
 const AuthController = {};
@@ -104,7 +106,7 @@ AuthController.getImages = async (req, res) => {
         await connectDB();
 
         const { id } = jwt.verify(token, process.env.JWT_SECRET);
-        
+
         if (!id) {
             return res.status(401).send('Not authorized');
         }
@@ -116,6 +118,42 @@ AuthController.getImages = async (req, res) => {
         }
 
         return res.status(200).send({ images: user.uploadedFiles });
+    } catch (err) {
+        return res.status(401).send('Not authorized');
+    }
+}
+
+AuthController.getVideos = async (req, res) => {
+    // const token = req.headers.token;
+
+    // if (!token) {
+    //     return res.status(401).send('Not authorized');
+    // }
+
+    try {
+
+        // const { id } = jwt.verify(token, process.env.JWT_SECRET);
+
+        // if (!id) {
+        //     return res.status(401).send('Not authorized');
+        // }
+
+        // const user = await User.findById(id);
+
+        // if (!user) {
+        //     return res.status(404).send('User not found');
+        // }
+
+        const videoName = req.params.name;
+
+        const videoPath = join(process.cwd(), "created", `${videoName}.mp4`);
+
+        if (!fs.existsSync(videoPath)) {
+            return res.status(404).send('Video not found');
+        }
+
+        return res.status(200).sendFile(videoPath);
+
     } catch (err) {
         return res.status(401).send('Not authorized');
     }
