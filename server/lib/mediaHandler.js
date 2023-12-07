@@ -41,7 +41,8 @@ mediaHandler.prepareImage = async (scene, inputName, ext, aspectRatio) => {
         try {
             // Define the input/output path
             const path = join(process.cwd(), 'uploads', inputName + ext);
-            const audioDuration = await getAudioDuration(join(process.cwd(), 'audioGenerated', `${inputName}.mp3`));
+            const speechPath = join(process.cwd(), 'audioGenerated', `${inputName}.mp3`);
+            const audioDuration = await getAudioDuration(speechPath);
             const subtitlePath = await createSubtitle(scene.dialogue, inputName);
 
             // Read the image from the input path
@@ -58,12 +59,14 @@ mediaHandler.prepareImage = async (scene, inputName, ext, aspectRatio) => {
 
             ffmpeg()
                 .input(path)
-                .input(join(process.cwd(), 'audioGenerated', `${inputName}.mp3`))
+                .input(speechPath)
                 .inputFPS(1)
                 .outputOptions('-vf', `loop=loop=20,scale=720:1280,subtitles=${subtitlePath}`, '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-c:v', 'libx264', '-r', '27', '-t', audioDuration, '-b:v', '2000k', '-b:a', '128k', '-y')
                 .output(join(process.cwd(), 'temp', `${inputName}.mp4`))
                 .on('end', () => {
                     console.log('Finished processing', inputName + ext);
+                    unlink(path);
+                    unlink(speechPath);
                     resolve();
                 })
                 .on('start', () => {
@@ -83,7 +86,8 @@ mediaHandler.prepareImage = async (scene, inputName, ext, aspectRatio) => {
 mediaHandler.prepareVideo = async (scene, inputName, ext, aspectRatio) => {
 
     const path = join(process.cwd(), 'uploads', inputName + ext);
-    const audioDuration = await getAudioDuration(join(process.cwd(), 'audioGenerated', `${inputName}.mp3`));
+    const speechPath = join(process.cwd(), 'audioGenerated', `${inputName}.mp3`);
+    const audioDuration = await getAudioDuration(speechPath);
     const { height, width } = await getVideoMetadata(path);
     const newWidth = Math.round(height * aspectRatio);
     const temp = Math.round((width - newWidth) / 2);
@@ -92,12 +96,14 @@ mediaHandler.prepareVideo = async (scene, inputName, ext, aspectRatio) => {
     return new Promise((resolve, reject) => {
         ffmpeg()
             .input(path)
-            .input(join(process.cwd(), 'audioGenerated', `${inputName}.mp3`))
+            .input(speechPath)
             .outputOptions('-vf', `crop=in_w-${temp}-${temp}:in_h,scale=720:1280,subtitles=${subtitlePath}`)
             .outputOptions('-map', '0:v:0', '-map', '1:a:0', '-c:a', 'aac', '-c:v', 'libx264', '-t', audioDuration, '-pix_fmt', 'yuv420p', '-r', '27', '-b:v', '2000k', '-b:a', '128k', '-strict', 'experimental')
             .output(join(process.cwd(), 'temp', `${inputName}.mp4`))
             .on('end', () => {
                 console.log('Finished processing', inputName + ext);
+                unlink(path);
+                unlink(speechPath);
                 resolve();
             })
             .on('start', () => {

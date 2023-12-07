@@ -58,7 +58,6 @@ myFFmpeg.createVideo = (script, prefix, musicPath, volumeMix, outputPath) => {
         // Add the background music
         command.input(musicPath);
 
-        // '[0:v:0]setsar=sar=1/1[v0];[1:v:0]setsar=sar=1/1[v1];[v0][0:a:0][v1][1:a:0]concat=n=2:v=1:a=1[vout][aout]'
         command
             .inputOptions('-filter_complex', `${sar}${streams}concat=n=${length}:v=1:a=1[vou][aou];[aou]volume=${volumeMix.speech}[a0];[${length}:a:0]atrim=start=10,volume=${volumeMix.bgMusic}[a1];[a0][a1]amix=inputs=2:duration=shortest[aout]`)
             .outputOptions('-map', '[vou]', '-map', '[aout]', '-r', '27', '-strict', 'experimental', '-c:v', 'libx264', '-b:v', '2000k', '-b:a', '128k', '-pix_fmt', 'yuv420p')
@@ -68,6 +67,11 @@ myFFmpeg.createVideo = (script, prefix, musicPath, volumeMix, outputPath) => {
             })
             .on('end', () => {
                 console.log('Video created successfully');
+                unlink(musicPath);
+                script.forEach((scene, index) => {
+                    const name = prefix + (index + 1);
+                    unlink(join(process.cwd(), 'temp', `${name}.mp4`));
+                });
             })
             .on('error', (err, stdout, stderr) => {
                 console.error('Error:', err);
