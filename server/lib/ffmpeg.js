@@ -3,7 +3,7 @@ const ffprobePath = require('ffprobe-static').path;
 const ffmpeg = require('fluent-ffmpeg');
 const { join } = require("path");
 const { unlink } = require("fs").promises;
-const { connectDB } = require('../configs/db');
+const connectDB = require('../configs/db');
 const Project = require('../models/Project');
 
 ffmpeg.setFfmpegPath(ffmpegPath);
@@ -20,7 +20,7 @@ const changeStatus = async (id, projectId) => {
             $set: {
                 status: 'ready',
                 isGenerated: true,
-                generatedUrl: `http://localhost:${PORT}/user/video/download/${projectId}`
+                generatedUrl: `http://localhost:${process.env.PORT}/user/video/download/${projectId}`
             }
         },
         { new: true }
@@ -78,7 +78,7 @@ myFFmpeg.createVideo = (script, id, projectId, musicPath, volumeMix, outputPath)
 
         command
             .inputOptions('-filter_complex', `${sar}${streams}concat=n=${length}:v=1:a=1[vou][aou];[aou]volume=${volumeMix.speech}[a0];[${length}:a:0]atrim=start=10,volume=${volumeMix.bgMusic}[a1];[a0][a1]amix=inputs=2:duration=shortest[aout]`)
-            .outputOptions('-map', '[vou]', '-map', '[aout]', '-r', '27', '-strict', 'experimental', '-c:v', 'libx264', '-b:v', '2000k', '-b:a', '128k', '-pix_fmt', 'yuv420p')
+            .outputOptions('-map', '[vou]', '-map', '[aout]', '-r', '27', '-strict', 'experimental', '-c:v', 'libx264', '-b:v', '4000k', '-b:a', '128k', '-pix_fmt', 'yuv420p')
             .output(outputPath)
             .on('start', () => {
                 console.log('Final video creation started.....');
