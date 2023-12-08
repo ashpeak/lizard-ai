@@ -56,7 +56,8 @@ const validateRequest = async (token, projectId) => {
 
     // Check if the user has access to the project
     await connectDB();
-    const project = await Project.findOne({ _id: projectId, user: id });
+    // const project = await Project.findOne({ _id: projectId, user: id });
+    const project = await Project.findOneAndUpdate({ _id: projectId, user: id }, { $set: { status: 'processing' } }, { new: true });
 
     if (!project) {
         return { isValid: false, id: null };
@@ -113,7 +114,7 @@ videoController.createVideo = async (req, res) => {
         const outputPath = join(process.cwd(), 'created', `${id}${projectId}.mp4`);
 
         // Create the final video
-        createVideo(script, id + projectId, musicPath, volumeMix, outputPath);
+        createVideo(script, id, projectId, musicPath, volumeMix, outputPath);
 
     } catch (error) {
         console.log(error);

@@ -11,7 +11,7 @@ import { MdFullscreen, MdFullscreenExit, MdPlayCircleFilled, MdPauseCircleFilled
 import { Link } from 'react-router-dom';
 import Modal from './Modal/Modalbig';
 import { Toaster, toast } from 'sonner';
-import { uploadImage, createVideo } from '../lib/create';
+import { uploadImage, createVideo, downloadVideo } from '../lib/create';
 import { getUserImages } from "../lib/media";
 import { getStockMedia } from "../lib/media";
 import { useQuery } from '@tanstack/react-query';
@@ -105,7 +105,7 @@ export default function Editor() {
     setScript(newScript);
   }
 
-  const download = async (script, bgMusic) => {
+  const generate = async (script, bgMusic) => {
 
     if (!bgMusic.preview) return toast.error('Please select a background music');
 
@@ -133,6 +133,21 @@ export default function Editor() {
     );
   }
 
+  const download = async () => {
+
+    toast.promise(
+      downloadVideo(id),
+      {
+        loading: 'Downloading your video...',
+        success: 'Video downloaded successfully',
+        error: (err) => {
+          return "Error while downloading video, please try again later";
+        },
+        duration: 2000
+      }
+    );
+  }
+
   const selectBGMusic = (name, music) => setBgMusic({ name, preview: music });
 
   const { isPending, data, isError } = useQuery({ queryKey: ['todos'], queryFn: getUserImages, refetchOnWindowFocus: false });
@@ -142,6 +157,7 @@ export default function Editor() {
 
   useEffect(() => {
     mediaQuery.refetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search]);
   useEffect(() => {
     setImages(data);
@@ -160,11 +176,11 @@ export default function Editor() {
             <h2>Filename</h2>
           </div>
           <div className='flex gap-2'>
-            <button type='button' onClick={() => setModal({ open: true, type: 'media' })} className='flex gap-2 items-center px-3 py-1 rounded-2xl bg-rose-500 text-white hover:bg-rose-600 transition-all duration-200'>
+            <button type='button' onClick={download} className='flex gap-2 items-center px-3 py-1 rounded-2xl bg-rose-500 text-white hover:bg-rose-600 transition-all duration-200'>
               <FaMagic size={20} />
               <p>Ai create</p>
             </button>
-            <button type='button' onClick={() => download(script, bgMusic)} className='flex gap-2 items-center px-3 py-1 text-text-light dark:text-text-dark opacity-70 hover:opacity-100 transition-all duration-200'>
+            <button type='button' onClick={() => generate(script, bgMusic)} className='flex gap-2 items-center px-3 py-1 text-text-light dark:text-text-dark opacity-70 hover:opacity-100 transition-all duration-200'>
               <BiSolidDownload size={20} />
               <p>Download</p>
             </button>

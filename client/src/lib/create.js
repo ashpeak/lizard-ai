@@ -49,6 +49,27 @@ const uploadImage = async (image) => {
   });
 }
 
+const downloadVideo = async (projectId) => {
+  return new Promise((resolve, reject) => {
+    axios.get(process.env.REACT_APP_API + '/user/video/download/' + projectId, {
+      responseType: 'blob',
+      headers: {
+        token: Cookies.get('token')
+      }
+    }).then((response) => {
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'video.mp4'); // or any other name you want
+      document.body.appendChild(link);
+      link.click();
+
+      resolve(response.data);
+    }).catch((error) => {
+      reject(error);
+    });
+  });
+}
 
 
-export { createVideo, uploadImage };
+export { createVideo, uploadImage, downloadVideo };

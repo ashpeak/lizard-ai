@@ -3,12 +3,29 @@ const ffprobePath = require('ffprobe-static').path;
 const ffmpeg = require('fluent-ffmpeg');
 const { join } = require("path");
 const { unlink } = require("fs").promises;
+const { connectDB } = require('../configs/db');
+const Project = require('../models/Project');
 
 ffmpeg.setFfmpegPath(ffmpegPath);
 ffmpeg.setFfprobePath(ffprobePath);
 
 const myFFmpeg = {};
 
+const changeStatus = async (id, projectId) => {
+    await connectDB();
+
+    await Project.findOneAndUpdate(
+        { _id: projectId, user: id },
+        {
+            $set: {
+                status: 'ready',
+                isGenerated: true,
+                generatedUrl: `http://localhost:${PORT}/user/video/download/${projectId}`
+            }
+        },
+        { new: true }
+    );
+}
 
 myFFmpeg.mergeAudio = (audio1, audio2, name) => {
     return new Promise((resolve, reject) => {
@@ -41,9 +58,10 @@ myFFmpeg.mergeAudio = (audio1, audio2, name) => {
     });
 };
 
-myFFmpeg.createVideo = (script, prefix, musicPath, volumeMix, outputPath) => {
+myFFmpeg.createVideo = (script, id, projectId, musicPath, volumeMix, outputPath) => {
     try {
         const command = ffmpeg();
+        const prefix = id + projectId;
 
         const length = script.length;
         let streams = '';   // [0:v:0][0:a:0][1:v:0][1:a:0]...
@@ -72,6 +90,7 @@ myFFmpeg.createVideo = (script, prefix, musicPath, volumeMix, outputPath) => {
                     const name = prefix + (index + 1);
                     unlink(join(process.cwd(), 'temp', `${name}.mp4`));
                 });
+                changeStatus(id, projectId);
             })
             .on('error', (err, stdout, stderr) => {
                 console.error('Error:', err);

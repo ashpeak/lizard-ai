@@ -31,13 +31,17 @@ const ProjectSchema = new mongoose.Schema({
             },
         }
     ],
+    generatedUrl: {
+        type: String,
+        default: 'none'
+    },
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
     status: {
         type: String,
-        enum: ['ready', 'pending'],
+        enum: ['ready', 'processing'],
         default: 'ready'
     },
     isGenerated: {
