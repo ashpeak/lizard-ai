@@ -16,6 +16,7 @@ import { getUserImages } from "../lib/media";
 import { getStockMedia } from "../lib/media";
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
+import Settings from './Settings';
 
 export default function Editor() {
   const { id } = useParams();
@@ -46,6 +47,10 @@ export default function Editor() {
       height: 'auto'
     }
   ]);
+  const [volumeLevel, setVolumeLevel] = useState({
+    music: 0.1,
+    voiceover: 1
+  });
 
   const handleTimeline = (e) => {
     const value = e.target.value;
@@ -330,9 +335,7 @@ export default function Editor() {
         </div>
 
         {/* Settings area */}
-        <div className='rounded-xl col-span-2 border border-border-light dark:border-border-dark h-full'>
-
-        </div>
+        <Settings />
 
       </div>
 
