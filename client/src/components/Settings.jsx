@@ -1,16 +1,17 @@
 import React from 'react'
+import { useLayerStore } from '../states/layer';
 import Mixer from './MusicMix';
-import { FaMicrophone } from "react-icons/fa";
+import ScriptSettings from './ScriptSettings';
 
 export default function Settings() {
+
+    const layer = useLayerStore(state => state.layer);
+
     return (
         <div className='rounded-xl col-span-2 border border-border-light dark:border-border-dark h-full'>
-            <div className='bg-neutral-800 flex items-center opacity-70 pl-4 rounded-t-xl h-10'>
-                <FaMicrophone />
-                <span className='ml-2'>Volume Mix</span>
-            </div>
-            <Mixer />
-            {/* <p className='text-text-light dark:text-text-dark opacity-80'>Select a layer to make customizations.</p> */}
+            {layer === "music" && <Mixer />}
+            {layer === "script" && <ScriptSettings />}
+            {layer === null && <p className='text-text-light p-4 dark:text-text-dark opacity-80'>Select a layer to make customizations.</p>}
         </div>
     )
 }

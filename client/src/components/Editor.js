@@ -17,9 +17,11 @@ import { getStockMedia } from "../lib/media";
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import Settings from './Settings';
+import { useLayerStore } from '../states/layer';
 
 export default function Editor() {
   const { id } = useParams();
+  const setLayer = useLayerStore(state => state.setLayer);
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -47,10 +49,6 @@ export default function Editor() {
       height: 'auto'
     }
   ]);
-  const [volumeLevel, setVolumeLevel] = useState({
-    music: 0.1,
-    voiceover: 1
-  });
 
   const handleTimeline = (e) => {
     const value = e.target.value;
@@ -203,7 +201,8 @@ export default function Editor() {
         {/* Script area */}
         <div className='col-span-3 h-[79vh] md:pr-2 overflow-y-scroll md:pb-12 pb-5 flex flex-col gap-y-5'>
 
-          <div className='rounded-xl'>
+          {/* Background music selection card */}
+          <div onClick={() => setLayer("music")} className='rounded-xl'>
 
             <div className='bg-secondary-light flex justify-between items-center px-4 rounded-t-xl py-1 dark:bg-secondary-dark border-t border-x border-border-light dark:border-border-dark'>
               <p className='text-size-sm lg:text-size-base opacity-[0.7]'>Audio</p>
@@ -230,6 +229,7 @@ export default function Editor() {
 
           </div>
 
+          {/* Voice over selection card */}
           <div className='rounded-xl'>
             <div className='bg-secondary-light flex justify-between items-center px-4 rounded-t-xl py-1 dark:bg-secondary-dark border-t border-x border-border-light dark:border-border-dark'>
               <p className='text-size-sm lg:text-size-base opacity-[0.7]'>Voice Over</p>
@@ -255,7 +255,7 @@ export default function Editor() {
           </div>
 
           {script.map((item, index) => (
-            <div className='rounded-xl'>
+            <div onClick={() => setLayer("script")} className='rounded-xl'>
               <div className='bg-secondary-light flex justify-between items-center px-4 rounded-t-xl py-1 dark:bg-secondary-dark border-t border-x border-border-light dark:border-border-dark'>
                 <p className='text-size-sm lg:text-size-base opacity-[0.7]'>Scene {index + 1}</p>
                 <div className='flex gap-2 opacity-70 items-center'>
