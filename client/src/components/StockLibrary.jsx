@@ -54,7 +54,8 @@ export default function StockLibrary({ mediaQuery, selectImage, handleClose, mut
                         selectImage(media.thumbnail, download, media.type);
                         handleClose();
                     }}>
-                        <ImageCard key={Date.now()} title={media.name} href={media.thumbnail} service={media.service} />
+                        {/* <ImageCard key={Date.now()} type={media.type} title={media.name} href={media.thumbnail} service={media.service} /> */}
+                        <ImageCard key={Date.now()} data={media} />
                     </button>
                 ))}
 
