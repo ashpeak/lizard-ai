@@ -1,8 +1,10 @@
-file 'D:/watcher-bot/test/sm.png'
-duration 3
+onst logger = require('progress-estimator')();
+const youtubedl = require('youtube-dl-exec');
 
-file 'D:/watcher-bot/test/an.png'
-duration 3
 
-file 'D:/watcher-bot/test/az.png'
-duration 2
+const url = 'https://www.youtube.com/watch?v=6xKWiCMKKJg';
+const promise = youtubedl(url, { output: 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4', output: './'});
+
+
+logger(promise, `Obtaining ${url}`)
+        .then((res) => console.log(res));

@@ -8,6 +8,7 @@ import MyLibrary from '../MyLibrary';
 import StockLibrary from '../StockLibrary';
 import StockMusicLibrary from '../StockMusicLibrary';
 import { GiMagicGate } from "react-icons/gi";
+import YoutubeVideo from '../YoutubeVideo';
 
 
 export default function Modal({ handleClose, handleImage, selectBGMusic, images, selectImage, pending, error, mediaQuery, mutation, type }) {
@@ -36,6 +37,12 @@ export default function Modal({ handleClose, handleImage, selectBGMusic, images,
                                 <BiSolidImageAlt size={15} />
                                 <h2>My library</h2>
                             </button>
+                            {type === "media" && (
+                                <button onClick={() => setActive("utube")} className={(active === "utube" ? "border-b border-text-light dark:border-border-light" : "") + ' flex items-center gap-1 opacity-100 px-4 py-2 hover:bg-neutral-300 transition-colors duration-200 cursor-pointer hover:dark:bg-neutral-700'}>
+                                    <BiSolidImageAlt size={15} />
+                                    <h2>Youtube</h2>
+                                </button>
+                            )}
                         </div>
                         <motion.button className='p-[0.3rem] transition-colors duration-200 hover:dark:bg-[#535353] hover:text-[#fff] hover:bg-[#4d4d4d] focus:outline-none rounded-full' onClick={handleClose} whileTap={{ translateY: 1.1 }}>
                             <AiOutlineClose size={15} />
@@ -57,6 +64,9 @@ export default function Modal({ handleClose, handleImage, selectBGMusic, images,
                             selectImage={selectImage}
                             mutation={mutation}
                             handleClose={handleClose} />
+                    )}
+                    {(active === "utube" && type === "media") && (
+                        <YoutubeVideo />
                     )}
                     {(active === "stock" && type === "music") && (
                         <StockMusicLibrary

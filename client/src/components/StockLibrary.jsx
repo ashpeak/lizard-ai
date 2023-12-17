@@ -32,15 +32,15 @@ export default function StockLibrary({ mediaQuery, selectImage, handleClose, mut
                     </div>
                     <div className='flex items-center gap-x-3 pl-4 mb-3'>
                         <label className='cursor-pointer flex items-center gap-[0.35rem]'>
-                            <input type='radio' onChange={(e) => setSearch({...search, type: e.target.value})} name='type' value='video' className='accent-red-500' defaultChecked />
+                            <input type='radio' onChange={(e) => setSearch({ ...search, type: e.target.value })} name='type' value='video' className='accent-red-500' defaultChecked />
                             <p>Video</p>
                         </label>
                         <label className='cursor-pointer flex items-center gap-[0.35rem]'>
-                            <input type='radio' onChange={(e) => setSearch({...search, type: e.target.value})} name='type' value='image' className='accent-red-500' />
+                            <input type='radio' onChange={(e) => setSearch({ ...search, type: e.target.value })} name='type' value='image' className='accent-red-500' />
                             <p>Image</p>
                         </label>
                         <label className='cursor-pointer flex items-center gap-[0.35rem]'>
-                            <input type='radio' onChange={(e) => setSearch({...search, type: e.target.value})} name='type' value='gif' className='accent-red-500' />
+                            <input type='radio' onChange={(e) => setSearch({ ...search, type: e.target.value })} name='type' value='gif' className='accent-red-500' />
                             <p>GIF</p>
                         </label>
                     </div>
@@ -59,13 +59,19 @@ export default function StockLibrary({ mediaQuery, selectImage, handleClose, mut
                     </button>
                 ))}
 
-                {data?.length === 0 && (
+                {(isPending) && (
                     <div className='w-full flex justify-center items-center'>
-                        <p className='text-base opacity-70'>
-                            {isPending && "Loading images..."}
-                            {isError && "Failed to load resources."}
-                            {data.length === 0 && !isPending && !isError && "No images found."}
-                        </p>
+                        <p className='text-base opacity-70'>Loading images... </p>
+                    </div>
+                )}
+                {isError && (
+                    <div className='w-full flex justify-center items-center'>
+                        <p className='text-base opacity-70'>Failed to load resources.</p>
+                    </div>
+                )}
+                {(data.length === 0 && !isPending && !isError) && (
+                    <div className='w-full flex justify-center items-center'>
+                        <p className='text-base opacity-70'>No images found.</p>
                     </div>
                 )}
             </div>

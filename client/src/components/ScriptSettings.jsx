@@ -9,9 +9,9 @@ const ScriptSettings = () => {
 
     return (
         <div className='w-full'>
-            <div className='bg-neutral-800 flex items-center opacity-70 pl-4 rounded-t-xl h-10'>
-                <FaMicrophone className='text-slate-50 dark:text-text-dark' />
-                <span className='ml-2 text-slate-50 dark:text-text-dark'>Voiceover</span>
+            <div className='bg-secondary-light dark:bg-secondary-dark flex items-center opacity-70 pl-4 rounded-t-xl h-10'>
+                <FaMicrophone className='text-text-light dark:text-text-dark' />
+                <span className='ml-2 text-text-light dark:text-text-dark'>Voiceover</span>
             </div>
 
             <div className='px-4 pt-4'>

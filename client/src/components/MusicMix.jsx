@@ -65,9 +65,9 @@ const Mixer = () => {
 
     return (
         <div className='w-full'>
-            <div className='bg-neutral-800 flex items-center opacity-70 pl-4 rounded-t-xl h-10'>
-                <FaMicrophone className='text-slate-50 dark:text-text-dark' />
-                <span className='ml-2 text-slate-50 dark:text-text-dark'>Volume Mix</span>
+            <div className='dark:bg-secondary-dark bg-secondary-light flex items-center opacity-70 pl-4 rounded-t-xl h-10'>
+                <FaMicrophone className='text-text-light dark:text-text-dark' />
+                <span className='ml-2 text-text-light dark:text-text-dark'>Volume Mix</span>
             </div>
             <div className='w-full flex flex-col gap-2 px-4 pt-4'>
                 <div className='w-full'>
@@ -82,7 +82,7 @@ const Mixer = () => {
                         step="0.01"
                         value={voiceover}
                         onChange={handleVolumeChange1}
-                        className='w-full accent-neutral-600'
+                        className='w-full'
                     />
                 </div>
 
