@@ -84,7 +84,7 @@ export default function StockMusicLibrary({ selectBGMusic, handleClose }) {
                 </form>
             </div>
 
-            <div className='px-2 bg-primary-light dark:bg-primary-dark md:px-4 py-3 grid grid-cols-2 gap-y-5 gap-x-6 overflow-y-scroll scroll-hide h-[70vh]'>
+            <div className='px-2 bg-primary-light dark:bg-primary-dark md:px-4 py-3 grid grid-cols-2 gap-y-5 gap-x-6 overflow-y-scroll h-[70vh]'>
                 {data?.length > 0 && data.map((media, index) => (
                     <div key={index} className='h-fit group'>
                         <div className='flex h-fit items-center gap-x-2 opacity-70 group-hover:opacity-90 transition-opacity duration-200'>

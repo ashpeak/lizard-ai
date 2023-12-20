@@ -47,7 +47,7 @@ export default function StockLibrary({ mediaQuery, selectImage, handleClose, mut
                 </form>
             </div>
 
-            <div className='px-2 bg-primary-light dark:bg-primary-dark md:px-4 py-3 flex flex-wrap gap-5 overflow-y-scroll scroll-hide h-[70vh]'>
+            <div className='px-2 bg-primary-light dark:bg-primary-dark md:px-4 py-3 flex flex-wrap gap-5 overflow-y-scroll h-[70vh]'>
                 {data?.length > 0 && data.map((media, index) => (
                     <button type='button' key={index} className='h-fit' onClick={() => {
                         const download = media.service === 'storyblocks' ? media.preview : media.download;
@@ -69,7 +69,7 @@ export default function StockLibrary({ mediaQuery, selectImage, handleClose, mut
                         <p className='text-base opacity-70'>Failed to load resources.</p>
                     </div>
                 )}
-                {(data.length === 0 && !isPending && !isError) && (
+                {(data?.length === 0 && !isPending && !isError) && (
                     <div className='w-full flex justify-center items-center'>
                         <p className='text-base opacity-70'>No images found.</p>
                     </div>

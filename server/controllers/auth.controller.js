@@ -51,12 +51,8 @@ AuthController.login = async (req, res) => {
 
     const user = await User.findOne({ username });
 
-    if (!user) {
-        return res.status(401).send('User does not exist');
-    }
-
-    if (user.password !== password) {
-        return res.status(401).send('Wrong password');
+    if (!user || user.password !== password) {
+        return res.status(401).send('Wrong username or password');
     }
 
     const data = {

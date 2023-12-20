@@ -54,3 +54,23 @@ export const getStockMusic = async (query, filter) => {
         console.log('Not authorized');
     }
 }
+
+export const downloadYoutubeVideo = async (url, startTime = null, endTime = null) => {
+    try {
+        const res = await axios.post(process.env.REACT_APP_API + '/media/youtube/download', {
+            url: url,
+            startTime: startTime,
+            endTime: endTime
+        }, {
+            headers: {
+                token: Cookies.get('token')
+            },
+        });
+        if (res.status !== 200) {
+            return false;
+        } else return res.data;
+
+    } catch (error) {
+        console.log('Not authorized');
+    }
+}

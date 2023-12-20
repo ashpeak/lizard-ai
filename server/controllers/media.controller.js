@@ -1,12 +1,14 @@
 const axios = require('axios');
 const jwt = require('jsonwebtoken');
+const youtubedl = require('youtube-dl-exec');
+const { join } = require('path');
 
 const MediaController = {};
 
 MediaController.getMedia = async (req, res) => {
 
     const token = req.headers.token;
-    if(!token) return res.status(401).json({ msg: "Unauthorized" });
+    if (!token) return res.status(401).json({ msg: "Unauthorized" });
     const { id } = jwt.verify(token, process.env.JWT_SECRET);
 
     if (!id) return res.status(401).json({ msg: "Unauthorized" });
@@ -48,7 +50,7 @@ MediaController.getMedia = async (req, res) => {
 MediaController.getMusic = async (req, res) => {
 
     const token = req.headers.token;
-    if(!token) return res.status(401).json({ msg: "Unauthorized" });
+    if (!token) return res.status(401).json({ msg: "Unauthorized" });
     const { id } = jwt.verify(token, process.env.JWT_SECRET);
 
     if (!id) return res.status(401).json({ msg: "Unauthorized" });
@@ -85,6 +87,28 @@ MediaController.getMusic = async (req, res) => {
     let response = await axios.request(reqOptions);
 
     return res.status(200).json(response.data.data);
+}
+
+MediaController.downloadYoutubeVideo = async (req, res) => {
+
+    const token = req.headers.token;
+    if (!token) return res.status(401).json({ msg: "Unauthorized" });
+    const { id } = jwt.verify(token, process.env.JWT_SECRET);
+
+    if (!id) return res.status(401).json({ msg: "Unauthorized" });
+
+    const { url, startTime, endTime } = req.body;
+
+
+    // const url = 'https://www.youtube.com/watch?v=6xKWiCMKKJg';
+    const promise = await youtubedl(url,
+        {
+            output: 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4',
+            output: join(process.cwd(), 'uploads', `${Date.now()}.mp4`)
+        });
+
+    return res.status(200).json({ msg: "Downloaded" });
+
 }
 
 module.exports = MediaController;

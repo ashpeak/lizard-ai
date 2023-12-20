@@ -8,4 +8,6 @@ router.post('/', MediaController.getMedia);
 
 router.post('/music', MediaController.getMusic);
 
+router.post('/youtube/download', MediaController.downloadYoutubeVideo)
+
 module.exports = router;
