@@ -125,15 +125,17 @@ myFFmpeg.trimVideo = (path, start, end) => {
             }
 
             command
-                .outputOptions('-c', 'copy', '-y', '-an')
+                .outputOptions('-c', 'copy', '-an')
                 .output(path + '_trimmed.mp4')
                 .on('end', () => {
                     generateThumbnail(filePath, start)
                         .then(() => resolve())
                         .catch(err => console.log(err));
                 })
-                .on('error', (err) => {
-                    console.log(err);
+                .on('error', (err, stdout, stderr) => {
+                    console.error('Error:', err);
+                    console.error('ffmpeg stdout:', stdout);
+                    console.error('ffmpeg stderr:', stderr);
                     reject(err);
                 })
                 .run();
