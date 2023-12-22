@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const { join } = require('path');
 const { unlink, readdir } = require('fs').promises;
 const fs = require('fs');
-// const youtubedl = require('youtube-dl-exec');
+const youtubedl = require('youtube-dl-exec');
 const { trimVideo } = require('../lib/ffmpeg');
 
 const MediaController = {};
@@ -127,6 +127,8 @@ MediaController.getTubeDownloadedVideos = async (req, res) => {
     if (!id) return res.status(401).json({ msg: "Unauthorized" });
 
     const files = (await readdir(join(process.cwd(), 'uploads'))).filter(file => file.endsWith('_trimmed.mp4'));
+
+    if(!files || files.length === 0) return res.status(200).json([]);
 
     return res.status(200).json(files);
 

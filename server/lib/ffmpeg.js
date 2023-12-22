@@ -128,7 +128,7 @@ myFFmpeg.trimVideo = (path, start, end) => {
                 .outputOptions('-c', 'copy', '-y', '-an')
                 .output(path + '_trimmed.mp4')
                 .on('end', () => {
-                    generateThumbnail(path)
+                    generateThumbnail(filePath, start)
                         .then(() => resolve())
                         .catch(err => console.log(err));
                 })
@@ -144,11 +144,25 @@ myFFmpeg.trimVideo = (path, start, end) => {
     });
 };
 
-function generateThumbnail(videoPath, position = '00:00:01') {
+function convertToTime(seconds) {
+    // const time = '00:00:01';
+
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor(seconds % 3600 / 60);
+    const sec = Math.floor(seconds % 3600 % 60);
+
+    const hoursStr = hours < 10 ? '0' + hours : hours;
+    const minutesStr = minutes < 10 ? '0' + minutes : minutes;
+    const secStr = sec < 10 ? '0' + sec : sec;
+
+    return `${hoursStr}:${minutesStr}:${secStr}`;
+}
+
+function generateThumbnail(videoPath, startTime) {
     return new Promise((resolve, reject) => {
-        const path = videoPath + '_trimmed.mp4';
         const thumbnailPath = videoPath + '_thumbnail.png';
-        ffmpeg(path)
+        const position = startTime ? convertToTime(startTime) : '00:00:01';
+        ffmpeg(videoPath)
             .on('end', resolve)
             .on('error', reject)
             .screenshots({
