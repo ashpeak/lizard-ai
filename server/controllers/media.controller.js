@@ -101,7 +101,8 @@ MediaController.downloadYoutubeVideo = async (req, res) => {
     if (!id) return res.status(401).json({ msg: "Unauthorized" });
 
     const { url, startTime, endTime } = req.body;
-    const output = join(process.cwd(), 'uploads', `${projectId}-${Date.now()}-utube`);
+    const filename = `${projectId}-${Date.now()}-utube`;
+    const output = join(process.cwd(), 'uploads', filename);
 
     await youtubedl(url,
         {
@@ -110,7 +111,7 @@ MediaController.downloadYoutubeVideo = async (req, res) => {
         });
 
     if (startTime || endTime) {
-        await trimVideo(output, startTime, endTime);
+        await trimVideo(filename, output, startTime, endTime);
         unlink(output + '.webm');
     }
 

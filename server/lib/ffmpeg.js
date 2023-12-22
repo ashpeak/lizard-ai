@@ -103,7 +103,7 @@ myFFmpeg.createVideo = (script, id, projectId, musicPath, volumeMix, outputPath)
     }
 }
 
-myFFmpeg.trimVideo = (path, start, end) => {
+myFFmpeg.trimVideo = (filename, path, start, end) => {
     return new Promise((resolve, reject) => {
         const filePath = path + '.webm';
         try {
@@ -128,7 +128,7 @@ myFFmpeg.trimVideo = (path, start, end) => {
                 .outputOptions('-c', 'copy', '-an')
                 .output(path + '_trimmed.mp4')
                 .on('end', () => {
-                    generateThumbnail(path, start)
+                    generateThumbnail(filename, filePath, start)
                         .then(() => resolve())
                         .catch(err => console.log(err));
                 })
@@ -144,13 +144,9 @@ myFFmpeg.trimVideo = (path, start, end) => {
     });
 };
 
-function generateThumbnail(videoPath, time) {
+function generateThumbnail(filename, videoPath, time) {
     return new Promise((resolve, reject) => {
-        const thumbnailPath = videoPath + '_thumbnail.png';
         ffmpeg(videoPath)
-            .on('filenames', (filenames) => {
-                console.log('Created file names', filenames);
-            })
             .on('end', () => {
                 console.log('Job done');
                 resolve();
@@ -161,9 +157,9 @@ function generateThumbnail(videoPath, time) {
             })
             .takeScreenshots({
                 count: 1,
-                filename: thumbnailPath,
+                filename: filename,
                 timemarks: [time]
-            }, '.');
+            }, join(process.cwd(), 'uploads'));
     });
 }
 
