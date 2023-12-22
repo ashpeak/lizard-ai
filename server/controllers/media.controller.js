@@ -1,7 +1,9 @@
 const axios = require('axios');
 const jwt = require('jsonwebtoken');
 const { join } = require('path');
-const youtubedl = require('youtube-dl-exec');
+const { unlink, readdir } = require('fs').promises;
+const fs = require('fs');
+// const youtubedl = require('youtube-dl-exec');
 const { trimVideo } = require('../lib/ffmpeg');
 
 const MediaController = {};
@@ -92,14 +94,14 @@ MediaController.getMusic = async (req, res) => {
 
 MediaController.downloadYoutubeVideo = async (req, res) => {
 
-    const token = req.headers.token;
+    const { token, id: projectId } = req.headers;
     if (!token) return res.status(401).json({ msg: "Unauthorized" });
     const { id } = jwt.verify(token, process.env.JWT_SECRET);
 
     if (!id) return res.status(401).json({ msg: "Unauthorized" });
 
     const { url, startTime, endTime } = req.body;
-    const output = join(process.cwd(), 'uploads', `${Date.now()}`);
+    const output = join(process.cwd(), 'uploads', `${projectId}-${Date.now()}-utube`);
 
     await youtubedl(url,
         {
@@ -109,9 +111,38 @@ MediaController.downloadYoutubeVideo = async (req, res) => {
 
     if (startTime || endTime) {
         await trimVideo(output, startTime, endTime);
+        unlink(output + '.webm');
     }
 
     return res.status(200).json({ msg: "Downloaded" });
+
+}
+
+MediaController.getTubeDownloadedVideos = async (req, res) => {
+
+    const token = req.headers.token;
+    if (!token) return res.status(401).json({ msg: "Unauthorized" });
+    const { id } = jwt.verify(token, process.env.JWT_SECRET);
+
+    if (!id) return res.status(401).json({ msg: "Unauthorized" });
+
+    const files = (await readdir(join(process.cwd(), 'uploads'))).filter(file => file.endsWith('_trimmed.mp4'));
+
+    return res.status(200).json(files);
+
+}
+
+MediaController.getTubeSingleVideo = async (req, res) => {
+
+    const { name } = req.params;
+
+    const file = join(process.cwd(), 'uploads', name);
+
+    if (!fs.existsSync(file)) {
+        return res.status(404).send('File not found');
+    }
+
+    return res.status(200).sendFile(file);
 
 }
 

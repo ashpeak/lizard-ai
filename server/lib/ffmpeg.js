@@ -107,10 +107,15 @@ myFFmpeg.trimVideo = (path, start, end) => {
     return new Promise((resolve, reject) => {
         const filePath = path + '.webm';
         try {
+            if (start > 0 && end > 0 && start > end) {
+                reject('Start time should be less than end time');
+            } else if (start > 0 && end > 0 && start === end) {
+                reject('Start time and end time should not be same');
+            }
+
             const command = ffmpeg();
 
-            command.input(filePath)
-                .inputOptions('-r', '30');
+            command.input(filePath);
 
             if (start) {
                 command.inputOptions('-ss', start);
@@ -120,14 +125,12 @@ myFFmpeg.trimVideo = (path, start, end) => {
             }
 
             command
-                .outputOptions('-c', 'copy', '-y')
-                .output(filePath + '_trimmed.mp4')
-                .on('start', () => {
-                    console.log('Trimming video started.....');
-                })
+                .outputOptions('-c', 'copy', '-y', '-an')
+                .output(path + '_trimmed.mp4')
                 .on('end', () => {
-                    console.log('Video trimmed successfully');
-                    resolve();
+                    generateThumbnail(path)
+                        .then(() => resolve())
+                        .catch(err => console.log(err));
                 })
                 .on('error', (err) => {
                     console.log(err);
@@ -140,5 +143,20 @@ myFFmpeg.trimVideo = (path, start, end) => {
         }
     });
 };
+
+function generateThumbnail(videoPath, position = '00:00:01') {
+    return new Promise((resolve, reject) => {
+        const path = videoPath + '_trimmed.mp4';
+        const thumbnailPath = videoPath + '_thumbnail.png';
+        ffmpeg(path)
+            .on('end', resolve)
+            .on('error', reject)
+            .screenshots({
+                timestamps: [position],
+                filename: thumbnailPath,
+                folder: '.'
+            });
+    });
+}
 
 module.exports = myFFmpeg;

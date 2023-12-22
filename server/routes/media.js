@@ -8,6 +8,10 @@ router.post('/', MediaController.getMedia);
 
 router.post('/music', MediaController.getMusic);
 
-router.post('/youtube/download', MediaController.downloadYoutubeVideo)
+router.post('/youtube/download', MediaController.downloadYoutubeVideo);
+
+router.get('/youtube/download', MediaController.getTubeDownloadedVideos);
+
+router.get('/youtube/:name', MediaController.getTubeSingleVideo);
 
 module.exports = router;

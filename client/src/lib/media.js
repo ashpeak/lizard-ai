@@ -56,7 +56,7 @@ export const getStockMusic = async (query, filter) => {
     }
 }
 
-export const downloadYoutubeVideo = async (url, startTime = null, endTime = null) => {
+export const downloadYoutubeVideo = async (url, projectId, startTime = null, endTime = null) => {
     try {
 
         toast.info('Downloading...', { duration: 3000 });
@@ -67,7 +67,8 @@ export const downloadYoutubeVideo = async (url, startTime = null, endTime = null
             endTime: endTime
         }, {
             headers: {
-                token: Cookies.get('token')
+                token: Cookies.get('token'),
+                id: projectId
             },
         });
 
@@ -78,6 +79,24 @@ export const downloadYoutubeVideo = async (url, startTime = null, endTime = null
             toast.success('Downloaded Successfully', { duration: 3000 });
             return res.data;
         };
+
+    } catch (error) {
+        console.log('Not authorized');
+    }
+}
+
+export const getTubeDownloadedVideos = async () => {
+    try {
+
+        const res = await axios.get(process.env.REACT_APP_API + '/media/youtube/download', {
+            headers: {
+                token: Cookies.get('token')
+            },
+        });
+
+        if (res.status !== 200) {
+            return [];
+        } else return res.data;
 
     } catch (error) {
         console.log('Not authorized');

@@ -4,11 +4,13 @@ import { toast } from 'sonner';
 import { IoMdDownload } from "react-icons/io";
 import { MdPlayCircleFilled } from 'react-icons/md';
 import YoutubeCard from './YoutubeCard';
-import { downloadYoutubeVideo } from '../lib/media';
+import { downloadYoutubeVideo, getTubeDownloadedVideos } from '../lib/media';
+import { useQuery } from '@tanstack/react-query';
+import { useParams } from 'react-router-dom';
 
 export default function YoutubeVideo() {
 
-
+    const { id } = useParams();
     const [link, setLink] = useState('');
     const [key, setKey] = useState(Date.now());
     const [url, setUrl] = useState(null);
@@ -16,15 +18,6 @@ export default function YoutubeVideo() {
         start: 0,
         end: 0
     });
-
-    const opts = {
-        height: '100%',
-        width: '100%',
-        playerVars: {
-            // https://developers.google.com/youtube/player_parameters
-            autoplay: 1,
-        },
-    }
 
     useEffect(() => {
         player();
@@ -62,6 +55,25 @@ export default function YoutubeVideo() {
         setTime({ ...time, [name]: value ? parseInt(value) : 0 });
     }
 
+    const { data: videos, refetch, isPending } = useQuery({ queryKey: ['youtubeVideo'], queryFn: getTubeDownloadedVideos, refetchOnWindowFocus: true });
+
+    const handleDownload = async () => {
+        if (!url) {
+            toast.error('Please enter a valid youtube video url', { duration: 3000 });
+            return;
+        }
+        if (time.start > 0 && time.end > 0 && time.start > time.end) {
+            toast.error('Start time should be less than end time', { duration: 3000 });
+            return;
+        } else if (time.start > 0 && time.end > 0 && time.start === time.end) {
+            toast.error('Start time and end time should not be same', { duration: 3000 });
+            return;
+        }
+
+        await downloadYoutubeVideo(url, id, time.start, time.end);
+        refetch();
+    }
+
     return (
         <div>
             <div className='border-b border-border-light dark:border-border-dark w-full'>
@@ -83,7 +95,7 @@ export default function YoutubeVideo() {
                             <iframe width="100%" height="100%" title='video' key={key}
                                 src={url}
                                 className='md:min-w-[37.5rem] md:min-h-[25rem]'
-                                frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen">
+                                frameborder="0" allow="accelerometer; autoPlay; encrypted-media; gyroscope; picture-in-picture; fullscreen">
                             </iframe>
                         ) : (
                             <div className='h-full opacity-90 flex items-center justify-center'>
@@ -133,7 +145,7 @@ export default function YoutubeVideo() {
                                 </span>
                                 <span>Replay</span>
                             </button>
-                            <button type='button' className='flex opacity-90 hover:opacity-100 gap-1 h-fit items-center transition duration-150 hover:scale-105' onClick={() => downloadYoutubeVideo(url, time.start, time.end)}>
+                            <button type='button' className='flex opacity-90 hover:opacity-100 gap-1 h-fit items-center transition duration-150 hover:scale-105' onClick={handleDownload}>
                                 <span className='text-text-light dark:text-gray-50'>
                                     <IoMdDownload size={25} />
                                 </span>
@@ -150,11 +162,14 @@ export default function YoutubeVideo() {
                     </div>
 
                     <div className='py-3 flex flex-wrap gap-x-5 gap-y-5'>
-                        <YoutubeCard />
-                        <YoutubeCard />
-                        <YoutubeCard />
-                        <YoutubeCard />
-                        <YoutubeCard />
+                        {isPending && (
+                            <div className='flex items-center justify-center w-full h-full'>
+                                <h2>Loading...</h2>
+                            </div>
+                        )}
+                        {videos && videos.map((video, index) => (
+                            <YoutubeCard key={index} name={video} />
+                        ))}
                     </div>
                 </div>
             </div>
