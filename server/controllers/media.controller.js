@@ -1,7 +1,8 @@
 const axios = require('axios');
 const jwt = require('jsonwebtoken');
-const youtubedl = require('youtube-dl-exec');
 const { join } = require('path');
+const youtubedl = require('youtube-dl-exec');
+const { trimVideo } = require('../lib/ffmpeg');
 
 const MediaController = {};
 
@@ -98,14 +99,17 @@ MediaController.downloadYoutubeVideo = async (req, res) => {
     if (!id) return res.status(401).json({ msg: "Unauthorized" });
 
     const { url, startTime, endTime } = req.body;
+    const output = join(process.cwd(), 'uploads', `${Date.now()}`);
 
-
-    // const url = 'https://www.youtube.com/watch?v=6xKWiCMKKJg';
-    const promise = await youtubedl(url,
+    await youtubedl(url,
         {
             output: 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4',
-            output: join(process.cwd(), 'uploads', `${Date.now()}.mp4`)
+            output: output,
         });
+
+    if (startTime || endTime) {
+        await trimVideo(output, startTime, endTime);
+    }
 
     return res.status(200).json({ msg: "Downloaded" });
 

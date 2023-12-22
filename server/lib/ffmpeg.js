@@ -103,4 +103,37 @@ myFFmpeg.createVideo = (script, id, projectId, musicPath, volumeMix, outputPath)
     }
 }
 
+myFFmpeg.trimVideo = (path, start, end) => {
+    return new Promise((resolve, reject) => {
+
+        try {
+            const command = ffmpeg();
+
+            command.input(path)
+                .inputOptions('-r', '30');
+
+            if (start) {
+                command.inputOptions('-ss', start);
+            }
+            if (end) {
+                command.inputOptions('-to', end);
+            }
+
+            command
+                .outputOptions('-c', 'copy', '-y')
+                .output(path)
+                .on('end', () => {
+                    resolve();
+                })
+                .on('error', (err) => {
+                    reject(err);
+                })
+                .run();
+
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
 module.exports = myFFmpeg;
