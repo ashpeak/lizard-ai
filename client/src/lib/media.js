@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { toast } from 'sonner';
 
 export const getUserImages = async () => {
     try {
@@ -57,6 +58,9 @@ export const getStockMusic = async (query, filter) => {
 
 export const downloadYoutubeVideo = async (url, startTime = null, endTime = null) => {
     try {
+
+        toast.info('Downloading...', { duration: 3000 });
+
         const res = await axios.post(process.env.REACT_APP_API + '/media/youtube/download', {
             url: url,
             startTime: startTime,
@@ -66,9 +70,14 @@ export const downloadYoutubeVideo = async (url, startTime = null, endTime = null
                 token: Cookies.get('token')
             },
         });
+
         if (res.status !== 200) {
-            return false;
-        } else return res.data;
+            toast.error('Something went wrong', { duration: 3000 });
+            return;
+        } else {
+            toast.success('Downloaded Successfully', { duration: 3000 });
+            return res.data;
+        };
 
     } catch (error) {
         console.log('Not authorized');

@@ -4,6 +4,7 @@ import { toast } from 'sonner';
 import { IoMdDownload } from "react-icons/io";
 import { MdPlayCircleFilled } from 'react-icons/md';
 import YoutubeCard from './YoutubeCard';
+import { downloadYoutubeVideo } from '../lib/media';
 
 export default function YoutubeVideo() {
 
@@ -132,7 +133,7 @@ export default function YoutubeVideo() {
                                 </span>
                                 <span>Replay</span>
                             </button>
-                            <button type='button' className='flex gap-1 h-fit items-center transition duration-150 hover:scale-105' onClick={() => player()}>
+                            <button type='button' className='flex opacity-90 hover:opacity-100 gap-1 h-fit items-center transition duration-150 hover:scale-105' onClick={() => downloadYoutubeVideo(url, time.start, time.end)}>
                                 <span className='text-text-light dark:text-gray-50'>
                                     <IoMdDownload size={25} />
                                 </span>
