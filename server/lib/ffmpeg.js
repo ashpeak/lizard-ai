@@ -105,11 +105,11 @@ myFFmpeg.createVideo = (script, id, projectId, musicPath, volumeMix, outputPath)
 
 myFFmpeg.trimVideo = (path, start, end) => {
     return new Promise((resolve, reject) => {
-
+        const filePath = path + '.webm';
         try {
             const command = ffmpeg();
 
-            command.input(path)
+            command.input(filePath)
                 .inputOptions('-r', '30');
 
             if (start) {
@@ -121,11 +121,16 @@ myFFmpeg.trimVideo = (path, start, end) => {
 
             command
                 .outputOptions('-c', 'copy', '-y')
-                .output(path)
+                .output(filePath + '_trimmed.mp4')
+                .on('start', () => {
+                    console.log('Trimming video started.....');
+                })
                 .on('end', () => {
+                    console.log('Video trimmed successfully');
                     resolve();
                 })
                 .on('error', (err) => {
+                    console.log(err);
                     reject(err);
                 })
                 .run();
