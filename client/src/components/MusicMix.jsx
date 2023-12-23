@@ -7,9 +7,10 @@ const Mixer = () => {
     const musicState = settings();
     const voiceover = musicState.voiceover;
     const bgMusic = musicState.music;
+    const bgMusic_preview = musicState.bgMusic.preview;
 
-    const audio1 = new Audio('/audio/ashish.mp3');
-    const audio2 = new Audio('https://dm0qx8t0i9gc9.cloudfront.net/previews/audio/SiX0YRGyPkccxaman/audioblocks-background-beat-60-sec_HUgx2kFDo_NWM.mp3?type=preview&origin=AUDIOBLOCKS&timestamp_ms=1701131920367&publicKey=34acan3LytGU0uHTGfeRAvwOEkvEWmyRrBu34gNyRJmOwP2QMPU62mzFr5zKdmur&organizationId=106979&apiVersion=2.0&stockItemId=347300457&resolution=&endUserId=7f903380050cf7c47cbbe711fe85aa413ee94795&projectId=65653066d2d6a82b89bdfd6b&searchId=6efc5b81-c13f-4ede-a3f6-457f01281b11&searchPageId=c1091281-53c1-43ba-8d7c-5d7727b7b455');
+    const audio1 = new Audio(`${process.env.REACT_APP_API}/media/speech/demo/guy`);
+    const audio2 = new Audio(bgMusic_preview);
 
     const playAudio = (audio, volume, startTime) => {
         audio.pause();

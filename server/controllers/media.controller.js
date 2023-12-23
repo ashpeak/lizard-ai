@@ -129,7 +129,7 @@ MediaController.getTubeDownloadedVideos = async (req, res) => {
 
     const files = (await readdir(join(process.cwd(), 'uploads'))).filter(file => file.endsWith('_trimmed.mp4'));
 
-    if(!files || files.length === 0) return res.status(200).json([]);
+    if (!files || files.length === 0) return res.status(200).json([]);
 
     return res.status(200).json(files);
 
@@ -140,6 +140,20 @@ MediaController.getTubeSingleVideo = async (req, res) => {
     const { name } = req.params;
 
     const file = join(process.cwd(), 'uploads', name);
+
+    if (!fs.existsSync(file)) {
+        return res.status(404).send('File not found');
+    }
+
+    return res.status(200).sendFile(file);
+
+}
+
+MediaController.getDemoSpeech = async (req, res) => {
+
+    const { name } = req.params;
+
+    const file = join(process.cwd(), 'files', `${name}.mp3`);
 
     if (!fs.existsSync(file)) {
         return res.status(404).send('File not found');

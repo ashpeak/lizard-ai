@@ -1,7 +1,9 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-const createVideo = async (script, bgMusic, id) => {
+const createVideo = async (script, bgMusic, musicState, id) => {
+  
+  console.log("hello", musicState);
 
   const arr = [];
   script.map((item, index) => arr.push({ index: index + 1, dialogue: item.dialogue, media: item.download, type: item.type }));
@@ -10,26 +12,26 @@ const createVideo = async (script, bgMusic, id) => {
     script: arr,
     bgMusic: bgMusic,
     volumeMix: {
-      speech: 1,
-      bgMusic: 0.7
+      speech: musicState.voiceover,
+      bgMusic: musicState.music
     }
   };
 
-  try {
-    const response = await axios.post(process.env.REACT_APP_API + '/v1/create', data, {
-      headers: {
-        'Content-Type': 'application/json',
-        token: Cookies.get('token'),
-        id: id
-      }
-    });
+  // try {
+  //   const response = await axios.post(process.env.REACT_APP_API + '/v1/create', data, {
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       token: Cookies.get('token'),
+  //       id: id
+  //     }
+  //   });
 
-    if (response.status === 200) {
-      return true;
-    }
-  } catch (error) {
-    return false;
-  }
+  //   if (response.status === 200) {
+  //     return true;
+  //   }
+  // } catch (error) {
+  //   return false;
+  // }
 }
 
 const uploadImage = async (image) => {

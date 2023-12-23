@@ -4,8 +4,10 @@ import { MdStopCircle } from "react-icons/md";
 import { useQuery } from '@tanstack/react-query';
 import { getStockMusic } from '../lib/media';
 import { HiMiniSpeakerWave } from 'react-icons/hi2';
+import { settings } from '../states/settings';
 
-export default function StockMusicLibrary({ selectBGMusic, handleClose }) {
+export default function StockMusicLibrary({ handleClose }) {
+    const setBgMusic = settings((state) => state.setBgMusic);
     const [search, setSearch] = useState({
         query: '',
         filter: 'music'
@@ -99,7 +101,7 @@ export default function StockMusicLibrary({ selectBGMusic, handleClose }) {
                             </button>
                             <div className='flex gap-1 font-bold'>
                                 <button type='button' className='h-fit' onClick={() => {
-                                    selectBGMusic(media.name, media.preview);
+                                    setBgMusic({ name: media.name, preview: media.preview });
                                     handleClose();
                                 }}>
                                     <p className='line-clamp-1 text-[1rem] text-start'>{media.name.length > 20 ? media.name.substring(0, 20) + '...' : media.name}</p>

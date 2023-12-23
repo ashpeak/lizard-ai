@@ -14,4 +14,6 @@ router.get('/youtube/download', MediaController.getTubeDownloadedVideos);
 
 router.get('/youtube/:name', MediaController.getTubeSingleVideo);
 
+router.get('/speech/demo/:name', MediaController.getDemoSpeech);
+
 module.exports = router;

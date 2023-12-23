@@ -18,10 +18,13 @@ import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import Settings from './Settings';
 import { useLayerStore } from '../states/layer';
+import { settings } from '../states/settings';
 
 export default function Editor() {
   const { id } = useParams();
   const setLayer = useLayerStore(state => state.setLayer);
+  const musicState = settings();
+  const bgMusic = settings(state => state.bgMusic);
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -32,10 +35,6 @@ export default function Editor() {
   });
   const [images, setImages] = useState([]);
   const [editingIndex, setEditingIndex] = useState(0);
-  const [bgMusic, setBgMusic] = useState({
-    name: '',
-    preview: ''
-  });
   const [search, setSearch] = useState({
     query: '',
     type: 'video'
@@ -124,7 +123,7 @@ export default function Editor() {
     }
 
     toast.promise(
-      createVideo(script, bgMusic, id),
+      createVideo(script, bgMusic, musicState, id),
       {
         loading: 'Preparing your video... Hang tight!',
         success: 'Creating your video. We\'ll notify you upon completion for download. Feel free to close this editor now.',
@@ -150,8 +149,6 @@ export default function Editor() {
       }
     );
   }
-
-  const selectBGMusic = (name, music) => setBgMusic({ name, preview: music });
 
   const { isPending, data, isError } = useQuery({ queryKey: ['todos'], queryFn: getUserImages, refetchOnWindowFocus: false });
   const mediaQuery = useQuery({ queryKey: ['stockMedia'], queryFn: () => getStockMedia(search), refetchOnWindowFocus: false });
@@ -218,7 +215,7 @@ export default function Editor() {
                   <BsMusicNote size={15} />
                   <p className='text-text-light dark:text-text-dark opacity-70'>Background Music</p>
                 </div>
-                <button type='button' onClick={() => setBgMusic('')} className='text-xs cursor-pointer invisible hover:opacity-100 transition-opacity duration-200 group-hover:visible opacity-70'>delete</button>
+                <button type='button' onClick={() => musicState.setBgMusic({ name: '', preview: '' })} className='text-xs cursor-pointer invisible hover:opacity-100 transition-opacity duration-200 group-hover:visible opacity-70'>delete</button>
               </div>
               <div className='flex items-center mt-2'>
                 <button type='button' onClick={() => setModal({ open: true, type: 'music' })} className='px-[0.6rem] py-[0.2rem] rounded-2xl text-xs cursor-pointer border border-text-light dark:border-text-dark opacity-70 hover:opacity-100'>
@@ -345,7 +342,6 @@ export default function Editor() {
         selectImage={selectImage}
         images={images}
         handleImage={handleImage}
-        selectBGMusic={selectBGMusic}
         pending={isPending}
         error={isError}
         type={modal.type}

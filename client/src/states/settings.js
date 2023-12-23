@@ -4,7 +4,12 @@ export const settings = create((set) => ({
     music: 0.1,
     voiceover: 1,
     subtitlePosition: 5,
+    bgMusic: {
+        preview: '',
+        name: ''
+    },
     setMusicVolume: (volume) => set({ music: volume }),
     setVoiceoverVolume: (volume) => set({ voiceover: volume }),
-    setSubtitlePosition: (position) => set({ subtitlePosition: position })
+    setSubtitlePosition: (position) => set({ subtitlePosition: position }),
+    setBgMusic: (bgMusic) => set({ bgMusic: bgMusic })
 }));
