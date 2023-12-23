@@ -10,9 +10,9 @@ subtitle.createSubtitle = async (dialogue, name) => {
 
         const length = dialogue.split(' ').length;
         const path = join(process.cwd(), 'temp', name + '.ass');
-        // Dialogue: 0,0:00:03.90,0:00:05.90,ffmpeg,,0,0,0,,{\bord3.9\blur1\shad0.2}glider.
-        for(let i = 0; i < length/5; i++) {
-            const line = length - i*5 > 5 ? dialogue.split(' ').slice(i*5, i*5 + 5).join(' ') : dialogue.split(' ').slice(i*5, length).join(' ');
+        // Dialogue: 0,0:00:03.90,0:00:05.90,ffmpeg,,0,0,0,,{\bord3.9\blur1\shad0.2}Some text here.
+        for(let i = 0; i < length/4; i++) {
+            const line = length - i*4 > 4 ? dialogue.split(' ').slice(i*4, i*4 + 4).join(' ') : dialogue.split(' ').slice(i*4, length).join(' ');
             data += `Dialogue: 0,0:00:0${i}.${i*2}9,0:00:0${i+1}.${i*2+2}0,ffmpeg,,0,0,0,,{\\bord3.9\\blur1\\shad0.2}${line}\n`;
         }
         

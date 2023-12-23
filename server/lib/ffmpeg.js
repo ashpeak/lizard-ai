@@ -93,7 +93,12 @@ myFFmpeg.createVideo = (script, id, projectId, musicPath, volumeMix, outputPath)
                 console.log('Video created successfully');
                 unlink(musicPath);
                 script.forEach((scene, index) => {
-                    const name = prefix + (index + 1);
+                    const name = null;
+                    if (scene.type === 'utube') {
+                        name = scene.media;
+                    } else {
+                        name = prefix + (index + 1);
+                    }
                     unlink(join(process.cwd(), 'temp', `${name}.mp4`));
                 });
                 changeStatus(id, projectId);
