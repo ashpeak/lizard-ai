@@ -148,7 +148,6 @@ function generateThumbnail(filename, videoPath, time) {
     return new Promise((resolve, reject) => {
         ffmpeg(videoPath)
             .on('end', () => {
-                console.log('Job done');
                 resolve();
             })
             .on('error', (err) => {
@@ -157,7 +156,7 @@ function generateThumbnail(filename, videoPath, time) {
             })
             .takeScreenshots({
                 count: 1,
-                filename: filename,
+                filename: `${filename}_thumbnail.png`,
                 timemarks: [time]
             }, join(process.cwd(), 'uploads'));
     });

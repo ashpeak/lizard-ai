@@ -83,10 +83,15 @@ videoController.createVideo = async (req, res) => {
         // Iterate over each file in the request
         script.forEach((scene) => {
             const { index, media, type, dialogue } = scene;
-            const name = id + projectId + index;
-            // Download the image
-            downloadPromises.push(downloadMedia(media, name, type, res));
-            downloadPromises.push(text2speech(dialogue, name));
+
+            if ((media.split('-')[2]?.split('_')[0]) !== 'utube') {
+                const name = id + projectId + index;
+                // Download the Media
+                downloadPromises.push(downloadMedia(media, name, type, res));
+                downloadPromises.push(text2speech(dialogue, name));
+            } else {
+                downloadPromises.push(text2speech(dialogue, media));
+            }
         });
 
         // Download background music
@@ -106,6 +111,8 @@ videoController.createVideo = async (req, res) => {
                 await mediaHandler.prepareImage(scene, name, '.gif', 0.5625);
             } else if (scene.type === 'video') {
                 await mediaHandler.prepareVideo(scene, name, '.mp4', 0.5625);
+            } else if (scene.type === 'utube') {
+                await mediaHandler.prepareYoutube(scene, 0.5625);
             }
         }
 

@@ -117,5 +117,38 @@ mediaHandler.prepareVideo = async (scene, inputName, ext, aspectRatio) => {
     });
 }
 
+mediaHandler.prepareYoutube = async (scene, aspectRatio) => {
+
+    const path = join(process.cwd(), 'uploads', scene.media);
+    const speechPath = join(process.cwd(), 'audioGenerated', `${scene.media}.mp3`);
+    const audioDuration = await getAudioDuration(speechPath);
+    const { height, width } = await getVideoMetadata(path);
+    const newWidth = Math.round(height * aspectRatio);
+    const temp = Math.round((width - newWidth) / 2);
+    const subtitlePath = await createSubtitle(scene.dialogue, scene.media);
+
+    return new Promise((resolve, reject) => {
+        ffmpeg()
+            .input(path)
+            .input(speechPath)
+            .outputOptions('-vf', `crop=in_w-${temp}-${temp}:in_h,scale=720:1280,subtitles=${subtitlePath}`)
+            .outputOptions('-map', '0:v:0', '-map', '1:a:0', '-c:a', 'aac', '-c:v', 'libx264', '-t', audioDuration, '-pix_fmt', 'yuv420p', '-r', '27', '-b:v', '4000k', '-b:a', '128k', '-strict', 'experimental')
+            .output(join(process.cwd(), 'temp', `${scene.media}.mp4`))
+            .on('end', () => {
+                console.log('Finished processing', scene.media);
+                unlink(speechPath);
+                resolve();
+            })
+            .on('start', () => {
+                console.log('Started processing', scene.media);
+            })
+            .on('error', (err) => {
+                console.error('Error:', err);
+                reject(err);
+            })
+            .run();
+    });
+}
+
 module.exports = mediaHandler;
 
