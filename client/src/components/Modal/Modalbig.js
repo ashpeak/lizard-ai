@@ -66,7 +66,10 @@ export default function Modal({ handleClose, handleImage, selectBGMusic, images,
                             handleClose={handleClose} />
                     )}
                     {(active === "utube" && type === "media") && (
-                        <YoutubeVideo />
+                        <YoutubeVideo
+                            mediaQuery={mediaQuery}
+                            selectImage={selectImage}
+                            handleClose={handleClose} />
                     )}
                     {(active === "stock" && type === "music") && (
                         <StockMusicLibrary

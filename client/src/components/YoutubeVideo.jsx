@@ -8,7 +8,7 @@ import { downloadYoutubeVideo, getTubeDownloadedVideos } from '../lib/media';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 
-export default function YoutubeVideo() {
+export default function YoutubeVideo({ mediaQuery, selectImage, handleClose }) {
 
     const { id } = useParams();
     const [link, setLink] = useState('');
@@ -168,7 +168,13 @@ export default function YoutubeVideo() {
                             </div>
                         )}
                         {videos && videos.map((video, index) => (
-                            <YoutubeCard key={index} name={video} />
+                            <button type='button' key={index} className='h-fit' onClick={() => {
+                                const thumbnail = `${process.env.REACT_APP_API}/media/youtube/${video.split('_')[0]}_thumbnail.png`;
+                                selectImage(thumbnail, video, 'utube');
+                                handleClose();
+                            }}>
+                                <YoutubeCard key={index} name={video} />
+                            </button>
                         ))}
                     </div>
                 </div>
