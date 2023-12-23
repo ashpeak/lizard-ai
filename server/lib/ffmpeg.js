@@ -67,7 +67,13 @@ myFFmpeg.createVideo = (script, id, projectId, musicPath, volumeMix, outputPath)
         let streams = '';   // [0:v:0][0:a:0][1:v:0][1:a:0]...
         let sar = '';       // setsar=sar=1/1
         script.forEach((scene, index) => {
-            const name = prefix + (index + 1);
+            let name = null;
+            if (scene.type === 'utube') {
+                name = scene.media;
+            } else {
+                name = prefix + (index + 1);
+            }
+
             command.input(join(process.cwd(), 'temp', `${name}.mp4`));
             sar += `[${index}:v:0]setsar=sar=1/1[v${index}];`;
             streams += `[v${index}][${index}:a:0]`;
