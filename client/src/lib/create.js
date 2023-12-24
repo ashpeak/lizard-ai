@@ -17,21 +17,21 @@ const createVideo = async (script, bgMusic, musicState, id) => {
     }
   };
 
-  // try {
-  //   const response = await axios.post(process.env.REACT_APP_API + '/v1/create', data, {
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       token: Cookies.get('token'),
-  //       id: id
-  //     }
-  //   });
+  try {
+    const response = await axios.post(process.env.REACT_APP_API + '/v1/create', data, {
+      headers: {
+        'Content-Type': 'application/json',
+        token: Cookies.get('token'),
+        id: id
+      }
+    });
 
-  //   if (response.status === 200) {
-  //     return true;
-  //   }
-  // } catch (error) {
-  //   return false;
-  // }
+    if (response.status === 200) {
+      return true;
+    }
+  } catch (error) {
+    return false;
+  }
 }
 
 const uploadImage = async (image) => {
