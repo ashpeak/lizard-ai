@@ -27,7 +27,7 @@ export default function ImageCard({ data }) {
                 ))}
 
                 {type === 'image' && <img src={thumbnail}
-                    className='w-full h-[7rem] md:h-[8rem] object-cover rounded-lg cursor-pointer' alt='a person' />}
+                    className='w-full h-[7rem] md:h-[8rem] object-contain rounded-lg cursor-pointer' alt='a person' />}
             </div>
 
             <div className='w-full flex items-start opacity-70 gap-1 mt-2 group-hover:opacity-100 transition-opacity duration-200'>

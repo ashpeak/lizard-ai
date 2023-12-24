@@ -11,8 +11,7 @@ import { MdFullscreen, MdFullscreenExit, MdPlayCircleFilled, MdPauseCircleFilled
 import { Link } from 'react-router-dom';
 import Modal from './Modal/Modalbig';
 import { Toaster, toast } from 'sonner';
-import { uploadImage, createVideo, downloadVideo } from '../lib/create';
-import { getUserImages } from "../lib/media";
+import { createVideo, downloadVideo } from '../lib/create';
 import { getStockMedia } from "../lib/media";
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
@@ -33,7 +32,6 @@ export default function Editor() {
     open: false,
     type: 'media'
   });
-  const [images, setImages] = useState([]);
   const [editingIndex, setEditingIndex] = useState(0);
   const [search, setSearch] = useState({
     query: '',
@@ -53,21 +51,6 @@ export default function Editor() {
     const value = e.target.value;
     const duration = value / 100 * 42;
     setTimeline(parseInt(duration));
-  }
-
-  const handleImage = async (e) => {
-    const image = e.target.files[0];
-    toast.promise(
-      uploadImage(image),
-      {
-        loading: 'Uploading image...',
-        success: (res) => {
-          setImages([...images, res]);
-          return 'Image uploaded successfully';
-        },
-        error: 'Error while uploading image',
-      }
-    );
   }
 
   const addScript = (index) => {
@@ -149,8 +132,6 @@ export default function Editor() {
       }
     );
   }
-
-  const { isPending, data, isError } = useQuery({ queryKey: ['todos'], queryFn: getUserImages, refetchOnWindowFocus: false });
   const mediaQuery = useQuery({ queryKey: ['stockMedia'], queryFn: () => getStockMedia(search), refetchOnWindowFocus: false });
 
   const mutation = (search) => setSearch(search);
@@ -159,9 +140,6 @@ export default function Editor() {
     mediaQuery.refetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search]);
-  useEffect(() => {
-    setImages(data);
-  }, [data]);
 
   return (
     <div>
@@ -340,10 +318,6 @@ export default function Editor() {
       {modal.open && <Modal
         handleClose={() => setModal({ open: false, type: 'media' })}
         selectImage={selectImage}
-        images={images}
-        handleImage={handleImage}
-        pending={isPending}
-        error={isError}
         type={modal.type}
         mediaQuery={mediaQuery}
         mutation={mutation}

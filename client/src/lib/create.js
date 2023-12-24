@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 
 const createVideo = async (script, bgMusic, musicState, id) => {
   
-  console.log("hello", musicState);
+  console.log("hello", script);
 
   const arr = [];
   script.map((item, index) => arr.push({ index: index + 1, dialogue: item.dialogue, media: item.download, type: item.type }));

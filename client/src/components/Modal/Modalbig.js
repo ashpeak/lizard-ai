@@ -11,7 +11,7 @@ import { GiMagicGate } from "react-icons/gi";
 import YoutubeVideo from '../YoutubeVideo';
 
 
-export default function Modal({ handleClose, handleImage, images, selectImage, pending, error, mediaQuery, mutation, type }) {
+export default function Modal({ handleClose, selectImage, mediaQuery, mutation, type }) {
     const [active, setActive] = useState("stock");
 
     return (
@@ -52,11 +52,7 @@ export default function Modal({ handleClose, handleImage, images, selectImage, p
                     {(active === "my" && type === "media") && (
                         <MyLibrary
                             handleClose={handleClose}
-                            handleImage={handleImage}
-                            images={images}
-                            selectImage={selectImage}
-                            isPending={pending}
-                            isError={error} />
+                            selectImage={selectImage} />
                     )}
                     {(active === "stock" && type === "media") && (
                         <StockLibrary
