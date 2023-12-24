@@ -34,7 +34,7 @@ function App() {
 
   return (
     <BrowserRouter>
-      <div className='dark:bg-primary-dark bg-primary-light min-h-screen px-3 md:px-5 text-text-light dark:text-text-dark'>
+      <div className='dark:bg-primary-dark scroll-hide bg-primary-light min-h-screen px-3 md:px-5 text-text-light dark:text-text-dark'>
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />

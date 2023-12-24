@@ -2,11 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800;900&display=swap');
 
 body {
     font-family: 'Nunito', sans-serif;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 ::-webkit-scrollbar {
@@ -14,12 +14,12 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: #404040;
+    background-color: #656565;
     border-radius: 6px;
 }
 
 ::-webkit-scrollbar-track {
-    background-color: transparent;
+    background-color: #292929;
 }
 
 html {
@@ -41,10 +41,20 @@ html {
     display: none;
 }
 
-/* For IE, Edge and Firefox */
 .scroll-hide {
     -ms-overflow-style: none;
-    /* IE and Edge */
     scrollbar-width: none;
-    /* Firefox */
+}
+
+.circle_blue {
+    background: radial-gradient(50% 50% at 50% 50%, rgba(101, 31, 255, .34) 0, hsla(0, 0%, 100%, 0) 100%);
+    border-radius: 100% 100% 100% 88% / 19% 100% 32% 100%;
+}
+.circle_red {
+    background: radial-gradient(50% 50% at 50% 50%,rgba(255,61,0,.22) 0,hsla(0,0%,100%,0) 100%);
+    border-radius: 100% 100% 0% 88% / 0% 100% 93% 100%;
+}
+.circle_yellow {
+    background: radial-gradient(50% 50% at 50% 50%,rgba(255,213,79,.1) 0,hsla(0,0%,100%,0) 100%);
+    border-radius: 58% 34% 71% 27% / 34% 28% 63% 47%;
 }
