@@ -1,13 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FaArrowRight } from "react-icons/fa";
+import { FaArrowRight, FaLinkedin, FaGithub } from "react-icons/fa";
 
 export default function Home() {
+
+  const year = new Date().getFullYear();
+
   return (
-    <div className="relative w-full h-full scroll-hide">
+    <div className="relative w-full h-full pb-12">
 
       {/* Ambient Background */}
-      <div className='absolute blur-2xl left-1/2 top-[18%] transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center'>
+      <div className='absolute blur-2xl left-1/2 top-[6%] transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center'>
         <div className='flex translate-y-6 md:translate-y-20'>
           <div className='w-40 h-40 md:w-[20rem] md:h-[20rem] md:-mr-2 circle_blue rounded-3xl'></div>
           <div className='w-40 h-40 md:w-[20rem] md:h-[20rem] md:-ml-2 circle_red rounded-3xl'></div>
@@ -29,13 +32,13 @@ export default function Home() {
           </Link>
         </div>
 
-        <div className='md:px-16 px-4 mt-20'>
+        <div className='md:px-16 lg:px-32 px-4 mt-20'>
           <img src='/images/lizard.png' alt='lizard' className='h-full w-full rounded-2xl' />
         </div>
       </div>
 
-      <div className='rounded-3xl mt-10 pb-14 flex flex-col items-center bg-neutral-300/50 dark:bg-[#26262673] opacity-90'>
-        <div className='pt-14 max-w-[50rem]'>
+      <div className='rounded-3xl xl:mx-32 mt-10 pb-14 flex flex-col items-center bg-neutral-300/50 dark:bg-[#26262673] opacity-90'>
+        <div className='pt-14 px-4 md:px-0 md:max-w-[45rem] lg:max-w-[50rem]'>
           <h1 className='text-[2rem] dark:text-[#fafafa] text-text-light md:text-[2.5rem] text-center leading-[2.45rem] md:leading-[2.8rem] font-bold'>Savings, Speed, and Quality — you can have it all!</h1>
         </div>
 
@@ -65,6 +68,100 @@ export default function Home() {
 
         </div>
       </div>
+
+      <div className='rounded-3xl xl:mx-32 mt-20 md:mt-24 pb-14 flex flex-col items-center bg-neutral-300/50 dark:bg-[#26262673] opacity-90'>
+        <div className='md:pt-14 pt-8 px-4 md:px-0 md:max-w-[45rem] lg:max-w-[50rem]'>
+          <h1 className='text-[2rem] dark:text-[#fafafa] text-text-light md:text-[2.5rem] text-center leading-[2.45rem] md:leading-[2.8rem] font-bold'>Make videos in minutes with Magic Create</h1>
+        </div>
+
+        <div className='flex flex-col-reverse md:flex-row items-center md:items-center md:justify-center md:gap-8 md:px-10 mt-16'>
+
+          <div className='md:w-1/2 w-[90%] mt-6 md:mt-0'>
+            <button type='button' className='rounded-2xl my-[0.2rem] md:my-[0.35rem] cursor-pointer hover:dark:bg-[#f3f5f412] hover:bg-[#dbdbdb] focus:bg-[#f3f5f412] transition-colors duration-150'>
+              <div className='flex md:items-center justify-between p-[0.8rem] gap-x-[0.8rem] md:gap-x-4 md:px-3'>
+                <img className='rounded-xl h-12 w-12 md:h-20 md:w-20 md:rounded-2xl opacity-70 md:border border-[#767a7a1a]' src="https://storage.googleapis.com/fliki/public/image/features/idea.svg" alt="Idea to video" loading="lazy" />
+                <div>
+                  <h2 className='mb-2 text-[1.2125rem] md:text-[1.4125rem] leading-[1.6125rem] font-bold text-start opacity-90'>Idea to video</h2>
+                  <p className='mt-2 text-[1.125rem] text-start opacity-70'>Transform your ideas into stunning videos with AI voices, using our Idea to Video feature</p>
+                </div>
+              </div>
+            </button>
+            <button type='button' className='rounded-2xl my-[0.2rem] md:my-[0.35rem] cursor-pointer hover:dark:bg-[#f3f5f412] hover:bg-[#dbdbdb] focus:bg-[#f3f5f412] transition-colors duration-150'>
+              <div className='flex md:items-center justify-between p-[0.8rem] gap-x-[0.8rem] md:gap-x-4 md:px-3'>
+                <img className='rounded-xl h-12 w-12 md:h-20 md:w-20 md:rounded-2xl opacity-70 md:border border-[#767a7a1a]' src="https://storage.googleapis.com/fliki/public/image/features/blog.svg" alt="Idea to video" loading="lazy" />
+                <div>
+                  <h2 className='mb-2 text-[1.2125rem] md:text-[1.4125rem] leading-[1.6125rem] font-bold text-start opacity-90'>Blog to video</h2>
+                  <p className='mt-2 text-[1.125rem] text-start opacity-70'>Convert blog articles into engaging video content</p>
+                </div>
+              </div>
+            </button>
+            <button type='button' className='rounded-2xl my-[0.2rem] md:my-[0.35rem] cursor-pointer hover:dark:bg-[#f3f5f412] hover:bg-[#dbdbdb] focus:bg-[#f3f5f412] transition-colors duration-150'>
+              <div className='flex md:items-center justify-between p-[0.8rem] gap-x-[0.8rem] md:gap-x-4 md:px-3'>
+                <img className='rounded-xl h-12 w-12 md:h-20 md:w-20 md:rounded-2xl opacity-70 md:border border-[#767a7a1a]' src="https://storage.googleapis.com/fliki/public/image/features/ppt.svg" alt="Idea to video" loading="lazy" />
+                <div>
+                  <h2 className='mb-2 text-[1.2125rem] md:text-[1.4125rem] leading-[1.6125rem] font-bold text-start opacity-90'>PPT to video</h2>
+                  <p className='mt-2 text-[1.125rem] text-start opacity-70'>Transform your powerpoint presentations (PPTs) into stunning videos in seconds</p>
+                </div>
+              </div>
+            </button>
+            <button type='button' className='rounded-2xl my-[0.2rem] md:my-[0.35rem] cursor-pointer hover:dark:bg-[#f3f5f412] hover:bg-[#dbdbdb] focus:bg-[#f3f5f412] transition-colors duration-150'>
+              <div className='flex md:items-center justify-between p-[0.8rem] gap-x-[0.8rem] md:gap-x-4 md:px-3'>
+                <img className='rounded-xl h-12 w-12 md:h-20 md:w-20 md:rounded-2xl opacity-70 md:border border-[#767a7a1a]' src="https://storage.googleapis.com/fliki/public/image/features/tweet.svg" alt="Idea to video" loading="lazy" />
+                <div>
+                  <h2 className='mb-2 text-[1.2125rem] md:text-[1.4125rem] leading-[1.6125rem] font-bold text-start opacity-90'>Tweet to video</h2>
+                  <p className='mt-2 text-[1.125rem] text-start opacity-70'>Transform Tweets into engaging videos with our Tweet-to-Video feature</p>
+                </div>
+              </div>
+            </button>
+            <button type='button' className='rounded-2xl my-[0.2rem] md:my-[0.35rem] cursor-pointer hover:dark:bg-[#f3f5f412] hover:bg-[#dbdbdb] focus:bg-[#f3f5f412] transition-colors duration-150'>
+              <div className='flex md:items-center justify-between p-[0.8rem] gap-x-[0.8rem] md:gap-x-4 md:px-3'>
+                <img className='rounded-xl h-12 w-12 md:h-20 md:w-20 md:rounded-2xl opacity-70 md:border border-[#767a7a1a]' src="https://storage.googleapis.com/fliki/public/image/features/avatar.svg" alt="Idea to video" loading="lazy" />
+                <div>
+                  <h2 className='mb-2 text-[1.2125rem] md:text-[1.4125rem] leading-[1.6125rem] font-bold text-start opacity-90'>Avatar video</h2>
+                  <p className='mt-2 text-[1.125rem] text-start opacity-70'>Create stunning avatar videos in just single click</p>
+                </div>
+              </div>
+            </button>
+          </div>
+
+          <div className='w-[19rem] lg:w-[27rem]'>
+            <video className='rounded-xl md:rounded-3xl transition-transform duration-200' autoplay="true" loop="true" playsinline="" src="https://storage.googleapis.com/fliki/public/video/features/hero/avatar.mp4"></video>
+          </div>
+        </div>
+
+      </div>
+
+      <div className='rounded-3xl xl:mx-32 mt-20 md:mt-24 pb-14 flex flex-col items-center bg-neutral-300/50 dark:bg-[#26262673] opacity-90'>
+        <div className='md:pt-14 pt-8 px-4 md:px-0 md:max-w-[45rem] lg:max-w-[50rem]'>
+          <h1 className='text-[1.675rem] dark:text-[#fafafa] text-text-light md:text-[1.875rem] text-center leading-[1.8rem] md:leading-[2rem] font-bold'>Frequently asked questions</h1>
+        </div>
+
+        <div className='w-full text-start mt-12 px-4 md:px-20'>
+          <p className='text-[1.125rem] py-2 px-6 cursor-pointer transition-colors duration-150 opacity-70 hover:opacity-95 hover:dark:bg-[#f3f5f412] hover:bg-[#dbdbdb] rounded-2xl'>Can I use Bulbul for free?</p>
+          <p className='text-[1.125rem] py-2 px-6 cursor-pointer transition-colors duration-150 opacity-70 hover:opacity-95 hover:dark:bg-[#f3f5f412] hover:bg-[#dbdbdb] rounded-2xl'>How does Bulbul differ from other text-to-video and text-to-speech tools in the market?</p>
+          <p className='text-[1.125rem] py-2 px-6 cursor-pointer transition-colors duration-150 opacity-70 hover:opacity-95 hover:dark:bg-[#f3f5f412] hover:bg-[#dbdbdb] rounded-2xl'>Which languages are supported?</p>
+          <p className='text-[1.125rem] py-2 px-6 cursor-pointer transition-colors duration-150 opacity-70 hover:opacity-95 hover:dark:bg-[#f3f5f412] hover:bg-[#dbdbdb] rounded-2xl'>Do I need any special software or equipment to use this tool?</p>
+          <p className='text-[1.125rem] py-2 px-6 cursor-pointer transition-colors duration-150 opacity-70 hover:opacity-95 hover:dark:bg-[#f3f5f412] hover:bg-[#dbdbdb] rounded-2xl'>How does the text to speech feature in Bulbul work?</p>
+          <p className='text-[1.125rem] py-2 px-6 cursor-pointer transition-colors duration-150 opacity-70 hover:opacity-95 hover:dark:bg-[#f3f5f412] hover:bg-[#dbdbdb] rounded-2xl'>What kinds of videos can I make using Bulbul's platform?</p>
+          <p className='text-[1.125rem] py-2 px-6 cursor-pointer transition-colors duration-150 opacity-70 hover:opacity-95 hover:dark:bg-[#f3f5f412] hover:bg-[#dbdbdb] rounded-2xl'>How do I pay?</p>
+          <p className='text-[1.125rem] py-2 px-6 cursor-pointer transition-colors duration-150 opacity-70 hover:opacity-95 hover:dark:bg-[#f3f5f412] hover:bg-[#dbdbdb] rounded-2xl'>How does Bulbul's payment system work?</p>
+          <p className='text-[1.125rem] py-2 px-6 cursor-pointer transition-colors duration-150 opacity-70 hover:opacity-95 hover:dark:bg-[#f3f5f412] hover:bg-[#dbdbdb] rounded-2xl'>Does Bulbul support Voice Cloning? How can it help me?</p>
+          <p className='text-[1.125rem] py-2 px-6 cursor-pointer transition-colors duration-150 opacity-70 hover:opacity-95 hover:dark:bg-[#f3f5f412] hover:bg-[#dbdbdb] rounded-2xl'>What if I only need Bulbul for a short amount of time?</p>
+        </div>
+
+      </div>
+
+
+      {/* Footer */}
+      <div className='rounded-3xl xl:mx-32 mt-16 md:mt-24 py-8 flex flex-col items-center bg-neutral-300/50 dark:bg-[#26262673] opacity-90'>
+        <p className='cursor-pointer hover:opacity-90 transition-opacity duration-150 text-[1.125rem] text-center opacity-70'>© {year} Bulbul. All rights reserved.</p>
+        <p className='cursor-pointer hover:opacity-90 transition-opacity duration-150 text-[1.125rem] text-center opacity-70'>Made with ❤️ by Ashish Singh</p>
+        <div className='flex items-center justify-center gap-4 mt-3'>
+          <Link to='https://www.linkedin.com/in/ashishsingh09dev/?profileId=ACoAADORLc0BWMD-J0FaT_yufN-D-HdTg3Td4JY' target='_blank' className='hover:scale-110 cursor-pointer hover:opacity-90 transition-opacity duration-150 text-[1.125rem] text-center opacity-70'><FaLinkedin size={21} /></Link>
+          <Link to='https://github.com/ashish-singh09' target='_blank' className='hover:scale-110 cursor-pointer hover:opacity-90 transition-all duration-150 text-[1.125rem] text-center opacity-70'><FaGithub size={21} /></Link>
+        </div>
+      </div>
+
     </div>
   )
 }
