@@ -5,6 +5,7 @@ const fs = require('fs');
 const axios = require('axios');
 const User = require('../models/User');
 const Project = require('../models/Project');
+const Testimonial = require('../models/Testimonial');
 
 
 const AuthController = {};
@@ -70,15 +71,15 @@ AuthController.login = async (req, res) => {
     if (method === 'google') {
         const userInfo = await getUserInfo(access_token);
         user = await User.findOne({ g_id: userInfo.sub });
-        if (!User) {
-            User = new User({
+        if (!user) {
+            const newUser = new User({
                 g_id: userInfo.sub,
                 email: userInfo.email,
                 firstName: userInfo.given_name,
                 lastName: userInfo.family_name,
                 avatar: userInfo.picture,
             });
-            await User.save();
+            await newUser.save();
         }
         user = await User.findOne({ g_id: userInfo.sub });
     } else {
@@ -91,7 +92,7 @@ AuthController.login = async (req, res) => {
     const data = {
         id: user._id,
         name: user.firstName + ' ' + user.lastName,
-        role: user.role
+        avatar: user.avatar,
     }
 
     const token = jwt.sign(data, process.env.JWT_SECRET, { expiresIn: '2d' });
@@ -106,6 +107,34 @@ AuthController.logout = (req, res) => {
     return res.status(200).send({ msg: 'Logged out' });
 }
 
+AuthController.rate = async (req, res) => {
+    const { name, message, feeling } = req.body;
+
+    await connectDB();
+
+    const testimonial = new Testimonial({
+        name,
+        message,
+        feeling,
+    });
+
+    const newTestimonial = await testimonial.save();
+
+    if (!newTestimonial) {
+        return res.status(401).send('Invalid User Data');
+    }
+
+    return res.status(200).send({ msg: 'Testimonial created' });
+}
+
+AuthController.getTestimonials = async (req, res) => {
+    await connectDB();
+
+    const testimonials = await Testimonial.find();
+
+    return res.status(200).send({ testimonials });
+}
+
 AuthController.checkAuth = (req, res) => {
     // const token = req.cookies?.token;
     // const token = req.cookie?.token;
@@ -113,14 +142,14 @@ AuthController.checkAuth = (req, res) => {
     const token = req.headers.token;
 
     if (!token) {
-        return res.status(401).send('Not authorized dffdf');
+        return res.status(401).send('Not authorized.');
     }
 
     try {
         const data = jwt.verify(token, process.env.JWT_SECRET);
         return res.status(200).send(data);
     } catch (err) {
-        return res.status(401).send('Not authorized dasdasd');
+        return res.status(401).send('Not authorized.');
     }
 }
 

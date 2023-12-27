@@ -2,9 +2,11 @@ import React, { useState } from 'react'
 import userAuth from '../lib/userAuth';
 import { Toaster, toast } from 'sonner';
 import { useGoogleLogin } from '@react-oauth/google';
+import { auth } from '../states/useAuth';
 
 export default function Login() {
 
+    const { checkAuth } = auth();
     const [user, setUser] = useState({
         username: '',
         password: ''
@@ -21,6 +23,7 @@ export default function Login() {
                 }
             }
         );
+        checkAuth();
     }
 
     const handleChange = (e) => {

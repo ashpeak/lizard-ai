@@ -34,6 +34,9 @@ module.exports = {
           base: "6.16875rem"
         }
       },
+      boxShadow: {
+        'feeling': '0 0px 22px -5px var(--tw-shadow-color), 0 0px 23px -6px var(--tw-shadow-color)'
+      }
     },
   },
   plugins: [],

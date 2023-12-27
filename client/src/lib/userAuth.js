@@ -4,6 +4,7 @@ import Cookies from "js-cookie";
 export const userAuth = {};
 
 userAuth.login = async (user, method, access_token) => {
+
     const response = await axios.post(process.env.REACT_APP_API + '/user/login', { userData: user, method, access_token });
     
     if (response.data.token) {

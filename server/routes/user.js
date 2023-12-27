@@ -7,6 +7,10 @@ router.post('/register', AuthController.register);
 
 router.post('/login', AuthController.login);
 
+router.post('/feedback', AuthController.rate);
+
+router.get('/feedback/all', AuthController.getRate);
+
 router.get('/logout', AuthController.logout);
 
 router.get('/checkAuth', AuthController.checkAuth);
@@ -14,5 +18,6 @@ router.get('/checkAuth', AuthController.checkAuth);
 router.get('/images', AuthController.getImages);
 
 router.get('/video/download/:name', AuthController.getVideos);
+
 
 module.exports = router;
