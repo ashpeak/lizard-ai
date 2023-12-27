@@ -2,12 +2,28 @@ const jwt = require('jsonwebtoken');
 const connectDB = require('../configs/db');
 const { join } = require("path");
 const fs = require('fs');
+const axios = require('axios');
 const User = require('../models/User');
 const Project = require('../models/Project');
 
 
 const AuthController = {};
 
+const getUserInfo = (access_token) => {
+    return new Promise((resolve, reject) => {
+        axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
+            headers: {
+                Authorization: `Bearer ${access_token}`
+            }
+        })
+            .then(res => {
+                resolve(res.data);
+            })
+            .catch(err => {
+                reject(err);
+            })
+    })
+}
 AuthController.register = async (req, res) => {
     const { username, password } = req.body;
 
@@ -45,19 +61,36 @@ AuthController.register = async (req, res) => {
 }
 
 AuthController.login = async (req, res) => {
-    const { username, password } = req.body;
+    const { userData, method, access_token } = req.body;
+    const { email, code } = userData;
 
     await connectDB();
 
-    const user = await User.findOne({ username });
-
-    if (!user || user.password !== password) {
-        return res.status(401).send('Wrong username or password');
+    let user = null;
+    if (method === 'google') {
+        const userInfo = await getUserInfo(access_token);
+        user = await User.findOne({ g_id: userInfo.sub });
+        if (!User) {
+            User = new User({
+                g_id: userInfo.sub,
+                email: userInfo.email,
+                firstName: userInfo.given_name,
+                lastName: userInfo.family_name,
+                avatar: userInfo.picture,
+            });
+            await User.save();
+        }
+        user = await User.findOne({ g_id: userInfo.sub });
+    } else {
+        user = await User.findOne({ email });
+        if (!user || user.password !== password) {
+            return res.status(401).send('Wrong username or password');
+        }
     }
 
     const data = {
         id: user._id,
-        username: user.username,
+        name: user.firstName + ' ' + user.lastName,
         role: user.role
     }
 

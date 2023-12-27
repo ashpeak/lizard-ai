@@ -23,9 +23,9 @@ export default function ThemeSwitcher() {
     }, []);
 
     return (
-        <div>
+        <>
             {mounted && <button type='button'
-                className='text-gray-800 dark:text-gray-200' onClick={toggleTheme}>{theme === "dark" ? <BsSunFill size={20} /> : <BsMoonFill size={20} />}</button>}
-        </div>
+                className='p-2 rounded-lg transition-opacity duration-200 opacity-75 hover:opacity-100' onClick={toggleTheme}>{theme === "dark" ? <BsSunFill size={20} /> : <BsMoonFill size={20} />}</button>}
+        </>
     )
 }

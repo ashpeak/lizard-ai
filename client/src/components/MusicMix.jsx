@@ -83,7 +83,7 @@ const Mixer = () => {
                         step="0.01"
                         value={voiceover}
                         onChange={handleVolumeChange1}
-                        className='w-full'
+                        className='w-full h-2 bg-neutral-400 rounded-lg appearance-none cursor-pointer dark:bg-neutral-700'
                     />
                 </div>
 
@@ -99,7 +99,7 @@ const Mixer = () => {
                         step="0.01"
                         value={bgMusic}
                         onChange={handleVolumeChange2}
-                        className='w-full'
+                        className='w-full h-2 bg-neutral-400 rounded-lg appearance-none cursor-pointer dark:bg-neutral-700'
                     />
                 </div>
 

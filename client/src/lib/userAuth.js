@@ -3,8 +3,8 @@ import Cookies from "js-cookie";
 
 export const userAuth = {};
 
-userAuth.login = async (username, password) => {
-    const response = await axios.post(process.env.REACT_APP_API + '/user/login', { username, password });
+userAuth.login = async (user, method, access_token) => {
+    const response = await axios.post(process.env.REACT_APP_API + '/user/login', { userData: user, method, access_token });
     
     if (response.data.token) {
         Cookies.set('token', response.data.token, { expires: 2 });

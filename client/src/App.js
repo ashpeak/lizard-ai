@@ -8,6 +8,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import Files from './components/Files';
 import Mixer from './components/Test';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 function App() {
 
@@ -34,15 +35,19 @@ function App() {
 
   return (
     <BrowserRouter>
-      <div className='dark:bg-primary-dark scroll-hide bg-primary-light min-h-screen px-3 md:px-5 text-text-light dark:text-text-dark'>
+      <div className='dark:bg-primary-dark scroll-hide bg-primary-light min-h-screen text-text-light dark:text-text-dark'>
         <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/files" element={<Files />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/editor/:id" element={<Editor />} />
-          <Route path="/test" element={<Mixer />} />
-        </Routes>
+        <GoogleOAuthProvider clientId="1066475058855-qldr4edmbv65qvq19pcjj6s181nhsgav.apps.googleusercontent.com">
+          <div className='px-3 md:px-5'>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/files" element={<Files />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/editor/:id" element={<Editor />} />
+              <Route path="/test" element={<Mixer />} />
+            </Routes>
+          </div>
+        </GoogleOAuthProvider>
       </div>
     </BrowserRouter>
   );
