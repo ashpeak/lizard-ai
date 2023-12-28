@@ -9,7 +9,7 @@ router.post('/login', AuthController.login);
 
 router.post('/feedback', AuthController.rate);
 
-router.get('/feedback/all', AuthController.getRate);
+router.get('/feedback/all', AuthController.getTestimonials);
 
 router.get('/logout', AuthController.logout);
 

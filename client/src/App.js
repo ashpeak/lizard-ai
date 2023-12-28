@@ -9,6 +9,7 @@ import Mixer from './components/Test';
 import Feedback from './components/Feedback';
 import { auth } from './states/useAuth';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import { Toaster } from 'sonner';
 
 function App() {
 
@@ -35,6 +36,8 @@ function App() {
             </Routes>
           </div>
         </GoogleOAuthProvider>
+
+        <Toaster richColors position="bottom-right" />
       </div>
     </BrowserRouter>
   );
