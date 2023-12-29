@@ -1,6 +1,8 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaArrowRight, FaLinkedin, FaGithub } from "react-icons/fa";
+import { IoPeople } from "react-icons/io5";
+import { PiSealCheckFill } from "react-icons/pi";
+import { HiCurrencyRupee } from "react-icons/hi2";
 
 export default function Home() {
 
@@ -46,7 +48,7 @@ export default function Home() {
 
           <div className='flex items-center justify-center flex-col'>
             <span className='opacity-90'>
-              <svg viewBox="0 0 1000 1000" fill="#00a2c7" width="3rem" height="3rem"><path fill-rule="evenodd" clip-rule="evenodd" d="M822.945 394.435C822.945 394.435 915 445.086 915 499.694C915 554.303 822.945 604.953 822.945 604.953C822.945 604.953 867.859 699.994 835.773 744.167C803.718 788.296 699.577 775.103 699.577 775.103C699.577 775.103 680.227 878.567 628.273 895.453C576.426 912.305 500 840.372 500 840.372C500 840.372 423.643 912.66 371.727 895.831C319.76 878.984 300.423 775.481 300.423 775.481C300.423 775.481 196.339 788.632 164.227 744.544C131.997 700.294 177.055 604.953 177.055 604.953C177.055 604.953 85.0969 554.303 85.0001 499.694C84.9031 444.975 177.055 394.058 177.055 394.058C177.055 394.058 131.927 298.666 164.227 254.467C196.39 210.456 300.423 223.908 300.423 223.908C300.423 223.908 319.773 120.444 371.727 103.558C423.574 86.7061 500 158.64 500 158.64C500 158.64 576.42 86.7235 628.273 103.558C680.353 120.466 699.577 224.285 699.577 224.285C699.577 224.285 803.718 211.092 835.773 255.221C867.859 299.394 822.945 394.435 822.945 394.435ZM398.59 638.764V360.032C398.59 338.778 421.884 325.863 439.824 337.432L657.776 476.529C674.376 487.291 674.376 511.505 657.776 521.998L439.824 661.363C421.884 672.932 398.59 660.018 398.59 638.764Z"></path></svg>
+              <svg viewBox="0 0 1000 1000" fill="#00a2c7" width="3rem" height="3rem"><path fillRule="evenodd" clipRule="evenodd" d="M822.945 394.435C822.945 394.435 915 445.086 915 499.694C915 554.303 822.945 604.953 822.945 604.953C822.945 604.953 867.859 699.994 835.773 744.167C803.718 788.296 699.577 775.103 699.577 775.103C699.577 775.103 680.227 878.567 628.273 895.453C576.426 912.305 500 840.372 500 840.372C500 840.372 423.643 912.66 371.727 895.831C319.76 878.984 300.423 775.481 300.423 775.481C300.423 775.481 196.339 788.632 164.227 744.544C131.997 700.294 177.055 604.953 177.055 604.953C177.055 604.953 85.0969 554.303 85.0001 499.694C84.9031 444.975 177.055 394.058 177.055 394.058C177.055 394.058 131.927 298.666 164.227 254.467C196.39 210.456 300.423 223.908 300.423 223.908C300.423 223.908 319.773 120.444 371.727 103.558C423.574 86.7061 500 158.64 500 158.64C500 158.64 576.42 86.7235 628.273 103.558C680.353 120.466 699.577 224.285 699.577 224.285C699.577 224.285 803.718 211.092 835.773 255.221C867.859 299.394 822.945 394.435 822.945 394.435ZM398.59 638.764V360.032C398.59 338.778 421.884 325.863 439.824 337.432L657.776 476.529C674.376 487.291 674.376 511.505 657.776 521.998L439.824 661.363C421.884 672.932 398.59 660.018 398.59 638.764Z"></path></svg>
             </span>
             <h2 className='mt-2 text-[1.2125rem] md:text-[1.4125rem] leading-[1.6125rem] font-bold text-center opacity-90'>Simple Editor</h2>
             <p className='mt-2 text-[1.125rem] text-center opacity-70'>Bulbul makes creating videos as simple as writing an email with its script based editor.</p>
@@ -125,10 +127,42 @@ export default function Home() {
           </div>
 
           <div className='w-[19rem] lg:w-[27rem]'>
-            <video className='rounded-xl md:rounded-3xl transition-transform duration-200' autoplay="true" loop="true" playsinline="" src="https://storage.googleapis.com/fliki/public/video/features/hero/avatar.mp4"></video>
+            <video className='rounded-xl md:rounded-3xl transition-transform duration-200' autoPlay="true" loop="true" playsInline="" src="https://storage.googleapis.com/fliki/public/video/features/hero/avatar.mp4"></video>
           </div>
         </div>
 
+      </div>
+
+      <div className='rounded-3xl xl:mx-32 mt-10 pb-14 flex flex-col items-center bg-neutral-300/50 dark:bg-[#26262673] opacity-90'>
+        <div className='pt-14 px-4 md:px-0 md:max-w-[45rem] lg:max-w-[50rem]'>
+          <h1 className='text-[2rem] dark:text-[#fafafa] text-text-light md:text-[2.5rem] text-center leading-[2.45rem] md:leading-[2.8rem] font-bold'>Loved by people around the world</h1>
+        </div>
+
+        <div className='mt-16 flex md:flex-row flex-col justify-between items-center gap-8 px-10'>
+
+          <div className='flex items-center justify-center flex-col'>
+            <span className='opacity-90'>
+              <IoPeople size={48} color='#00a2c7' />
+            </span>
+            <h2 className='mt-2 text-[1.2125rem] md:text-[1.4125rem] leading-[1.6125rem] font-bold text-center opacity-90'>Simple Editor</h2>
+            <p className='mt-2 text-[1.125rem] text-center opacity-70'>Bulbul makes creating videos as simple as writing an email with its script based editor.</p>
+          </div>
+          <div className='flex items-center justify-center flex-col'>
+            <span className='opacity-90'>
+              <PiSealCheckFill color='#ffc53d' size={48} />
+            </span>
+            <h2 className='mt-2 text-[1.2125rem] md:text-[1.4125rem] leading-[1.6125rem] font-bold text-center opacity-90'>Fast creation</h2>
+            <p className='mt-2 text-[1.125rem] text-center opacity-70'>Create videos with lifelike voiceovers in minutes, powered using AI.</p>
+          </div>
+          <div className='flex items-center justify-center flex-col'>
+            <span className='opacity-90'>
+            <HiCurrencyRupee size={48} color='#46a758' />
+              </span>
+            <h2 className='mt-2 text-[1.2125rem] md:text-[1.4125rem] leading-[1.6125rem] font-bold text-center opacity-90'>Cost effective</h2>
+            <p className='mt-2 text-[1.125rem] text-center opacity-70'>Create high-quality content at scale at a fraction of the cost.</p>
+          </div>
+
+        </div>
       </div>
 
       <div className='rounded-3xl xl:mx-32 mt-20 md:mt-24 pb-14 flex flex-col items-center bg-neutral-300/50 dark:bg-[#26262673] opacity-90'>

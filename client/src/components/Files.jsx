@@ -6,11 +6,32 @@ import { FaFileMedical } from "react-icons/fa6";
 import { IoVideocam } from "react-icons/io5";
 import { format } from 'date-fns';
 import NewProject from './Modal/NewProject';
+import { createProject } from '/src/lib/project';
+import { toast } from 'sonner';
 
 export default function Files() {
     const [modal, setModal] = useState(false);
 
-    const { data, isLoading } = useQuery({ queryKey: ['projects'], queryFn: getAllProjects, refetchOnWindowFocus: false });
+    const { data, isLoading, refetch } = useQuery({ queryKey: ['projects'], queryFn: getAllProjects, refetchOnWindowFocus: false });
+
+    const handleSubmit = async (e, projectData) => {
+        e.preventDefault();
+        toast.promise(
+            createProject(projectData),
+            {
+                loading: 'Wait creating project...',
+                success: (data) => {
+                    refetch();
+                    setModal(false);
+                    return data.message;
+                },
+                error: () => {
+                    return "Error while creating project";
+                },
+                duration: 3000
+            }
+        );
+    }
 
     return (
         <div className='-mt-4'>
@@ -27,33 +48,6 @@ export default function Files() {
                     </div>
                 </div>
             </div>
-
-            {/* <h2>Start new project</h2>
-            <form onSubmit={handleSubmit}>
-                <div className='flex flex-col gap-4 w-[25rem]'>
-                    <input type="text"
-                        onChange={(e) => setProjectData({ ...projectData, name: e.target.value })}
-                        placeholder="Project name"
-                        required
-                        value={projectData.name} />
-
-                    {projectData.isAiGenerated && (
-                        <textarea placeholder="Project idea" required value={projectData.idea}
-                            onChange={(e) => setProjectData({ ...projectData, idea: e.target.value })}
-                        />)}
-
-                    <div>
-                        <label htmlFor="isAiGenerated">Is AI generated? &nbsp;</label>
-                        <input
-                            id='isAiGenerated'
-                            type="checkbox"
-                            onChange={() => setProjectData({ ...projectData, isAiGenerated: !projectData.isAiGenerated })}
-                            checked={projectData.isAiGenerated} />
-                    </div>
-
-                    <button type='submit'>Create</button>
-                </div>
-            </form> */}
 
             <div>
                 <div className='mt-1 flex items-center justify-between px-6 py-2 border-b dark:border-border-dark border-border-light'>
@@ -88,6 +82,7 @@ export default function Files() {
 
             {modal && <NewProject
                 handleClose={() => setModal(false)}
+                handleSubmit={handleSubmit}
             />}
         </div>
     )

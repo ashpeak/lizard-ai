@@ -26,7 +26,7 @@ export default function Navbar() {
 
             {user ? (
               <Link to="/files">
-                <button className='gap-1 opacity-75 hover:opacity-95 text-xl font-medium px-3 py-1 rounded-3xl transition-opacity duration-150'>{user.avatar ? <img src={user.avatar} className='rounded-full' alt="User Profile" height={45} width={45} /> : <RxAvatar size={45} />}</button>
+                <button className='gap-1 p-[0.2rem] border dark:border-border-light rounded-full border-border-dark text-xl font-medium transition-opacity duration-150'>{user.avatar ? <img src={user.avatar} className='rounded-full opacity-90 hover:opacity-100' alt="User Profile" height={45} width={45} /> : <RxAvatar size={45} className='opacity-75 hover:opacity-95' />}</button>
               </Link>) : (
               <>
                 <Link to="/login">
