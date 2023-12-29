@@ -101,7 +101,7 @@ MediaController.downloadYoutubeVideo = async (req, res) => {
     if (!id) return res.status(401).json({ msg: "Unauthorized" });
 
     const { url, startTime, endTime } = req.body;
-    const filename = `${projectId}-${Date.now()}-utube`;
+    const filename = `${id}-${Date.now()}-utube`;
     const output = join(process.cwd(), 'uploads', filename);
 
     await youtubedl(url,
@@ -127,7 +127,7 @@ MediaController.getTubeDownloadedVideos = async (req, res) => {
 
     if (!id) return res.status(401).json({ msg: "Unauthorized" });
 
-    const files = (await readdir(join(process.cwd(), 'uploads'))).filter(file => file.endsWith('_trimmed.mp4'));
+    const files = (await readdir(join(process.cwd(), 'uploads'))).filter(file => file.startsWith(id) && file.endsWith('_trimmed.mp4'));
 
     if (!files || files.length === 0) return res.status(200).json([]);
 

@@ -36,15 +36,16 @@ const Feedback = () => {
 
         toast.promise(misc.sendFeedback(rating), {
             loading: 'Sending feedback...',
-            success: 'Feedback sent successfully',
+            success: () => {
+                setRating({
+                    feeling: "loved",
+                    name: "",
+                    message: ""
+                });
+                return 'Feedback sent successfully';
+            },
             error: 'Error sending feedback'
         }, { duration: 3000 });
-
-        setRating({
-            feeling: "loved",
-            name: "",
-            message: ""
-        });
     }
 
     return (

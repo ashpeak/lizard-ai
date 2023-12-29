@@ -37,6 +37,12 @@ html {
     height: min(90%);
 }
 
+.new-projectModal {
+    width: clamp(50%, 700px, 90%);
+    /* height: min(90%, 700px, 70%); */
+    height: min(30%);
+}
+
 .scroll-hide::-webkit-scrollbar {
     display: none;
 }

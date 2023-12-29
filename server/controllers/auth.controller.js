@@ -110,21 +110,26 @@ AuthController.logout = (req, res) => {
 AuthController.rate = async (req, res) => {
     const { name, message, feeling } = req.body;
 
-    await connectDB();
+    try {
+        await connectDB();
 
-    const testimonial = new Testimonial({
-        name,
-        message,
-        feeling,
-    });
+        const testimonial = new Testimonial({
+            name,
+            message,
+            feeling,
+        });
 
-    const newTestimonial = await testimonial.save();
+        const newTestimonial = await testimonial.save();
 
-    if (!newTestimonial) {
-        return res.status(401).send('Invalid User Data');
+        if (!newTestimonial) {
+            return res.status(401).send('Invalid User Data');
+        }
+
+        return res.status(200).send({ msg: 'Testimonial created' });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).send('Internal Server Error');
     }
-
-    return res.status(200).send({ msg: 'Testimonial created' });
 }
 
 AuthController.getTestimonials = async (req, res) => {

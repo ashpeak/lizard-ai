@@ -12,7 +12,7 @@ const testimonialSchema = new mongoose.Schema({
     feeling: {
         type: String,
         required: true,
-        enum: ['Loved', 'good', 'average']
+        enum: ['loved', 'good', 'average']
     },
     createdAt: {
         type: Date,
