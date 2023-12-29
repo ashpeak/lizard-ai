@@ -1,7 +1,9 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { FaMicrophone, FaPlayCircle } from "react-icons/fa";
 import { FaStopCircle } from "react-icons/fa";
 import { settings } from '../states/settings';
+
+const appUri = import.meta.env.VITE_REACT_APP_API;
 
 const Mixer = () => {
     const musicState = settings();
@@ -9,7 +11,7 @@ const Mixer = () => {
     const bgMusic = musicState.music;
     const bgMusic_preview = musicState.bgMusic.preview;
 
-    const audio1 = new Audio(`${process.env.REACT_APP_API}/media/speech/demo/guy`);
+    const audio1 = new Audio(`${appUri}/media/speech/demo/guy`);
     const audio2 = new Audio(bgMusic_preview);
 
     const playAudio = (audio, volume, startTime) => {

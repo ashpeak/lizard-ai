@@ -1,10 +1,12 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
+const appUri = import.meta.env.VITE_REACT_APP_API;
+
 export const misc = {};
 
 misc.sendFeedback = async (rating) => {
-    const response = await axios.post(process.env.REACT_APP_API + '/user/feedback', rating, {
+    const response = await axios.post(appUri + '/user/feedback', rating, {
         headers: {
             token: Cookies.get('token')
         }
@@ -17,7 +19,7 @@ misc.sendFeedback = async (rating) => {
 }
 
 misc.getTestimonials = async () => {
-    const response = await axios.get(process.env.REACT_APP_API + '/user/feedback/all');
+    const response = await axios.get(appUri + '/user/feedback/all');
 
     if (response.status === 200) {
         return response.data;

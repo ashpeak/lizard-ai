@@ -1,11 +1,13 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
+const appUri = import.meta.env.VITE_REACT_APP_API;
+
 export const userAuth = {};
 
 userAuth.login = async (user, method, access_token) => {
 
-    const response = await axios.post(process.env.REACT_APP_API + '/user/login', { userData: user, method, access_token });
+    const response = await axios.post(`${appUri}/user/login`, { userData: user, method, access_token });
     
     if (response.data.token) {
         Cookies.set('token', response.data.token, { expires: 2 });
@@ -14,12 +16,12 @@ userAuth.login = async (user, method, access_token) => {
 }
 
 userAuth.register = async (username, password) => {
-    const response = await axios.post(process.env.REACT_APP_API + '/user/register', { username, password });
+    const response = await axios.post(appUri + '/user/register', { username, password });
     return response.data;
 }
 
 userAuth.logout = async () => {
-    const response = await axios.get(process.env.REACT_APP_API + '/user/logout');
+    const response = await axios.get(appUri + '/user/logout');
     return response.data;
 }
 

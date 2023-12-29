@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+/* eslint-disable react/prop-types */
+import { useState } from 'react';
 import { BiSolidImageAlt } from 'react-icons/bi';
+
+const appUri = import.meta.env.VITE_REACT_APP_API;
 
 export default function YoutubeCard({ name }) {
 
     const [isHovered, setIsHovered] = useState(false);
-    const thumbnail = `${process.env.REACT_APP_API}/media/youtube/${name.split('_')[0]}_thumbnail.png`;
+    const thumbnail = `${appUri}/media/youtube/${name.split('_')[0]}_thumbnail.png`;
 
     return (
         <div className='w-[7rem] md:w-[9rem] h-fit rounded-lg group'>
@@ -12,8 +15,8 @@ export default function YoutubeCard({ name }) {
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}>
                 {isHovered ? (
-                    <video autoplay="" loop="" poster={thumbnail} className='w-full h-[7rem] md:h-[8rem] object-cover rounded-lg'>
-                        <source src={`${process.env.REACT_APP_API}/media/youtube/${name}`} type="video/mp4" />
+                    <video autoPlay="" loop="" poster={thumbnail} className='w-full h-[7rem] md:h-[8rem] object-cover rounded-lg'>
+                        <source src={`${appUri}/media/youtube/${name}`} type="video/mp4" />
                     </video>
                 ) : (
                     <img src={thumbnail}

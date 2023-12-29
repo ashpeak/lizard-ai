@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+/* eslint-disable react/prop-types */
+import { useEffect, useState } from 'react'
 import getYoutubeId from 'get-youtube-id';
 import { toast } from 'sonner';
 import { IoMdDownload } from "react-icons/io";
@@ -8,7 +9,9 @@ import { downloadYoutubeVideo, getTubeDownloadedVideos } from '../lib/media';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 
-export default function YoutubeVideo({ mediaQuery, selectImage, handleClose }) {
+const appUri = import.meta.env.VITE_REACT_APP_API;
+
+export default function YoutubeVideo({ selectImage, handleClose }) {
 
     const { id } = useParams();
     const [link, setLink] = useState('');
@@ -95,7 +98,7 @@ export default function YoutubeVideo({ mediaQuery, selectImage, handleClose }) {
                             <iframe width="100%" height="100%" title='video' key={key}
                                 src={url}
                                 className='md:min-w-[37.5rem] md:min-h-[25rem]'
-                                frameborder="0" allow="accelerometer; autoPlay; encrypted-media; gyroscope; picture-in-picture; fullscreen">
+                                frameBorder="0" allow="accelerometer; autoPlay; encrypted-media; gyroscope; picture-in-picture; fullscreen">
                             </iframe>
                         ) : (
                             <div className='h-full opacity-90 flex items-center justify-center'>
@@ -169,7 +172,7 @@ export default function YoutubeVideo({ mediaQuery, selectImage, handleClose }) {
                         )}
                         {videos && videos.map((video, index) => (
                             <button type='button' key={index} className='h-fit' onClick={() => {
-                                const thumbnail = `${process.env.REACT_APP_API}/media/youtube/${video.split('_')[0]}_thumbnail.png`;
+                                const thumbnail = `${appUri}/media/youtube/${video.split('_')[0]}_thumbnail.png`;
                                 selectImage(thumbnail, video, 'utube');
                                 handleClose();
                             }}>

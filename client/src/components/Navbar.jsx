@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import ThemeSwitcher from './ThemeSwitcher'
 import { FaArrowRight } from "react-icons/fa6";
@@ -26,7 +26,7 @@ export default function Navbar() {
 
             {user ? (
               <Link to="/files">
-                <button className='gap-1 opacity-75 hover:opacity-95 text-xl font-medium px-3 py-1 rounded-3xl transition-opacity duration-150'>{user.avatar ? <img src={user.avatar} alt="User Profile" height={45} width={45} /> : <RxAvatar size={45} />}</button>
+                <button className='gap-1 opacity-75 hover:opacity-95 text-xl font-medium px-3 py-1 rounded-3xl transition-opacity duration-150'>{user.avatar ? <img src={user.avatar} className='rounded-full' alt="User Profile" height={45} width={45} /> : <RxAvatar size={45} />}</button>
               </Link>) : (
               <>
                 <Link to="/login">
@@ -59,8 +59,8 @@ export default function Navbar() {
                 <h2 className='text-2xl mr-6 font-bold hover:text-rose-500'>Blink.ai</h2>
               </Link>
               <button onClick={() => setIsOpen(!isOpen)}>
-                <span className='hidden dark:block'><svg width="30px" height="30px" viewBox="0 0 0.65 0.65" fill="none" xmlns="http://www.w3.org/2000/svg"><path width="24" height="24" d="M0 0H0.75V0.75H0V0z" /><path d="m0.219 0.531 0.309 -0.309" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.03125" /><path d="m0.219 0.219 0.309 0.309" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.03125" /></svg></span>
-                <span className='dark:hidden'><svg width="30px" height="30px" viewBox="0 0 0.65 0.65" fill="none" xmlns="http://www.w3.org/2000/svg"><path width="24" height="24" d="M0 0H0.75V0.75H0V0z" /><path d="m0.219 0.531 0.309 -0.309" stroke="#21201c" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.03125" /><path d="m0.219 0.219 0.309 0.309" stroke="#21201c" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.03125" /></svg></span>
+                <span className='hidden dark:block'><svg width="30px" height="30px" viewBox="0 0 0.65 0.65" fill="none" xmlns="http://www.w3.org/2000/svg"><path width="24" height="24" d="M0 0H0.75V0.75H0V0z" /><path d="m0.219 0.531 0.309 -0.309" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth="0.03125" /><path d="m0.219 0.219 0.309 0.309" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth="0.03125" /></svg></span>
+                <span className='dark:hidden'><svg width="30px" height="30px" viewBox="0 0 0.65 0.65" fill="none" xmlns="http://www.w3.org/2000/svg"><path width="24" height="24" d="M0 0H0.75V0.75H0V0z" /><path d="m0.219 0.531 0.309 -0.309" stroke="#21201c" strokeLinecap="round" strokeLinejoin="round" strokeWidth="0.03125" /><path d="m0.219 0.219 0.309 0.309" stroke="#21201c" strokeLinecap="round" strokeLinejoin="round" strokeWidth="0.03125" /></svg></span>
               </button>
             </div>
 

@@ -1,6 +1,8 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
+const appUri = import.meta.env.VITE_REACT_APP_API;
+
 const createVideo = async (script, bgMusic, musicState, id) => {
 
   const arr = [];
@@ -16,7 +18,7 @@ const createVideo = async (script, bgMusic, musicState, id) => {
   };
 
   try {
-    const response = await axios.post(process.env.REACT_APP_API + '/v1/create', data, {
+    const response = await axios.post(appUri + '/v1/create', data, {
       headers: {
         'Content-Type': 'application/json',
         token: Cookies.get('token'),
@@ -36,7 +38,7 @@ const uploadImage = async (image) => {
   return new Promise((resolve, reject) => {
     const formData = new FormData();
     formData.append('image', image);
-    axios.post(process.env.REACT_APP_API + '/image', formData, {
+    axios.post(appUri + '/image', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
         token: Cookies.get('token')
@@ -51,7 +53,7 @@ const uploadImage = async (image) => {
 
 const downloadVideo = async (projectId) => {
   return new Promise((resolve, reject) => {
-    axios.get(process.env.REACT_APP_API + '/user/video/download/' + projectId, {
+    axios.get(appUri + '/user/video/download/' + projectId, {
       responseType: 'blob',
       headers: {
         token: Cookies.get('token')

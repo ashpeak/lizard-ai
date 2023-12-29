@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import userAuth from '../lib/userAuth';
 import { Toaster, toast } from 'sonner';
 import { useGoogleLogin } from '@react-oauth/google';
@@ -19,6 +19,7 @@ export default function Login() {
                 loading: type === 'register' ? 'Registering...' : 'Logging in...',
                 success: type === 'register' ? 'Registered successfully!' : 'Logged in successfully!',
                 error: (err) => {
+                    console.log(err);
                     return "Something went wrong";
                 }
             }

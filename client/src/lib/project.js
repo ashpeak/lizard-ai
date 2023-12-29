@@ -1,10 +1,12 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
+const appUri = import.meta.env.VITE_REACT_APP_API;
+
 const createProject = async (project) => {
     return new Promise((resolve, reject) => {
 
-        axios.post(process.env.REACT_APP_API + '/project/new', project, {
+        axios.post(appUri + '/project/new', project, {
             headers: {
                 'Content-Type': 'application/json',
                 token: Cookies.get('token')
@@ -18,7 +20,7 @@ const createProject = async (project) => {
 }
 
 const getAllProjects = async () => {
-    const response = await axios.get(process.env.REACT_APP_API + '/project/getAll', {
+    const response = await axios.get(appUri + '/project/getAll', {
         headers: {
             'Content-Type': 'application/json',
             token: Cookies.get('token')

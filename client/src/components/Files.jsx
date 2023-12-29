@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { getAllProjects } from '../lib/project';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
@@ -65,7 +65,7 @@ export default function Files() {
                 </div>
                 <div className='flex flex-col mt-3'>
                     {isLoading && <p>Loading...</p>}
-                    {data && data.map((project, index) => (
+                    {(Array.isArray(data) && data?.length > 0) && data.map((project, index) => (
                         <div key={index}>
                             <Link className='flex flex-row gap-4 mx-2 px-4 py-3 items-center justify-between hover:opacity-95 hover:dark:bg-[#f3f5f412] hover:bg-[#dbdbdb] rounded-2xl transition-colors duration-150' to={`/editor/${project._id}`}>
                                 <div className='flex gap-x-6 md:gap-x-14 items-center'>
