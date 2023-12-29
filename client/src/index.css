@@ -65,3 +65,9 @@ html {
     background: radial-gradient(50% 50% at 50% 50%,rgba(255,213,79,.1) 0,hsla(0,0%,100%,0) 100%);
     border-radius: 58% 34% 71% 27% / 34% 28% 63% 47%;
 }
+
+.bg-blur {
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    -moz-backdrop-filter: blur(16px);
+}

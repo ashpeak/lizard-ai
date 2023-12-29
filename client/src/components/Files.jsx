@@ -8,6 +8,11 @@ import { format } from 'date-fns';
 import NewProject from './Modal/NewProject';
 import { createProject } from '/src/lib/project';
 import { toast } from 'sonner';
+import { MdDelete } from "react-icons/md";
+import axios from 'axios';
+import Cookies from 'js-cookie';
+
+const appUri = import.meta.env.VITE_REACT_APP_API;
 
 export default function Files() {
     const [modal, setModal] = useState(false);
@@ -33,6 +38,20 @@ export default function Files() {
         );
     }
 
+    const handleDelete = async (id) => {
+        try {
+            await axios.delete(`${appUri}/project/${id}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    token: Cookies.get('token')
+                }
+            });
+            refetch();
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     return (
         <div className='-mt-4'>
             <div className='flex justify-center'>
@@ -55,7 +74,7 @@ export default function Files() {
                         <h2 className='font-semibold opacity-90'>COVER</h2>
                         <h2 className='font-semibold opacity-90'>NAME</h2>
                     </div>
-                    <h2 className='font-semibold opacity-90 hidden md:block'>MODIFIED</h2>
+                    <h2 className='font-semibold opacity-90 hidden md:block mr-[6.5rem]'>MODIFIED</h2>
                 </div>
                 <div className='flex flex-col mt-3'>
                     {isLoading && <p>Loading...</p>}
@@ -71,9 +90,14 @@ export default function Files() {
                                         <p className='ml-[1.4rem] md:ml-2 text-xs font-thin opacity-70'>Video</p>
                                     </div>
                                 </div>
-                                <p className='text-base hidden md:block font-medium opacity-90'>
-                                    {format(new Date(project.updatedAt), 'MMM dd, hh:mm a')}
-                                </p>
+                                <div className='flex gap-x-6 md:gap-x-8 items-center'>
+                                    <p className='text-base hidden md:block font-medium opacity-90'>
+                                        {format(new Date(project.updatedAt), 'MMM dd, hh:mm a')}
+                                    </p>
+                                    <button type='button' className='flex items-center gap-1 text-sm opacity-70 hover:opacity-100' onClick={() => handleDelete(project._id)}>
+                                        <MdDelete size={20} />
+                                    </button>
+                                </div>
                             </Link>
                         </div>
                     ))}

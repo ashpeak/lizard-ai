@@ -133,11 +133,15 @@ AuthController.rate = async (req, res) => {
 }
 
 AuthController.getTestimonials = async (req, res) => {
-    await connectDB();
+    try {
+        await connectDB();
 
-    const testimonials = await Testimonial.find();
+        const testimonials = await Testimonial.find();
 
-    return res.status(200).send({ testimonials });
+        return res.status(200).send(testimonials);
+    } catch (error) {
+        return res.status(500).send('Internal Server Error');
+    }
 }
 
 AuthController.checkAuth = (req, res) => {

@@ -17,7 +17,7 @@ export default function NewProject({ handleClose, handleSubmit }) {
                 initial={{ y: 50, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 exit={{ y: 50, opacity: 0 }}
-                className='w-[21rem] h-[23rem] relative md:w-96 md:h-96 bg-secondary-light dark:bg-secondary-dark border border-border-light dark:border-border-dark rounded-xl flex flex-col items-center'
+                className='w-[21rem] h-fit pb-3 relative md:w-96 bg-secondary-light dark:bg-secondary-dark border border-border-light dark:border-border-dark rounded-xl flex flex-col items-center'
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className='w-full'>

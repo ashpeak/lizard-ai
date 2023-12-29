@@ -3,16 +3,21 @@ import { FaArrowRight, FaLinkedin, FaGithub } from "react-icons/fa";
 import { IoPeople } from "react-icons/io5";
 import { PiSealCheckFill } from "react-icons/pi";
 import { HiCurrencyRupee } from "react-icons/hi2";
+import FeedbackCard from './FeedbackCard';
+import { useQuery } from '@tanstack/react-query';
+import { misc } from '../lib/misc';
 
 export default function Home() {
 
   const year = new Date().getFullYear();
 
+  const { data } = useQuery({ queryKey: ['feedback'], queryFn: misc.getTestimonials, refetchOnWindowFocus: false });
+
   return (
     <div className="relative w-full h-full pb-12">
 
       {/* Ambient Background */}
-      <div className='absolute blur-2xl left-1/2 top-[6%] transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center'>
+      <div className='absolute blur-2xl left-1/2 top-[15rem] md:top-[14rem] transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center'>
         <div className='flex translate-y-6 md:translate-y-20'>
           <div className='w-40 h-40 md:w-[20rem] md:h-[20rem] md:-mr-2 circle_blue rounded-3xl'></div>
           <div className='w-40 h-40 md:w-[20rem] md:h-[20rem] md:-ml-2 circle_red rounded-3xl'></div>
@@ -139,29 +144,31 @@ export default function Home() {
         </div>
 
         <div className='mt-16 flex md:flex-row flex-col justify-between items-center gap-8 px-10'>
-
           <div className='flex items-center justify-center flex-col'>
             <span className='opacity-90'>
               <IoPeople size={48} color='#00a2c7' />
             </span>
-            <h2 className='mt-2 text-[1.2125rem] md:text-[1.4125rem] leading-[1.6125rem] font-bold text-center opacity-90'>Simple Editor</h2>
-            <p className='mt-2 text-[1.125rem] text-center opacity-70'>Bulbul makes creating videos as simple as writing an email with its script based editor.</p>
+            <h2 className='mt-2 text-[1.2125rem] md:text-[1.4125rem] leading-[1.6125rem] font-bold text-center opacity-90'>3000+</h2>
+            <p className='mt-2 text-[1.125rem] text-center opacity-70'>happy content creators, marketers, & educators.</p>
           </div>
           <div className='flex items-center justify-center flex-col'>
             <span className='opacity-90'>
               <PiSealCheckFill color='#ffc53d' size={48} />
             </span>
-            <h2 className='mt-2 text-[1.2125rem] md:text-[1.4125rem] leading-[1.6125rem] font-bold text-center opacity-90'>Fast creation</h2>
-            <p className='mt-2 text-[1.125rem] text-center opacity-70'>Create videos with lifelike voiceovers in minutes, powered using AI.</p>
+            <h2 className='mt-2 text-[1.2125rem] md:text-[1.4125rem] leading-[1.6125rem] font-bold text-center opacity-90'>Loved</h2>
+            <p className='mt-2 text-[1.125rem] text-center opacity-70'>average satisfaction rating from users is good.</p>
           </div>
           <div className='flex items-center justify-center flex-col'>
             <span className='opacity-90'>
-            <HiCurrencyRupee size={48} color='#46a758' />
-              </span>
-            <h2 className='mt-2 text-[1.2125rem] md:text-[1.4125rem] leading-[1.6125rem] font-bold text-center opacity-90'>Cost effective</h2>
-            <p className='mt-2 text-[1.125rem] text-center opacity-70'>Create high-quality content at scale at a fraction of the cost.</p>
+              <HiCurrencyRupee size={48} color='#46a758' />
+            </span>
+            <h2 className='mt-2 text-[1.2125rem] md:text-[1.4125rem] leading-[1.6125rem] font-bold text-center opacity-90'>{`\u20B9`}10+ Thousands</h2>
+            <p className='mt-2 text-[1.125rem] text-center opacity-70'>hours saved in content creation so far.</p>
           </div>
+        </div>
 
+        <div className='mt-8 py-4 justify-center flex flex-wrap gap-8 md:px-10'>
+          {Array.isArray(data) && data.map((item) => (<FeedbackCard key={item._id} {...item} />))}
         </div>
       </div>
 
