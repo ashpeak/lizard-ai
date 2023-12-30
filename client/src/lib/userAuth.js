@@ -20,9 +20,4 @@ userAuth.register = async (username, password) => {
     return response.data;
 }
 
-userAuth.logout = async () => {
-    const response = await axios.get(appUri + '/user/logout');
-    return response.data;
-}
-
 export default userAuth;

@@ -17,14 +17,16 @@ export default function Login() {
             type === 'register' ? userAuth.register(user.username, user.password) : userAuth.login(user, method, access_token),
             {
                 loading: type === 'register' ? 'Registering...' : 'Logging in...',
-                success: type === 'register' ? 'Registered successfully!' : 'Logged in successfully!',
+                success: () => {
+                    checkAuth();
+                    return 'Logged in successfully!';
+                },
                 error: (err) => {
                     console.log(err);
                     return "Something went wrong";
                 }
             }
         );
-        checkAuth();
     }
 
     const handleChange = (e) => {

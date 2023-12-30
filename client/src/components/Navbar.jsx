@@ -8,10 +8,13 @@ import { auth } from '../states/useAuth';
 export default function Navbar() {
 
   const user = auth((state) => state.user);
+  const { logout } = auth((state) => state);
   const [isOpen, setIsOpen] = useState(false);
+  const [visible, setVisible] = useState(false);
 
   return (
     <>
+      {/* Window Navbar */}
       <div className='pb-5 pt-10 px-20 relative z-10 hidden md:block'>
         <div className='flex justify-between items-center'>
           <div className='flex items-baseline justify-between w-fit gap-5'>
@@ -25,9 +28,27 @@ export default function Navbar() {
             <ThemeSwitcher />
 
             {user ? (
-              <Link to="/files">
-                <button className='gap-1 p-[0.2rem] border dark:border-border-light rounded-full border-border-dark text-xl font-medium transition-opacity duration-150'>{user.avatar ? <img src={user.avatar} className='rounded-full opacity-90 hover:opacity-100' alt="User Profile" height={45} width={45} /> : <RxAvatar size={45} className='opacity-75 hover:opacity-95' />}</button>
-              </Link>) : (
+              <div className='relative'>
+                <div className='gap-1 p-[0.2rem] cursor-pointer border dark:border-border-light rounded-full border-border-dark text-xl font-medium transition-opacity duration-150'>
+                  {user?.avatar ? (
+                    <img
+                      onClick={() => setVisible(!visible)}
+                      src={user.avatar}
+                      className='rounded-full opacity-90 hover:opacity-100'
+                      alt="User Profile"
+                      height={45}
+                      width={45} />
+                  ) : (
+                    <RxAvatar onClick={() => setVisible(!visible)} size={45} className='opacity-75 hover:opacity-95' />
+                  )}
+                </div>
+                <div className={`w-32 h-[7.5rem] z-[9999] shadow-md shadow-neutral-400 dark:shadow-neutral-700 right-0 p-2 transition-all duration-150 top-16 gap-1 absolute ${visible ? 'flex' : 'hidden'} flex-col rounded-xl dark:bg-secondary-dark bg-secondary-light`}>
+                  <Link to="/account" onClick={() => setVisible(false)} className='text-center py-1 rounded-md opacity-80 hover:opacity-95 hover:bg-[#b9b8b8] hover:dark:bg-neutral-600 transition-all duration-150'>Account</Link>
+                  <Link to="/files" onClick={() => setVisible(false)} className='text-center rounded-md opacity-80 hover:opacity-95 hover:bg-[#b9b8b8] py-1 hover:dark:bg-neutral-600 transition-all duration-150'>Files</Link>
+                  <button type='button' className='text-center rounded-md py-1 opacity-80 hover:opacity-95 hover:bg-[#b9b8b8] hover:dark:bg-neutral-600 transition-all duration-150' onClick={() => { logout(); setVisible(false); }}>Logout</button>
+                </div>
+              </div>
+            ) : (
               <>
                 <Link to="/login">
                   <button className='text-text-light dark:text-text-dark opacity-80 hover:opacity-95 font-medium text-xl transition-opacity duration-150'>Login</button>
@@ -41,6 +62,8 @@ export default function Navbar() {
           </div>
         </div>
       </div>
+
+      {/* Mobile Navbar */}
       <div className='pb-5 pt-5 relative z-[999] md:hidden block w-full'>
         <div className='flex justify-between items-center w-full'>
           <div className='flex items-baseline justify-between w-full gap-5 px-7'>
@@ -67,9 +90,26 @@ export default function Navbar() {
             <Link onClick={() => setIsOpen(!isOpen)} to="/feedback" className='text-text-light dark:text-text-dark opacity-80 hover:opacity-95 font-medium text-xl transition-opacity duration-150'>Rate Us</Link>
             <Link onClick={() => setIsOpen(!isOpen)} to='https://www.linkedin.com/in/ashishsingh09dev/?profileId=ACoAADORLc0BWMD-J0FaT_yufN-D-HdTg3Td4JY' target='_blank' className='text-text-light dark:text-text-dark opacity-80 hover:opacity-95 font-medium text-xl transition-opacity duration-150'>LinkedIn</Link>
             <ThemeSwitcher />
-            <Link onClick={() => setIsOpen(!isOpen)} to="/files">
-              <button className='gap-1 opacity-75 hover:opacity-95 text-xl font-medium px-3 py-1 rounded-3xl transition-opacity duration-150'><RxAvatar size={45} /></button>
-            </Link>
+            <div className='relative w-full px-16 flex flex-col gap-y-3 items-center'>
+              <div className='gap-1 p-[0.2rem] cursor-pointer border dark:border-border-light rounded-full border-border-dark text-xl font-medium transition-opacity duration-150'>
+                {user?.avatar ? (
+                  <img
+                    onClick={() => setVisible(!visible)}
+                    src={user.avatar}
+                    className='rounded-full opacity-90 hover:opacity-100'
+                    alt="User Profile"
+                    height={45}
+                    width={45} />
+                ) : (
+                  <RxAvatar onClick={() => setVisible(!visible)} size={45} className='opacity-75 hover:opacity-95' />
+                )}
+              </div>
+              <div className={`w-full right-0 p-2 transition-all duration-150 top-16 gap-1 ${visible ? 'flex' : 'hidden'} flex-col rounded-xl dark:bg-[#22222175] bg-[#958d85]`}>
+                <Link to="/account" onClick={() => { setVisible(false); setIsOpen(!isOpen); }} className='text-center py-1 rounded-md opacity-80 hover:opacity-95 hover:bg-[#b9b8b8] hover:dark:bg-neutral-600 transition-all duration-150'>Account</Link>
+                <Link to="/files" onClick={() => { setVisible(false); setIsOpen(!isOpen); }} className='text-center rounded-md opacity-80 hover:opacity-95 hover:bg-[#b9b8b8] py-1 hover:dark:bg-neutral-600 transition-all duration-150'>Files</Link>
+                <button type='button' className='text-center rounded-md py-1 opacity-80 hover:opacity-95 hover:bg-[#b9b8b8] hover:dark:bg-neutral-600 transition-all duration-150' onClick={() => { logout(); setVisible(false); setIsOpen(!isOpen); }}>Logout</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>

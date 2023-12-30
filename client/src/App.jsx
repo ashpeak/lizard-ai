@@ -7,6 +7,7 @@ import Login from './components/Login';
 import Files from './components/Files';
 import Mixer from './components/Test';
 import Feedback from './components/Feedback';
+import Account from './components/Account';
 import { auth } from './states/useAuth';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { Toaster } from 'sonner';
@@ -33,6 +34,7 @@ function App() {
               <Route path="/editor/:id" element={user ? <Editor /> : <Navigate to="/login" />} />
               <Route path="/test" element={<Mixer />} />
               <Route path="/feedback" element={user ? <Feedback /> : <Navigate to="/login" />} />
+              <Route path="/account" element={user ? <Account /> : <Navigate to="/login" />} />
             </Routes>
           </div>
         </GoogleOAuthProvider>

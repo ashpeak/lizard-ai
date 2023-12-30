@@ -25,7 +25,7 @@ export default function Home() {
         <div className='w-[20rem] h-[20rem] -mt-12 circle_yellow rounded-3xl'></div>
       </div>
 
-      <div className='w-full relative py-20 z-10 bg-transparent flex flex-col items-center justify-end'>
+      <div className='w-full relative py-20 bg-transparent flex flex-col items-center justify-end'>
         <div className='max-w-[42rem]'>
           <h1 className='md:text-[3.5rem] text-[2.5rem] text-center leading-[2.8rem] md:leading-[3.8rem] font-extrabold'>Video creation made 10x simpler & faster with AI</h1>
         </div>

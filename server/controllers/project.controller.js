@@ -64,7 +64,7 @@ project.getAll = async (req, res) => {
     }
 }
 
-Project.delete = async (req, res) => {
+project.delete = async (req, res) => {
     try {
         const token = req.headers.token;
         if(!token) return res.status(401).json({ msg: "Unauthorized" });
@@ -72,6 +72,8 @@ Project.delete = async (req, res) => {
         const { id } = jwt.verify(token, process.env.JWT_SECRET);
 
         if (!id) return res.status(401).json({ msg: "Unauthorized" });
+
+        await connectDB();
 
         const project = await Project.findById(req.params.id);
 
