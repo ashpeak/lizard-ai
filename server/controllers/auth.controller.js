@@ -174,7 +174,7 @@ AuthController.profile = async (req, res) => {
 
         await connectDB();
 
-        const user = User.findById(id);
+        const user = await User.findById(id);
 
         if (!user) {
             return res.status(404).send('User not found');
@@ -186,7 +186,7 @@ AuthController.profile = async (req, res) => {
             avatar: user.avatar,
             filesCount: user.projects.length,
             credit: user.credit,
-        }
+        };
 
         return res.status(200).send(data);
     } catch (err) {
