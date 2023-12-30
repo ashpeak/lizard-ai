@@ -162,6 +162,38 @@ AuthController.checkAuth = (req, res) => {
     }
 }
 
+AuthController.profile = async (req, res) => {
+    const token = req.headers.token;
+
+    if (!token) {
+        return res.status(401).send('Not authorized.');
+    }
+
+    try {
+        const { id } = jwt.verify(token, process.env.JWT_SECRET);
+
+        await connectDB();
+
+        const user = User.findById(id);
+
+        if (!user) {
+            return res.status(404).send('User not found');
+        }
+
+        const data = {
+            id: user._id,
+            name: user.firstName + ' ' + user.lastName,
+            avatar: user.avatar,
+            filesCount: user.projects.length,
+            credit: user.credit,
+        }
+
+        return res.status(200).send(data);
+    } catch (err) {
+        return res.status(401).send('Not authorized.');
+    }
+}
+
 AuthController.getImages = async (req, res) => {
     const token = req.headers.token;
 

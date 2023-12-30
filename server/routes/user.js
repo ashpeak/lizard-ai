@@ -11,6 +11,8 @@ router.post('/feedback', AuthController.rate);
 
 router.get('/feedback/all', AuthController.getTestimonials);
 
+router.get('/profile', AuthController.profile);
+
 router.get('/logout', AuthController.logout);
 
 router.get('/checkAuth', AuthController.checkAuth);
