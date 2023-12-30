@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { auth } from "../states/useAuth";
-import { RxAvatar } from "react-icons.profile";
+import { RxAvatar } from "react-icons/rx";
 import { useQuery } from '@tanstack/react-query';
 import userAuth from "../lib/userAuth";
 
@@ -14,8 +14,10 @@ export default function Account() {
     const date = tomorrow.getDate();
     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     const month = monthNames[tomorrow.getMonth()];
-
+    
     const { data } = useQuery({ queryKey: ['profile'], queryFn: userAuth.profile, refetchOnWindowFocus: false });
+    
+    const percent = parseInt((15 - data?.credit) / 15 * 100);
 
     useEffect(() => {
         checkAuth();
@@ -34,8 +36,8 @@ export default function Account() {
             <div className="flex flex-col z-20 items-center justify-center rounded-2xl dark:bg-secondary-dark bg-secondary-light p-4">
                 {/* User Avatar */}
                 <div className="p-1 border border-border-dark dark:border-border-light rounded-full">
-                    {user.avatar ? (
-                        <img src={data.avatar} alt="User Avatar" className="w-32 h-32 rounded-full" />
+                    {user?.avatar ? (
+                        <img src={data?.avatar} alt="User Avatar" className="w-32 h-32 rounded-full" />
                     ) : (
                         <RxAvatar size={100} className="opacity-90" />
                     )}
@@ -43,14 +45,14 @@ export default function Account() {
 
                 <div className="flex flex-col gap-2 mt-4">
                     {/* User Name */}
-                    <h1 className="text-2xl font-bold mb-2 opacity-95">{data.name}</h1>
+                    <h1 className="text-2xl font-bold mb-2 opacity-95">{data?.name}</h1>
                     {/* Credits left */}
                     <div>
-                        <p className="opacity-80">Credits used: {data.credits}/15 ({parseInt((data.credits / 15) * 100)}%)</p>
+                        <p className="opacity-80">Credits used: {15 - data?.credit}/15 ({percent}%)</p>
                         <p className="opacity-40 text-sm">(credits will reset on {month} {date}, 12:30 pm)</p>
                     </div>
                     {/* Files count */}
-                    <p className="opacity-80">Active projects: {data.filesCount}</p>
+                    <p className="opacity-80">Active projects: {data?.filesCount}</p>
                 </div>
                 <div className="mt-12">
                     <button onClick={logout} className="bg-rose-600 hover:bg-rose-500 flex items-center gap-1 text-white text-xl font-medium px-4 py-1 rounded-3xl transition-colors duration-150">Logout</button>

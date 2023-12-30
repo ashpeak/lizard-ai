@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 
 const appUri = import.meta.env.VITE_REACT_APP_API;
 
-export const userAuth = {};
+const userAuth = {};
 
 userAuth.login = async (user, method, access_token) => {
 
