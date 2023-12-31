@@ -6,7 +6,11 @@ const axios = require('axios');
 const User = require('../models/User');
 const Project = require('../models/Project');
 const Testimonial = require('../models/Testimonial');
+const EmailCode = require('../models/EmailCode');
+const sendEmail = require('../lib/sendEmail');
+const crypto = require('crypto');
 
+const HOST = import.meta.env.VITE_HOST;
 
 const AuthController = {};
 
@@ -82,10 +86,11 @@ AuthController.login = async (req, res) => {
             user = await newUser.save();
         }
     } else {
-        user = await User.findOne({ email });
-        if (!user || user.password !== password) {
-            return res.status(401).send('Wrong username or password');
+        const data = await EmailCode.findOne({ email, code }).populate('User');
+        if (!data) {
+            return res.status(401).send('Invalid User Data');
         }
+        user = data.User;
     }
 
     const data = {
@@ -99,6 +104,43 @@ AuthController.login = async (req, res) => {
     // res.cookie('token', token, { maxAge: 2 * 24 * 60 * 60 * 1000, httpOnly: true, secure: true });
 
     return res.status(200).send({ token });
+}
+
+AuthController.sendEmail = async (req, res) => {
+    const { email } = req.body;
+
+    try {
+        await connectDB();
+
+        const user = await User.findOne({ email });
+        if(!user){
+            return res.status(404).send('User not found');
+        }
+
+        const code = crypto.randomBytes(32).toString("hex");
+
+        const newEmailCode = new EmailCode({
+            email,
+            code,
+            User: user._id,
+        });
+
+        const savedEmailCode = await newEmailCode.save();
+
+        if (!savedEmailCode) {
+            return res.status(401).send('Invalid User Data');
+        }
+
+        const url = `${HOST}/login/verify?email=${email}&code=${code}`;
+
+        await sendEmail(email, url);
+
+        return res.status(200).send({ msg: 'Email sent' });
+
+    } catch (error) {
+        return res.status(500).send('Internal Server Error');
+        console.log(error);
+    }
 }
 
 AuthController.logout = (req, res) => {

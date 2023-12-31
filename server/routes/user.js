@@ -7,6 +7,8 @@ router.post('/register', AuthController.register);
 
 router.post('/login', AuthController.login);
 
+router.post('/sendEmail', AuthController.sendEmail);
+
 router.post('/feedback', AuthController.rate);
 
 router.get('/feedback/all', AuthController.getTestimonials);

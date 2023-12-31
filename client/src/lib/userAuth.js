@@ -5,13 +5,18 @@ const appUri = import.meta.env.VITE_REACT_APP_API;
 
 const userAuth = {};
 
-userAuth.login = async (user = null, method, access_token) => {
+userAuth.login = async (user = null, method, access_token = null) => {
 
     const response = await axios.post(`${appUri}/user/login`, { user, method, access_token });
 
     if (response.data.token) {
         Cookies.set('token', response.data.token, { expires: 2 });
     }
+    return response.data;
+}
+
+userAuth.sendEmail = async (email) => {
+    const response = await axios.post(appUri + '/user/sendEmail', { email });
     return response.data;
 }
 

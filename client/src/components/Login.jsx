@@ -10,13 +10,14 @@ export default function Login() {
     const { checkAuth } = auth();
     const [email, setEmail] = useState('');
 
-    const handleSubmit = async (method, access_token = null) => {
+    const handleSubmit = async (method, access_token) => {
         toast.promise(
-            userAuth.login({ email }, method, access_token),
+            method === "email" ? userAuth.sendEmail(email) : userAuth.login(null, method, access_token),
             {
                 loading: 'Logging in...',
                 success: (data) => {
                     checkAuth();
+                    setEmail('');
                     return data.message;
                 },
                 error: (err) => {
