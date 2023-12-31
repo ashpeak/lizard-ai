@@ -62,7 +62,7 @@ AuthController.register = async (req, res) => {
 }
 
 AuthController.login = async (req, res) => {
-    const { userData, method, access_token } = req.body;
+    const { user: userData, method, access_token } = req.body;
     const { email, code } = userData;
 
     await connectDB();
@@ -79,9 +79,8 @@ AuthController.login = async (req, res) => {
                 lastName: userInfo.family_name,
                 avatar: userInfo.picture,
             });
-            await newUser.save();
+            user = await newUser.save();
         }
-        user = await User.findOne({ g_id: userInfo.sub });
     } else {
         user = await User.findOne({ email });
         if (!user || user.password !== password) {

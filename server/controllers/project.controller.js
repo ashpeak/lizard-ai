@@ -12,7 +12,7 @@ project.create = async (req, res) => {
 
         if (!id) return res.status(401).json({ msg: "Unauthorized" });
 
-        const { name, idea, isAiGenerated } = req.body;
+        const { name, idea, template } = req.body;
 
         if (!name || (template !== "empty" && !idea)) {
             return res.status(400).json({ message: 'Missing required fields.' });

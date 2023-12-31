@@ -5,9 +5,9 @@ const appUri = import.meta.env.VITE_REACT_APP_API;
 
 const userAuth = {};
 
-userAuth.login = async (user, method, access_token) => {
+userAuth.login = async (user = null, method, access_token) => {
 
-    const response = await axios.post(`${appUri}/user/login`, { userData: user, method, access_token });
+    const response = await axios.post(`${appUri}/user/login`, { user, method, access_token });
 
     if (response.data.token) {
         Cookies.set('token', response.data.token, { expires: 2 });
