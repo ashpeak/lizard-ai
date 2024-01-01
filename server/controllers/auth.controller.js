@@ -27,40 +27,51 @@ const getUserInfo = (access_token) => {
             })
     })
 }
-AuthController.register = async (req, res) => {
-    const { username, password } = req.body;
 
-    await connectDB();
+AuthController.signup = async (req, res) => {
+    const { user: userData } = req.body;
+    const { email, fName, lName } = userData || {};
 
-    if (!username || !password) {
-        return res.status(401).send('Invalid User Data');
+    try {
+        await connectDB();
+
+        if (!email || !fName || !lName) {
+            return res.status(401).send('Invalid User Data');
+        }
+
+        const emailRegex = new RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/);
+        if (!emailRegex.test(email)) {
+            return res.status(401).send('Invalid Email');
+        }
+
+        let user = await User.findOne({
+            email: email.toLowerCase(),
+            $or: [{ g_id: { $exists: false } }, { g_id: '' }]
+        });
+
+        if (user) {
+            return res.status(401).send('User already exists');
+        }
+
+        user = new User({
+            email: email.toLowerCase(),
+            firstName: fName.charAt(0).toUpperCase() + fName.slice(1),
+            lastName: lName.charAt(0).toUpperCase() + lName.slice(1),
+            avatar: 'https://res.cloudinary.com/dhfuu5omv/image/upload/f_auto,q_auto/v1/bulbul/gwmnjezsthsil3mstwbo',
+            role: 'User',
+            updatedAt: Date.now(),
+        });
+
+        const newUser = user.save();
+
+        if (!newUser) {
+            return res.status(401).send('Invalid User Data');
+        }
+
+        return res.status(200).send('Signup successful, please login.');
+    } catch (error) {
+        return res.status(500).send('Internal Server Error');
     }
-
-    let user = await User.findOne({ username });
-
-    if (user) {
-        return res.status(401).send('User already exists');
-    }
-
-    user = new User({
-        username,
-        password,
-        email: "somebody@gmail.com",
-        firstName: "Ashish",
-        lastName: "Singh",
-        avatar: 'https://www.gravatar.com/avatar/3b3be63a4c2a439b013787725dfce802?d=identicon',
-        role: 'User',
-        createdAt: Date.now(),
-        updatedAt: Date.now(),
-    });
-
-    const newUser = user.save();
-
-    if (!newUser) {
-        return res.status(401).send('Invalid User Data');
-    }
-
-    return res.status(200).send({ msg: 'User created' });
 }
 
 AuthController.login = async (req, res) => {
@@ -114,7 +125,7 @@ AuthController.sendEmail = async (req, res) => {
             email,
             $or: [{ g_id: { $exists: false } }, { g_id: '' }]
         });
-        if(!user){
+        if (!user) {
             return res.status(404).send('User not found');
         }
 

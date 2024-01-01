@@ -12,6 +12,7 @@ import { auth } from './states/useAuth';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { Toaster } from 'sonner';
 import Verify from './components/Verify';
+import Signup from './components/Signup';
 
 function App() {
 
@@ -32,6 +33,7 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/files" element={user ? <Files /> : <Navigate to="/login" />} />
               <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
+              <Route path="/signup" element={user ? <Navigate to="/" /> : <Signup />} />
               <Route path="login/verify" element={user ? <Navigate to="/" /> : <Verify />} />
               <Route path="/editor/:id" element={user ? <Editor /> : <Navigate to="/login" />} />
               <Route path="/test" element={<Mixer />} />

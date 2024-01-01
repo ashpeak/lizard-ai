@@ -5,19 +5,27 @@ import { useGoogleLogin } from '@react-oauth/google';
 import { auth } from '../states/useAuth';
 import { motion } from 'framer-motion';
 
-export default function Login() {
+export default function Signup() {
 
     const { checkAuth } = auth();
-    const [email, setEmail] = useState('');
+    const [user, setUser] = useState({
+        email: '',
+        fName: '',
+        lName: '',
+    });
 
     const handleSubmit = async (method, access_token) => {
         toast.promise(
-            method === "email" ? userAuth.sendEmail(email) : userAuth.login(null, method, access_token),
+            method === "email" ? userAuth.signup(user) : userAuth.login(null, method, access_token),
             {
-                loading: (method === "email" ? "Sending email..." : "Logging in..."),
+                loading: (method === "email" ? "Signing up..." : "Logging in..."),
                 success: (data) => {
                     checkAuth();
-                    setEmail('');
+                    setUser({
+                        email: '',
+                        fName: '',
+                        lName: '',
+                    });
                     return data;
                 },
                 error: (err) => {
@@ -27,6 +35,9 @@ export default function Login() {
         );
     }
 
+    const handleChange = (e) => {
+        setUser({ ...user, [e.target.name]: e.target.value });
+    }
 
     const googleLogin = useGoogleLogin({
         onSuccess: async (codeResponse) => {
@@ -48,22 +59,54 @@ export default function Login() {
             </div>
 
             <div className="p-8 z-10 w-full md:w-[26rem] text-text-light dark:text-text-dark bg-secondary-light dark:bg-secondary-dark rounded shadow-md">
-                <h2 className="text-2xl font-bold mb-4">Login Form</h2>
+                <h2 className="text-2xl font-bold mb-4">Signup Form</h2>
                 <form onSubmit={(e) => { e.preventDefault(); handleSubmit("email") }}>
-                    <div className="mb-4">
-                        <label className="block text-sm font-bold mb-2" htmlFor="name">
-                            Email
-                        </label>
-                        <input
-                            className="appearance-none bg-neutral-50 dark:bg-neutral-700 rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
-                            id="name"
-                            type="email"
-                            required
-                            name="name"
-                            onChange={(e) => setEmail(e.target.value)}
-                            value={email}
-                            placeholder="Email address"
-                        />
+                    <div className="mb-4 flex gap-3 flex-col">
+                        <div>
+                            <label className="block text-sm font-bold mb-1" htmlFor="email">
+                                Email
+                            </label>
+                            <input
+                                className="appearance-none bg-neutral-50 dark:bg-neutral-700 rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+                                id="email"
+                                type="email"
+                                required
+                                name="email"
+                                onChange={handleChange}
+                                value={user.email}
+                                placeholder="Email address"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-bold mb-1" htmlFor="fName">
+                                First Name
+                            </label>
+                            <input
+                                className="appearance-none bg-neutral-50 dark:bg-neutral-700 rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+                                id="fName"
+                                type="text"
+                                required
+                                name="fName"
+                                onChange={handleChange}
+                                value={user.fName}
+                                placeholder="First Name"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-bold mb-1" htmlFor="lName">
+                                Last Name
+                            </label>
+                            <input
+                                className="appearance-none bg-neutral-50 dark:bg-neutral-700 rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+                                id="lName"
+                                type="text"
+                                required
+                                name="lName"
+                                onChange={handleChange}
+                                value={user.lName}
+                                placeholder="Last Name"
+                            />
+                        </div>
                     </div>
                     <motion.button
                         whileHover={{ scale: 1.02 }}
@@ -92,7 +135,7 @@ export default function Login() {
                     >
                         <div className="flex items-center gap-2">
                             <img src="https://img.icons8.com/color/16/000000/google-logo.png" alt="Google Logo" />
-                            <span>Sign in with Google</span>
+                            <span>Signup with Google</span>
                         </div>
                     </motion.button>
                 </div>

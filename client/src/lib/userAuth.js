@@ -20,15 +20,28 @@ userAuth.login = async (user = null, method, access_token = null) => {
     return "Login successful";
 }
 
-userAuth.sendEmail = async (email) => {
-    const response = await axios.post(appUri + '/user/sendEmail', { email });
-
-    return response.data;
+userAuth.sendEmail = (email) => {
+    return new Promise((resolve, reject) => {
+        axios.post(appUri + '/user/sendEmail', { email })
+            .then(response => {
+                resolve(response.data);
+            })
+            .catch(error => {
+                reject(error.response.data);
+            });
+    });
 }
 
-userAuth.register = async (username, password) => {
-    const response = await axios.post(appUri + '/user/register', { username, password });
-    return response.data;
+userAuth.signup = (user) => {
+    return new Promise((resolve, reject) => {
+        axios.post(appUri + '/user/signup', { user })
+            .then(response => {
+                resolve(response.data);
+            })
+            .catch(error => {
+                reject(error.response.data);
+            });
+    });
 }
 
 userAuth.profile = async () => {
