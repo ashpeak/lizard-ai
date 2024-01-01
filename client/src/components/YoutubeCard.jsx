@@ -15,7 +15,7 @@ export default function YoutubeCard({ name }) {
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}>
                 {isHovered ? (
-                    <video autoPlay="" loop="" poster={thumbnail} className='w-full h-[7rem] md:h-[8rem] object-cover rounded-lg'>
+                    <video autoPlay={true} loop={true} poster={thumbnail} className='w-full h-[7rem] md:h-[8rem] object-cover rounded-lg'>
                         <source src={`${appUri}/media/youtube/${name}`} type="video/mp4" />
                     </video>
                 ) : (

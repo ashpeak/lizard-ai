@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+/* eslint-disable react/prop-types */
+import { useState } from 'react';
 import { BiSolidImageAlt } from 'react-icons/bi';
 
 export default function ImageCard({ data }) {
@@ -12,7 +13,7 @@ export default function ImageCard({ data }) {
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}>
                 {type === 'video' && (isHovered ? (
-                    <video autoplay="" poster={thumbnail} loop="" className='w-full h-[7rem] md:h-[8rem] object-cover rounded-lg'>
+                    <video autoPlay={true} poster={thumbnail} loop={true} className='w-full h-[7rem] md:h-[8rem] object-cover rounded-lg'>
                         <source src={preview} type="video/mp4" />
                     </video>) : (
                     <img src={thumbnail}

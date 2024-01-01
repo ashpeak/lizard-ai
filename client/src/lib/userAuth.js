@@ -12,11 +12,17 @@ userAuth.login = async (user = null, method, access_token = null) => {
     if (response.data.token) {
         Cookies.set('token', response.data.token, { expires: 2 });
     }
-    return response.data;
+
+    if (response.status !== 200) {
+        return response.data;
+    }
+
+    return "Login successful";
 }
 
 userAuth.sendEmail = async (email) => {
     const response = await axios.post(appUri + '/user/sendEmail', { email });
+
     return response.data;
 }
 

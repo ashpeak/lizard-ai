@@ -14,11 +14,11 @@ export default function Login() {
         toast.promise(
             method === "email" ? userAuth.sendEmail(email) : userAuth.login(null, method, access_token),
             {
-                loading: 'Logging in...',
+                loading: (method === "email" ? "Sending email..." : "Logging in..."),
                 success: (data) => {
                     checkAuth();
                     setEmail('');
-                    return data.message;
+                    return data;
                 },
                 error: (err) => {
                     console.log(err);
@@ -50,7 +50,7 @@ export default function Login() {
 
             <div className="p-8 z-10 w-full md:w-[26rem] text-text-light dark:text-text-dark bg-secondary-light dark:bg-secondary-dark rounded shadow-md">
                 <h2 className="text-2xl font-bold mb-4">Login Form</h2>
-                <form onSubmit={() => handleSubmit("email")}>
+                <form onSubmit={(e) => { e.preventDefault(); handleSubmit("email") }}>
                     <div className="mb-4">
                         <label className="block text-sm font-bold mb-2" htmlFor="name">
                             Email

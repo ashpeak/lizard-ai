@@ -10,8 +10,6 @@ const EmailCode = require('../models/EmailCode');
 const sendEmail = require('../lib/sendEmail');
 const crypto = require('crypto');
 
-const HOST = import.meta.env.VITE_HOST;
-
 const AuthController = {};
 
 const getUserInfo = (access_token) => {
@@ -67,7 +65,7 @@ AuthController.register = async (req, res) => {
 
 AuthController.login = async (req, res) => {
     const { user: userData, method, access_token } = req.body;
-    const { email, code } = userData;
+    const { email, code } = userData || {};
 
     await connectDB();
 
@@ -112,7 +110,10 @@ AuthController.sendEmail = async (req, res) => {
     try {
         await connectDB();
 
-        const user = await User.findOne({ email });
+        const user = await User.findOne({
+            email,
+            $or: [{ g_id: { $exists: false } }, { g_id: '' }]
+        });
         if(!user){
             return res.status(404).send('User not found');
         }
@@ -131,15 +132,15 @@ AuthController.sendEmail = async (req, res) => {
             return res.status(401).send('Invalid User Data');
         }
 
-        const url = `${HOST}/login/verify?email=${email}&code=${code}`;
+        const url = `${process.env.BASE_URL}/login/verify?email=${email}&code=${code}`;
 
         await sendEmail(email, url);
 
-        return res.status(200).send({ msg: 'Email sent' });
+        return res.status(200).send('Email sent.');
 
     } catch (error) {
-        return res.status(500).send('Internal Server Error');
         console.log(error);
+        return res.status(500).send('Internal Server Error');
     }
 }
 

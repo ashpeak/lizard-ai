@@ -92,7 +92,7 @@ export default function Files() {
                                 </div>
                             </Link>
                             <div className='flex gap-x-6 md:gap-x-8 items-center'>
-                                <p className='text-base hidden md:block font-medium opacity-90'>
+                                <p className='text-base text-nowrap hidden md:block font-medium opacity-90'>
                                     {format(new Date(project.updatedAt), 'MMM dd, hh:mm a')}
                                 </p>
                                 <button type='button' className='flex items-center gap-1 text-sm opacity-70 hover:opacity-100' onClick={() => handleDelete(project._id)}>

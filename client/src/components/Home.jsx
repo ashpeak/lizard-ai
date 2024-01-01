@@ -132,7 +132,7 @@ export default function Home() {
           </div>
 
           <div className='w-[19rem] lg:w-[27rem]'>
-            <video className='rounded-xl md:rounded-3xl transition-transform duration-200' autoPlay="true" loop="true" playsInline="" src="https://storage.googleapis.com/fliki/public/video/features/hero/avatar.mp4"></video>
+            <video className='rounded-xl md:rounded-3xl transition-transform duration-200' autoPlay={true} loop={true} playsInline="" src="https://storage.googleapis.com/fliki/public/video/features/hero/avatar.mp4"></video>
           </div>
         </div>
 
