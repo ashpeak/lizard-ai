@@ -53,7 +53,7 @@ export default function Navbar() {
                 <Link to="/login">
                   <button className='text-text-light dark:text-text-dark opacity-80 hover:opacity-95 font-medium text-xl transition-opacity duration-150'>Login</button>
                 </Link>
-                <Link to="/login">
+                <Link to="/signup">
                   <button className='bg-rose-600 hover:bg-rose-500 flex items-center gap-1 text-white text-xl font-medium px-3 py-1 rounded-3xl transition-colors duration-150'>Signup <FaArrowRight size={18} /></button>
                 </Link>
               </>
@@ -90,7 +90,8 @@ export default function Navbar() {
             <Link onClick={() => setIsOpen(!isOpen)} to="/feedback" className='text-text-light dark:text-text-dark opacity-80 hover:opacity-95 font-medium text-xl transition-opacity duration-150'>Rate Us</Link>
             <Link onClick={() => setIsOpen(!isOpen)} to='https://www.linkedin.com/in/ashishsingh09dev/?profileId=ACoAADORLc0BWMD-J0FaT_yufN-D-HdTg3Td4JY' target='_blank' className='text-text-light dark:text-text-dark opacity-80 hover:opacity-95 font-medium text-xl transition-opacity duration-150'>LinkedIn</Link>
             <ThemeSwitcher />
-            <div className='relative w-full px-16 flex flex-col gap-y-3 items-center'>
+            {user ? (
+              <div className='relative w-full px-16 flex flex-col gap-y-3 items-center'>
               <div className='gap-1 p-[0.2rem] cursor-pointer border dark:border-border-light rounded-full border-border-dark text-xl font-medium transition-opacity duration-150'>
                 {user?.avatar ? (
                   <img
@@ -110,6 +111,16 @@ export default function Navbar() {
                 <button type='button' className='text-center rounded-md py-1 opacity-80 hover:opacity-95 hover:bg-[#b9b8b8] hover:dark:bg-neutral-600 transition-all duration-150' onClick={() => { logout(); setVisible(false); setIsOpen(!isOpen); }}>Logout</button>
               </div>
             </div>
+            ) : (
+              <>
+                <Link onClick={() => setIsOpen(!isOpen)} to="/login">
+                  <button className='text-text-light dark:text-text-dark opacity-80 hover:opacity-95 font-medium text-xl transition-opacity duration-150'>Login</button>
+                </Link>
+                <Link onClick={() => setIsOpen(!isOpen)} to="/signup">
+                  <button className='bg-rose-600 hover:bg-rose-500 flex items-center gap-1 text-white text-xl font-medium px-3 py-1 rounded-3xl transition-colors duration-150'>Signup <FaArrowRight size={18} /></button>
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>
