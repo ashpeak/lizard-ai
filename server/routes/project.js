@@ -8,6 +8,8 @@ router.post('/new', ProjectController.create);
 
 router.get('/getAll', ProjectController.getAll);
 
+router.get('/getById/:id', ProjectController.getById);
+
 router.delete('/:id', ProjectController.delete);
 
 module.exports = router;

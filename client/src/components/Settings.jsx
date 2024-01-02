@@ -1,4 +1,3 @@
-import React from 'react'
 import { useLayerStore } from '../states/layer';
 import Mixer from './MusicMix';
 import ScriptSettings from './ScriptSettings';

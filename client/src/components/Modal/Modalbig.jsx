@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Backdrop from '../Backdrop/Backdrop';
 import { AiOutlineClose } from 'react-icons/ai';
@@ -9,9 +9,19 @@ import StockLibrary from '../StockLibrary';
 import StockMusicLibrary from '../StockMusicLibrary';
 import { GiMagicGate } from "react-icons/gi";
 import YoutubeVideo from '../YoutubeVideo';
+import PropTypes from 'prop-types';
 
 
 export default function Modal({ handleClose, selectImage, mediaQuery, mutation, type }) {
+    // Component code here
+
+    Modal.propTypes = {
+        handleClose: PropTypes.func.isRequired,
+        selectImage: PropTypes.func.isRequired,
+        mediaQuery: PropTypes.object.isRequired,
+        mutation: PropTypes.object.isRequired,
+        type: PropTypes.string.isRequired
+    };
     const [active, setActive] = useState("stock");
 
     return (

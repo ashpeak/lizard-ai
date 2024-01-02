@@ -40,7 +40,7 @@ export default function Login() {
 
             {/* Ambient backdrop */}
             <div className='absolute blur-2xl left-1/2 top-[30%] transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center'>
-                <div className='flex translate-y-6 md:translate-y-20'>
+                <div className='flex translate-y-28 md:translate-y-32'>
                     <div className='w-40 h-40 md:w-[20rem] md:h-[20rem] md:-mr-2 circle_blue rounded-3xl'></div>
                     <div className='w-40 h-40 md:w-[20rem] md:h-[20rem] md:-ml-2 circle_red rounded-3xl'></div>
                 </div>

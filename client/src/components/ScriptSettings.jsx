@@ -1,4 +1,3 @@
-import React from 'react';
 import { FaMicrophone } from "react-icons/fa";
 import { settings } from '../states/settings';
 
@@ -14,7 +13,7 @@ const ScriptSettings = () => {
                 <span className='ml-2 text-text-light dark:text-text-dark'>Voiceover</span>
             </div>
 
-            <div className='px-4 pt-4'>
+            <div className='px-4 py-4'>
                 <p className='text-text-light dark:text-text-dark opacity-80'>Subtitle</p>
 
                 <p className='mt-5 opacity-80 text-sm'>Position</p>

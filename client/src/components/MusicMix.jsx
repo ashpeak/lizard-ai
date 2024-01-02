@@ -72,7 +72,7 @@ const Mixer = () => {
                 <FaMicrophone className='text-text-light dark:text-text-dark' />
                 <span className='ml-2 text-text-light dark:text-text-dark'>Volume Mix</span>
             </div>
-            <div className='w-full flex flex-col gap-2 px-4 pt-4'>
+            <div className='w-full flex flex-col gap-2 px-4 py-4'>
                 <div className='w-full'>
                     <label className='flex justify-between'>
                         <span>Voiceover Volume</span>

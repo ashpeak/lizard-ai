@@ -34,4 +34,19 @@ const getAllProjects = async () => {
     return response.data;
 }
 
-export { createProject, getAllProjects };
+const getProjectById = async (id) => {
+    const response = await axios.get(appUri + '/project/getById/' + id, {
+        headers: {
+            'Content-Type': 'application/json',
+            token: Cookies.get('token')
+        }
+    });
+
+    if (response.status !== 200) {
+        return null;
+    }
+
+    return response.data;
+}
+
+export { createProject, getAllProjects, getProjectById };

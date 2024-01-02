@@ -7,7 +7,7 @@ const project = {};
 project.create = async (req, res) => {
     try {
         const token = req.headers.token;
-        if(!token) return res.status(401).json({ msg: "Unauthorized" });
+        if (!token) return res.status(401).json({ msg: "Unauthorized" });
         const { id } = jwt.verify(token, process.env.JWT_SECRET);
 
         if (!id) return res.status(401).json({ msg: "Unauthorized" });
@@ -18,7 +18,7 @@ project.create = async (req, res) => {
             return res.status(400).json({ message: 'Missing required fields.' });
         }
 
-        if(template !== "empty") {
+        if (template !== "empty") {
             if (idea.length > 300) {
                 return res.status(400).json({ message: 'Idea must be less than 300 characters.' });
             }
@@ -31,7 +31,14 @@ project.create = async (req, res) => {
 
         const newProject = await Project.create({
             name,
-            user: id
+            user: id,
+            script: [{
+                dialogue: '',
+                image: '',
+                type: '',
+                download: '',
+                height: 'auto'
+            }],
         });
 
         if (!newProject) return res.status(500).json({ message: 'Internal server error.' });
@@ -46,7 +53,7 @@ project.create = async (req, res) => {
 project.getAll = async (req, res) => {
     try {
         const token = req.headers.token;
-        if(!token) return res.status(401).json({ msg: "Unauthorized" });
+        if (!token) return res.status(401).json({ msg: "Unauthorized" });
 
         const { id } = jwt.verify(token, process.env.JWT_SECRET);
 
@@ -64,10 +71,35 @@ project.getAll = async (req, res) => {
     }
 }
 
+project.getById = async (req, res) => {
+    try {
+        const token = req.headers.token;
+        if (!token) return res.status(401).json({ message: "Unauthorized" });
+
+        const { id } = jwt.verify(token, process.env.JWT_SECRET);
+
+        if (!id) return res.status(401).json({ message: "Unauthorized" });
+
+        await connectDB();
+        const project = await Project.findById(req.params.id);
+
+        if (!project) return res.status(404).json({ message: 'Project not found.' });
+
+        if (project.user.toString() !== id) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+
+        res.status(200).json(project);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: error.message });
+    }
+}
+
 project.delete = async (req, res) => {
     try {
         const token = req.headers.token;
-        if(!token) return res.status(401).json({ msg: "Unauthorized" });
+        if (!token) return res.status(401).json({ msg: "Unauthorized" });
 
         const { id } = jwt.verify(token, process.env.JWT_SECRET);
 

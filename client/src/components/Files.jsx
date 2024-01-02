@@ -77,7 +77,7 @@ export default function Files() {
                     <h2 className='font-semibold opacity-90 hidden md:block mr-[6.5rem]'>MODIFIED</h2>
                 </div>
                 <div className='flex flex-col mt-3'>
-                    {isLoading && <p>Loading...</p>}
+                    {isLoading && <p className='mx-[1.4rem] py-2 text-xl font-semibold'>Loading<span className='animate-pulse'>......</span></p>}
                     {(Array.isArray(data) && data?.length > 0) && data.map((project, index) => (
                         <div key={index} className='flex flex-row gap-4 mx-2 px-4 py-3 items-center justify-between hover:opacity-95 hover:dark:bg-[#f3f5f412] hover:bg-[#dbdbdb] rounded-2xl transition-colors duration-150'>
                             <Link to={`/editor/${project._id}`} className='w-full'>

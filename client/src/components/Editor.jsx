@@ -1,23 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { BiChevronRight, BiSolidDownload, BiSolidImageAlt } from 'react-icons/bi';
 import { BsLayersFill, BsMusicNote, BsFillMicFill } from 'react-icons/bs';
 import { VscDebugRestart } from 'react-icons/vsc';
-import { IoSettingsSharp } from 'react-icons/io5';
 import { RiLayoutMasonryFill } from 'react-icons/ri';
-import { FaMagic } from 'react-icons/fa';
+import { FaMagic, FaSave } from 'react-icons/fa';
 import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { CgTranscript } from 'react-icons/cg';
-import { MdFullscreen, MdFullscreenExit, MdPlayCircleFilled, MdPauseCircleFilled } from 'react-icons/md';
+import { MdFullscreenExit, MdPlayCircleFilled, MdPauseCircleFilled } from 'react-icons/md';
 import { Link } from 'react-router-dom';
-import Modal from './Modal/Modalbig';
-import { Toaster, toast } from 'sonner';
+import { toast } from 'sonner';
 import { createVideo, downloadVideo } from '../lib/create';
 import { getStockMedia } from "../lib/media";
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
-import Settings from './Settings';
 import { useLayerStore } from '../states/layer';
 import { settings } from '../states/settings';
+import Modal from './Modal/Modalbig';
+import Download from './Modal/Download';
+import Settings from './Settings';
+import { getProjectById } from "../lib/project";
 
 export default function Editor() {
   const { id } = useParams();
@@ -26,12 +27,14 @@ export default function Editor() {
   const bgMusic = settings(state => state.bgMusic);
 
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isFullScreen, setIsFullScreen] = useState(false);
+  const [name, setName] = useState(false);
   const [timeline, setTimeline] = useState(0);
   const [modal, setModal] = useState({
     open: false,
     type: 'media'
   });
+  const [downloadModal, setDownloadModal] = useState(false);
+  const [activeScript, setActiveScript] = useState(0);
   const [editingIndex, setEditingIndex] = useState(0);
   const [search, setSearch] = useState({
     query: '',
@@ -84,14 +87,15 @@ export default function Editor() {
   }
 
   const deleteScript = (index) => {
-    if (script.length === 1) return toast.success('You cannot delete the last scene');
+    if (script.length === 1) return toast.error('You cannot delete the last scene');
     const newScript = [...script];
     newScript.splice(index, 1);
     setScript(newScript);
   }
 
-  const generate = async (script, bgMusic) => {
+  const generate = async () => {
 
+    setDownloadModal(false);
     if (!bgMusic.preview) return toast.error('Please select a background music');
 
     for (const item of script) {
@@ -110,29 +114,28 @@ export default function Editor() {
       {
         loading: 'Preparing your video... Hang tight!',
         success: 'Creating your video. We\'ll notify you upon completion for download. Feel free to close this editor now.',
-        error: (err) => {
-          return "Error while creating video";
-        },
+        error: "Error while creating video",
         duration: 6000
       }
     );
   }
 
   const download = async () => {
+    setDownloadModal(false);
 
     toast.promise(
       downloadVideo(id),
       {
         loading: 'Downloading your video...',
         success: 'Video downloaded successfully',
-        error: (err) => {
-          return "Error while downloading video, please try again later";
-        },
+        error: "Error while downloading video, please try again later",
         duration: 2000
       }
     );
   }
+
   const mediaQuery = useQuery({ queryKey: ['stockMedia'], queryFn: () => getStockMedia(search), refetchOnWindowFocus: false });
+  const { data } = useQuery({ queryKey: ['project'], queryFn: () => getProjectById(id) });
 
   const mutation = (search) => setSearch(search);
 
@@ -141,20 +144,32 @@ export default function Editor() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search]);
 
+  useEffect(() => {
+    if (data) {
+      setName(data.name);
+      musicState.setBgMusic({ name: data.bgMusic?.name, preview: data.bgMusic?.preview });
+      setScript(data.script);
+      musicState.setSubtitlePosition(data.subtitlePosition);
+      musicState.setMusicVolume(data.music);
+      musicState.setVoiceoverVolume(data.voiceover);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
+
   return (
-    <div>
+    <div className='pb-4 md:pb-1'>
       {/* Settings tab */}
       <div className='flex justify-center'>
         <div className='w-full flex flex-col md:flex-row justify-between px-6 rounded-xl py-4 bg-secondary-light dark:bg-secondary-dark'>
-          <div className='flex gap-2 items-center'>
+          <div className='hidden md:flex gap-2 items-center'>
             <Link to='/files' className='flex gap-2 items-center px-[0.45rem] py-[0.3rem] rounded-xl transition-colors duration-200 hover:bg-neutral-200 dark:hover:bg-neutral-600'>
-              <h2>Editor</h2>
+              <h2>Files</h2>
             </Link>
             <BiChevronRight size={20} />
-            <h2>Filename</h2>
+            <h2>{name ? name : "Filename"}</h2>
           </div>
           <div className='flex gap-2'>
-            <button type='button' onClick={download} className='flex gap-2 items-center px-3 py-1 rounded-2xl bg-rose-500 text-white hover:bg-rose-600 transition-all duration-200'>
+            <button type='button' onClick={() => setDownloadModal(true)} className='hidden md:flex gap-2 items-center px-3 py-1 rounded-2xl bg-rose-500 text-white hover:bg-rose-600 transition-all duration-200'>
               <FaMagic size={20} />
               <p>Ai create</p>
             </button>
@@ -163,8 +178,8 @@ export default function Editor() {
               <p>Download</p>
             </button>
             <button type='button' className='flex gap-2 items-center px-3 py-1 text-text-light dark:text-text-dark opacity-70 hover:opacity-100 transition-all duration-200'>
-              <IoSettingsSharp size={20} />
-              <p>Settings</p>
+              <FaSave size={18} />
+              <p>Save</p>
             </button>
           </div>
         </div>
@@ -230,7 +245,10 @@ export default function Editor() {
           </div>
 
           {script.map((item, index) => (
-            <div onClick={() => setLayer("script")} className='rounded-xl'>
+            <div key={index} onClick={() => {
+              setLayer("script");
+              setActiveScript(index);
+            }} className='rounded-xl'>
               <div className='bg-secondary-light flex justify-between items-center px-4 rounded-t-xl py-1 dark:bg-secondary-dark border-t border-x border-border-light dark:border-border-dark'>
                 <p className='text-size-sm lg:text-size-base opacity-[0.7]'>Scene {index + 1}</p>
                 <div className='flex gap-2 opacity-70 items-center'>
@@ -284,20 +302,28 @@ export default function Editor() {
 
         {/* Player area */}
         <div className='w-full col-span-4 flex flex-col items-center pb-5 md:pb-0'>
-          <div className='aspect-[9/16] max-h-[31.15rem] w-full max-w-[17.5218rem] bg-neutral-700 rounded-xl border border-border-light dark:border-border-dark'></div>
+          <div className='aspect-[9/16] max-h-[31.15rem] w-full max-w-[17.5218rem] bg-neutral-700 rounded-xl border border-border-light dark:border-border-dark'>
+            {script[activeScript].image && <img src={script[activeScript].image} alt='Scene pic' className='rounded-xl h-full w-full object-cover' />}
+          </div>
 
           {/* Player controls */}
           <div className='w-full bg-secondary-light dark:bg-secondary-dark max-w-[24.7837rem] px-4 py-2 rounded-xl mt-3 border border-border-light dark:border-border-dark'>
             <div className='flex items-center justify-center gap-5'>
               <div className='flex items-center justify-center gap-2'>
-                <button type='button' onClick={() => setIsPlaying(!isPlaying)} className='active:opacity-80 hover:text-rose-500 transition-all duration-200'>
+                <button type='button' onClick={() => {
+                  setIsPlaying(!isPlaying);
+                  toast.info("This feature is not available yet.");
+                }} className='active:opacity-80 hover:text-rose-500 transition-all duration-200'>
                   {isPlaying ? <MdPauseCircleFilled size={35} /> : <MdPlayCircleFilled size={35} />}
                 </button>
-                <button type='button' onClick={() => setIsPlaying(!isPlaying)} className='active:opacity-80 hover:text-rose-500 transition-all duration-200'>
+                <button type='button' onClick={() => {
+                  setIsPlaying(!isPlaying);
+                  toast.info("This feature is not available yet.");
+                }} className='active:opacity-80 hover:text-rose-500 transition-all duration-200'>
                   <VscDebugRestart size={20} />
                 </button>
-                <button type='button' onClick={() => setIsFullScreen(!isFullScreen)} className='active:opacity-80 hover:text-rose-500 transition-all duration-200'>
-                  {isFullScreen ? <MdFullscreenExit size={20} /> : <MdFullscreen size={20} />}
+                <button type='button' className='active:opacity-80 hover:text-rose-500 transition-all duration-200'>
+                  <MdFullscreenExit size={20} />
                 </button>
               </div>
               <div>
@@ -314,7 +340,6 @@ export default function Editor() {
 
       </div>
 
-      <Toaster richColors position="bottom-right" />
       {modal.open && <Modal
         handleClose={() => setModal({ open: false, type: 'media' })}
         selectImage={selectImage}
@@ -322,6 +347,12 @@ export default function Editor() {
         mediaQuery={mediaQuery}
         mutation={mutation}
       />}
+      {downloadModal && <Download
+        handleClose={() => setDownloadModal(false)}
+        createdAt={data.createdAt}
+        generate={generate}
+        download={download}
+        exported={data.isGenerated} />}
     </div>
   )
 }
