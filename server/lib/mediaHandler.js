@@ -36,7 +36,7 @@ const getAudioDuration = (inputFilePath) => {
     });
 };
 
-mediaHandler.prepareImage = async (scene, inputName, ext, aspectRatio) => {
+mediaHandler.prepareImage = async (scene, subtitlePosition, inputName, ext, aspectRatio) => {
     return new Promise(async (resolve, reject) => {
         try {
             // Define the input/output path
@@ -83,7 +83,7 @@ mediaHandler.prepareImage = async (scene, inputName, ext, aspectRatio) => {
     });
 }
 
-mediaHandler.prepareVideo = async (scene, inputName, ext, aspectRatio) => {
+mediaHandler.prepareVideo = async (scene, subtitlePosition, inputName, ext, aspectRatio) => {
 
     const path = join(process.cwd(), 'uploads', inputName + ext);
     const speechPath = join(process.cwd(), 'audioGenerated', `${inputName}.mp3`);
@@ -117,7 +117,7 @@ mediaHandler.prepareVideo = async (scene, inputName, ext, aspectRatio) => {
     });
 }
 
-mediaHandler.prepareYoutube = async (scene, aspectRatio) => {
+mediaHandler.prepareYoutube = async (scene, subtitlePosition, aspectRatio) => {
 
     const path = join(process.cwd(), 'uploads', scene.media);
     const speechPath = join(process.cwd(), 'audioGenerated', `${scene.media}.mp3`);

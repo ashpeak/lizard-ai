@@ -14,7 +14,8 @@ const createVideo = async (script, bgMusic, musicState, id) => {
     volumeMix: {
       speech: musicState.voiceover,
       bgMusic: musicState.music
-    }
+    },
+    subtitlePosition: musicState.subtitlePosition
   };
 
   try {

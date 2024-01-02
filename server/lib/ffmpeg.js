@@ -5,6 +5,8 @@ const { join } = require("path");
 const { unlink } = require("fs").promises;
 const connectDB = require('../configs/db');
 const Project = require('../models/Project');
+const User = require('../models/User');
+const exportEmail = require('./exportEmail');
 
 ffmpeg.setFfmpegPath(ffmpegPath);
 ffmpeg.setFfprobePath(ffprobePath);
@@ -14,17 +16,28 @@ const myFFmpeg = {};
 const changeStatus = async (id, projectId) => {
     await connectDB();
 
-    await Project.findOneAndUpdate(
+    const project = await Project.findOneAndUpdate(
         { _id: projectId, user: id },
         {
             $set: {
                 status: 'ready',
                 isGenerated: true,
-                generatedUrl: `http://localhost:${process.env.PORT}/user/video/download/${projectId}`
+                generatedUrl: `http://${process.env.SERVER_URL}:${process.env.PORT}/user/video/download/${projectId}`
             }
         },
         { new: true }
     );
+
+    const user = await User.findOneAndUpdate(
+        { _id: id },
+        {
+            $inc: { credit: -10 },
+            $max: { credit: 0 }
+        },
+        { new: true }
+    );
+
+    exportEmail(`${user.firstName} ${user.lastName}`, project.generatedUrl);
 }
 
 myFFmpeg.mergeAudio = (audio1, audio2, name) => {

@@ -7,7 +7,6 @@ const Project = require('../models/Project');
 const mediaHandler = require('../lib/mediaHandler');
 const { createVideo } = require('../lib/ffmpeg');
 const text2speech = require('../lib/text2speech');
-const { mergeAudio } = require('../lib/ffmpeg');
 
 const videoController = {};
 
@@ -77,7 +76,7 @@ videoController.createVideo = async (req, res) => {
         return res.status(400).send('Invalid request');
     }
 
-    const { script, bgMusic, volumeMix } = req.body;
+    const { script, bgMusic, volumeMix, subtitlePosition } = req.body;
     try {
 
         // Iterate over each file in the request
@@ -106,13 +105,13 @@ videoController.createVideo = async (req, res) => {
         for (const scene of script) {
             const name = id + projectId + scene.index;
             if (scene.type === 'image') {
-                await mediaHandler.prepareImage(scene, name, '.jpg', 0.5625);
+                await mediaHandler.prepareImage(scene, subtitlePosition, name, '.jpg', 0.5625);
             } else if (scene.type === 'gif') {
-                await mediaHandler.prepareImage(scene, name, '.gif', 0.5625);
+                await mediaHandler.prepareImage(scene, subtitlePosition, name, '.gif', 0.5625);
             } else if (scene.type === 'video') {
-                await mediaHandler.prepareVideo(scene, name, '.mp4', 0.5625);
+                await mediaHandler.prepareVideo(scene, subtitlePosition, name, '.mp4', 0.5625);
             } else if (scene.type === 'utube') {
-                await mediaHandler.prepareYoutube(scene, 0.5625);
+                await mediaHandler.prepareYoutube(scene, subtitlePosition, 0.5625);
             }
         }
 
