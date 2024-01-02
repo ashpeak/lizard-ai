@@ -43,7 +43,7 @@ mediaHandler.prepareImage = async (scene, subtitlePosition, inputName, ext, aspe
             const path = join(process.cwd(), 'uploads', inputName + ext);
             const speechPath = join(process.cwd(), 'audioGenerated', `${inputName}.mp3`);
             const audioDuration = await getAudioDuration(speechPath);
-            const subtitlePath = await createSubtitle(scene.dialogue, inputName);
+            const subtitlePath = await createSubtitle(scene.dialogue, inputName, subtitlePosition);
 
             // Read the image from the input path
             const imageBuffer = await fs.readFile(path);
@@ -91,7 +91,7 @@ mediaHandler.prepareVideo = async (scene, subtitlePosition, inputName, ext, aspe
     const { height, width } = await getVideoMetadata(path);
     const newWidth = Math.round(height * aspectRatio);
     const temp = Math.round((width - newWidth) / 2);
-    const subtitlePath = await createSubtitle(scene.dialogue, inputName);
+    const subtitlePath = await createSubtitle(scene.dialogue, inputName, subtitlePosition);
 
     return new Promise((resolve, reject) => {
         ffmpeg()
@@ -125,7 +125,7 @@ mediaHandler.prepareYoutube = async (scene, subtitlePosition, aspectRatio) => {
     const { height, width } = await getVideoMetadata(path);
     const newWidth = Math.round(height * aspectRatio);
     const temp = Math.round((width - newWidth) / 2);
-    const subtitlePath = await createSubtitle(scene.dialogue, scene.media);
+    const subtitlePath = await createSubtitle(scene.dialogue, scene.media, subtitlePosition);
 
     return new Promise((resolve, reject) => {
         ffmpeg()

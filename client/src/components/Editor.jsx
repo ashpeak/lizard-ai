@@ -113,7 +113,7 @@ export default function Editor() {
       createVideo(script, bgMusic, musicState, id),
       {
         loading: 'Preparing your video... Hang tight!',
-        success: 'Creating your video. We\'ll notify you upon completion for download. Feel free to close this editor now.',
+        success: 'Creating your video. You will be emailed when it is ready',
         error: "Error while creating video",
         duration: 6000
       }
