@@ -102,6 +102,10 @@ AuthController.login = async (req, res) => {
         user = data.User;
     }
 
+    if (!user) {
+        return res.status(401).send('Invalid User Data');
+    }
+
     const data = {
         id: user._id,
         name: user.firstName + ' ' + user.lastName,

@@ -27,7 +27,6 @@ export default function Login() {
         );
     }
 
-
     const googleLogin = useGoogleLogin({
         onSuccess: async (codeResponse) => {
             handleSubmit("google", codeResponse.access_token);

@@ -7,17 +7,18 @@ const userAuth = {};
 
 userAuth.login = async (user = null, method, access_token = null) => {
 
-    const response = await axios.post(`${appUri}/user/login`, { user, method, access_token });
+    try {
+        const response = await axios.post(`${appUri}/user/login`, { user, method, access_token });
 
-    if (response.data.token) {
-        Cookies.set('token', response.data.token, { expires: 2 });
+        if (response.data.token) {
+            Cookies.set('token', response.data.token, { expires: 2 });
+        }
+
+        return "Login successful";
+    } catch (error) {
+        console.log(error.response.data, typeof error.response.data);
+        return error.response.data;
     }
-
-    if (response.status !== 200) {
-        return response.data;
-    }
-
-    return "Login successful";
 }
 
 userAuth.sendEmail = (email) => {
