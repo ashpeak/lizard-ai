@@ -1,13 +1,13 @@
 const transporter = require('../configs/nodemailer');
 
-module.exports = async (name, url) => {
+module.exports = async (name, email, url) => {
     return new Promise(async (resolve, reject) => {
         try {
             // send mail with defined transport object
             let info = await transporter.sendMail({
                 from: '"Ashish Singh 👻" <cs1.coursely@gmail.com>', // sender address
                 to: email, // list of receivers
-                subject: `Login to ${process.env.BRAND_NAME}`, // Subject line
+                subject: `Video ready to download`, // Subject line
                 html: `
                     <div style="background-color: #f3f4f6; padding: 2rem; border-radius: 1rem;">
                         <div style="background-color: #fff; padding: 2rem; border-radius: 1rem;">

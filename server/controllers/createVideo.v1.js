@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const { join } = require("path");
 const connectDB = require('../configs/db');
 const Project = require('../models/Project');
+const User = require('../models/User');
 const mediaHandler = require('../lib/mediaHandler');
 const { createVideo } = require('../lib/ffmpeg');
 const text2speech = require('../lib/text2speech');
@@ -44,36 +45,41 @@ const downloadMedia = async (url, name, ext, res) => {
 
 const validateRequest = async (token, projectId) => {
     if (!token || !projectId) {
-        return { isValid: false, id: null };
+        return { isValid: false, msg: "Invalid request", id: null };
     }
     // Verify the token
     const { id } = jwt.verify(token, process.env.JWT_SECRET);
 
     if (!id) {
-        return { isValid: false, id: null };
+        return { isValid: false, msg: "Invalid request", id: null };
     }
 
     // Check if the user has access to the project
     await connectDB();
     // const project = await Project.findOne({ _id: projectId, user: id });
     const project = await Project.findOneAndUpdate({ _id: projectId, user: id }, { $set: { status: 'processing' } }, { new: true });
+    const user = await User.findById(id);
 
     if (!project) {
-        return { isValid: false, id: null };
+        return { isValid: false, msg: "Invalid request", id: null };
+    }
+
+    // Check if the user has enough credits
+    if(user.credit < 10) {
+        return { isValid: false, msg: "Not enough credits", id: null };
     }
 
     return { isValid: true, id };
 }
-
 
 videoController.createVideo = async (req, res) => {
 
     const { token, id: projectId } = req.headers;
     const downloadPromises = [];
 
-    const { isValid, id } = await validateRequest(token, projectId);
+    const { isValid, msg, id } = await validateRequest(token, projectId);
     if (!isValid) {
-        return res.status(400).send('Invalid request');
+        return res.status(400).send(msg);
     }
 
     const { script, bgMusic, volumeMix, subtitlePosition } = req.body;

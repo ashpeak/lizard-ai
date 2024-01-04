@@ -36,7 +36,7 @@ const changeStatus = async (id, projectId) => {
         { new: true }
     );
 
-    exportEmail(`${user.firstName} ${user.lastName}`, project.generatedUrl);
+    exportEmail(`${user.firstName} ${user.lastName}`, user.email, project.generatedUrl);
 }
 
 myFFmpeg.mergeAudio = (audio1, audio2, name) => {

@@ -5,9 +5,21 @@ import { MdOutlineClose } from "react-icons/md";
 import { BiSolidDownload } from 'react-icons/bi';
 import { format } from 'date-fns';
 import { FaArrowRight } from "react-icons/fa6";
+import { useEffect, useState } from 'react';
 
 // eslint-disable-next-line react/prop-types
-export default function Download({ handleClose, exported, createdAt, generate, download }) {
+export default function Download({ handleClose, exported, createdAt, generate, download, refetch }) {
+
+    const [clicked, setClicked] = useState(false);
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            refetch();
+        }, 5000); // 5000 ms = 5 s
+
+        // Clear the interval when the component unmounts
+        return () => clearInterval(intervalId);
+    }, [refetch]);
 
     return (
         <Backdrop onClick={handleClose} position={"items-center"}>
@@ -45,15 +57,25 @@ export default function Download({ handleClose, exported, createdAt, generate, d
                         </div>
 
                         <div className='w-full flex justify-center'>
-                            <motion.button
-                                whileHover={{ scale: 1.02 }}
-                                whileTap={{ scale: 0.95 }}
-                                type='button'
-                                onClick={generate}
-                                className='w-fit px-4 flex justify-center gap-2 mt-6 items-center py-[0.3rem] rounded-3xl border border-neutral-500 dark:border-neutral-600 hover:bg-neutral-300 hover:dark:bg-neutral-700'>
-                                <p>{exported ? "Export again" : "Start export"}</p>
-                                <FaArrowRight size={17} />
-                            </motion.button>
+                            {clicked ? (
+                                <div className="flex items-center flex-col">
+                                    <div className='h-6 w-6 mt-1 rounded-full border-l-2 border-t-2 border-rose-500 border-opacity-100 animate-spin'></div>
+                                    <p className='text-text-light mt-2 text-xs px-4 text-start dark:text-text-dark opacity-70'>Exporting...</p>
+                                </div>
+                            ) : (
+                                <motion.button
+                                    whileHover={{ scale: 1.02 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    type='button'
+                                    onClick={() => {
+                                        setClicked(true);
+                                        generate();
+                                    }}
+                                    className='w-fit px-4 flex justify-center gap-2 mt-6 items-center py-[0.3rem] rounded-3xl border border-neutral-500 dark:border-neutral-600 hover:bg-neutral-300 hover:dark:bg-neutral-700'>
+                                    <p>{exported ? "Export again" : "Start export"}</p>
+                                    <FaArrowRight size={17} />
+                                </motion.button>
+                            )}
                         </div>
                     </div>
                 </div>

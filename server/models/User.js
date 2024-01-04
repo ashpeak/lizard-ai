@@ -32,7 +32,7 @@ const UserSchema = new mongoose.Schema({
     },
     credit: {
         type: Number,
-        default: 15,
+        default: 30,
     },
     role: {
         type: String,

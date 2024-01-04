@@ -57,6 +57,8 @@ export default function Editor() {
   }
 
   const addScript = (index) => {
+    if (script.length === 15) return toast.error('You cannot add more than 15 scenes');
+
     const newScript = [...script];
     newScript.splice(index + 1, 0, {
       dialogue: '',
@@ -96,17 +98,24 @@ export default function Editor() {
 
   const generate = async () => {
 
-    setDownloadModal(false);
-    if (!bgMusic.preview) return toast.error('Please select a background music');
+    if (!bgMusic.preview) {
+      setDownloadModal(false);
+      return toast.error('Please select a background music');
+    }
+
+    if (script.length < 2) {
+      setDownloadModal(false);
+      return toast.error('Please add atleast 2 scenes to your script');
+    }
 
     for (const item of script) {
       if (!item.image) {
-        toast.error('Please select a media file for each scene');
-        return;
+        setDownloadModal(false);
+        return toast.error('Please select a media file for each scene');
       }
       if (!item.dialogue || item.dialogue.length < 5) {
-        toast.error('Please enter a dialogue atleast 5 characters long for each scene');
-        return;
+        setDownloadModal(false);
+        return toast.error('Please enter a dialogue atleast 5 characters long for each scene');
       }
     }
 
@@ -136,7 +145,7 @@ export default function Editor() {
   }
 
   const mediaQuery = useQuery({ queryKey: ['stockMedia'], queryFn: () => getStockMedia(search), refetchOnWindowFocus: false });
-  const { data } = useQuery({ queryKey: ['project'], queryFn: () => getProjectById(id) });
+  const { data, refetch } = useQuery({ queryKey: ['project'], queryFn: () => getProjectById(id) });
 
   const mutation = (search) => setSearch(search);
 
@@ -353,6 +362,7 @@ export default function Editor() {
         createdAt={data.createdAt}
         generate={generate}
         download={download}
+        refetch={refetch}
         exported={data.isGenerated} />}
     </div>
   )

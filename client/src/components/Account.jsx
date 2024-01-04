@@ -46,7 +46,7 @@ export default function Account() {
                 <div className="flex flex-col gap-2 mt-8">
                     {/* User Name */}
                     <h1 className="text-2xl w-full text-center font-bold mb-2 opacity-95">{data?.name}</h1>
-                    <p className="opacity-80 mt-2 text-sm">{data?.email}</p>
+                    <p className="opacity-80 mt-2">{data?.email}</p>
                     {/* Credits left */}
                     <div>
                         <p className="opacity-80">Credits used: {15 - data?.credit}/15 ({percent}%)</p>
