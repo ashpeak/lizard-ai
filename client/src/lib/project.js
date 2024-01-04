@@ -49,4 +49,20 @@ const getProjectById = async (id) => {
     return response.data;
 }
 
-export { createProject, getAllProjects, getProjectById };
+const updateProject = (id, project) => {
+    return new Promise((resolve, reject) => {
+
+        axios.patch(appUri + '/project/' + id, project, {
+            headers: {
+                'Content-Type': 'application/json',
+                token: Cookies.get('token')
+            }
+        }).then((response) => {
+            resolve(response.data);
+        }).catch((error) => {
+            reject(error.response.data);
+        });
+    });
+}
+
+export { createProject, getAllProjects, getProjectById, updateProject };

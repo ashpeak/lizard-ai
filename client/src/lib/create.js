@@ -3,36 +3,39 @@ import Cookies from 'js-cookie';
 
 const appUri = import.meta.env.VITE_REACT_APP_API;
 
-const createVideo = async (script, bgMusic, musicState, id) => {
+const createVideo = (script, bgMusic, musicState, id) => {
+  return new Promise((resolve, reject) => {
+    const arr = [];
+    script.map((item, index) => arr.push({ index: index + 1, dialogue: item.dialogue, media: item.download, type: item.type }));
 
-  const arr = [];
-  script.map((item, index) => arr.push({ index: index + 1, dialogue: item.dialogue, media: item.download, type: item.type }));
+    const data = {
+      script: arr,
+      bgMusic: bgMusic,
+      volumeMix: {
+        speech: musicState.voiceover,
+        bgMusic: musicState.music
+      },
+      subtitlePosition: musicState.subtitlePosition
+    };
 
-  const data = {
-    script: arr,
-    bgMusic: bgMusic,
-    volumeMix: {
-      speech: musicState.voiceover,
-      bgMusic: musicState.music
-    },
-    subtitlePosition: musicState.subtitlePosition
-  };
-
-  try {
-    const response = await axios.post(appUri + '/v1/create', data, {
+    axios.post(appUri + '/v1/create', data, {
       headers: {
         'Content-Type': 'application/json',
         token: Cookies.get('token'),
         id: id
       }
+    })
+    .then(response => {
+      if (response.status === 200) {
+        resolve(response.data);
+      } else {
+        reject(response.data || 'Something went wrong');
+      }
+    })
+    .catch(error => {
+      reject(error.response.data);
     });
-
-    if (response.status === 200) {
-      return true;
-    }
-  } catch (error) {
-    return false;
-  }
+  });
 }
 
 const uploadImage = async (image) => {

@@ -4,6 +4,8 @@ import { RxAvatar } from "react-icons/rx";
 import { useQuery } from '@tanstack/react-query';
 import userAuth from "../lib/userAuth";
 
+const credits = import.meta.env.VITE_TOTAL_CREDITS;
+
 export default function Account() {
 
     const user = auth((state) => state.user);
@@ -17,7 +19,7 @@ export default function Account() {
 
     const { data } = useQuery({ queryKey: ['profile'], queryFn: userAuth.profile, refetchOnWindowFocus: false });
     
-    const percent = parseInt((15 - data?.credit) / 15 * 100);
+    const percent = parseInt((credits - data?.credit) / credits * 100);
 
     useEffect(() => {
         checkAuth();
@@ -49,7 +51,7 @@ export default function Account() {
                     <p className="opacity-80 mt-2">{data?.email}</p>
                     {/* Credits left */}
                     <div>
-                        <p className="opacity-80">Credits used: {15 - data?.credit}/15 ({percent}%)</p>
+                        <p className="opacity-80">Credits used: {credits - data?.credit}/{credits} ({percent}%)</p>
                         <p className="opacity-40 text-sm">(credits will reset on {month} {date}, 12:30 pm)</p>
                     </div>
                     {/* Files count */}

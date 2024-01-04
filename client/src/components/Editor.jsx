@@ -3,7 +3,7 @@ import { BiChevronRight, BiSolidDownload, BiSolidImageAlt } from 'react-icons/bi
 import { BsLayersFill, BsMusicNote, BsFillMicFill } from 'react-icons/bs';
 import { VscDebugRestart } from 'react-icons/vsc';
 import { RiLayoutMasonryFill } from 'react-icons/ri';
-import { FaMagic, FaSave } from 'react-icons/fa';
+import { FaSave } from 'react-icons/fa';
 import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { CgTranscript } from 'react-icons/cg';
 import { MdFullscreenExit, MdPlayCircleFilled, MdPauseCircleFilled } from 'react-icons/md';
@@ -18,7 +18,7 @@ import { settings } from '../states/settings';
 import Modal from './Modal/Modalbig';
 import Download from './Modal/Download';
 import Settings from './Settings';
-import { getProjectById } from "../lib/project";
+import { getProjectById, updateProject } from "../lib/project";
 
 export default function Editor() {
   const { id } = useParams();
@@ -124,7 +124,10 @@ export default function Editor() {
       {
         loading: 'Preparing your video... Hang tight!',
         success: 'Creating your video. You will be emailed when it is ready',
-        error: "Error while creating video",
+        error: (error) => {
+          setDownloadModal(false);
+          return error;
+        },
         duration: 6000
       }
     );
@@ -139,6 +142,26 @@ export default function Editor() {
         loading: 'Downloading your video...',
         success: 'Video downloaded successfully',
         error: "Error while downloading video, please try again later",
+        duration: 2000
+      }
+    );
+  }
+
+  const update = async () => {
+    const data = {
+      script: script,
+      music: musicState.music,
+      voiceover: musicState.voiceover,
+      bgMusic: musicState.bgMusic,
+      subtitlePosition: musicState.subtitlePosition
+    };
+
+    toast.promise(
+      updateProject(id, data),
+      {
+        loading: 'Saving your project...',
+        success: 'Project saved successfully',
+        error: "Error while saving project, please try again later",
         duration: 2000
       }
     );
@@ -179,15 +202,11 @@ export default function Editor() {
             <h2>{name ? name : "Filename"}</h2>
           </div>
           <div className='flex gap-2'>
-            <button type='button' onClick={() => setDownloadModal(true)} className='hidden md:flex gap-2 items-center px-3 py-1 rounded-2xl bg-rose-500 text-white hover:bg-rose-600 transition-all duration-200'>
-              <FaMagic size={20} />
-              <p>Ai create</p>
-            </button>
-            <button type='button' onClick={() => generate(script, bgMusic)} className='flex gap-2 items-center px-3 py-1 text-text-light dark:text-text-dark opacity-70 hover:opacity-100 transition-all duration-200'>
+            <button type='button' onClick={() => setDownloadModal(true)} className='flex gap-2 items-center px-3 py-1 text-text-light dark:text-text-dark opacity-70 hover:opacity-100 transition-all duration-200'>
               <BiSolidDownload size={20} />
               <p>Download</p>
             </button>
-            <button type='button' className='flex gap-2 items-center px-3 py-1 text-text-light dark:text-text-dark opacity-70 hover:opacity-100 transition-all duration-200'>
+            <button type='button' onClick={update} className='flex gap-2 items-center px-3 py-1 text-text-light dark:text-text-dark opacity-70 hover:opacity-100 transition-all duration-200'>
               <FaSave size={18} />
               <p>Save</p>
             </button>
