@@ -32,7 +32,6 @@ const changeStatus = async (id, projectId) => {
         { _id: id },
         {
             $inc: { credit: -10 },
-            $max: { credit: 0 }
         },
         { new: true }
     );

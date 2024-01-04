@@ -90,6 +90,7 @@ export default function Editor() {
     if (script.length === 1) return toast.error('You cannot delete the last scene');
     const newScript = [...script];
     newScript.splice(index, 1);
+    setActiveScript(index - 1);
     setScript(newScript);
   }
 
@@ -303,7 +304,7 @@ export default function Editor() {
         {/* Player area */}
         <div className='w-full col-span-4 flex flex-col items-center pb-5 md:pb-0'>
           <div className='aspect-[9/16] max-h-[31.15rem] w-full max-w-[17.5218rem] bg-neutral-700 rounded-xl border border-border-light dark:border-border-dark'>
-            {script[activeScript].image && <img src={script[activeScript].image} alt='Scene pic' className='rounded-xl h-full w-full object-cover' />}
+            {script[activeScript]?.image && <img src={script[activeScript]?.image} alt='Scene pic' className='rounded-xl h-full w-full object-cover' />}
           </div>
 
           {/* Player controls */}

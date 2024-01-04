@@ -116,6 +116,7 @@ project.delete = async (req, res) => {
         }
 
         await Project.findByIdAndDelete(req.params.id);
+        await User.findByIdAndUpdate(id, { $pull: { projects: req.params.id } });
 
         res.status(200).json({ message: 'Project deleted successfully.' });
     } catch (error) {

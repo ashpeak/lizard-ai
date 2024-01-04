@@ -240,6 +240,7 @@ AuthController.profile = async (req, res) => {
         const data = {
             id: user._id,
             name: user.firstName + ' ' + user.lastName,
+            email: user.email,
             avatar: user.avatar,
             filesCount: user.projects.length,
             credit: user.credit,

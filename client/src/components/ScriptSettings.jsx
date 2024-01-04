@@ -27,7 +27,7 @@ const ScriptSettings = () => {
                     <button type='button' onClick={() => setPosition(6)} className={(position === 6 ? 'bg-rose-500' : 'dark:bg-neutral-700 bg-neutral-400') + ` h-5 w-5 border-transparent hover:border-rose-500 border transition-colors duration-150 rounded-sm`}></button>
 
                     <button type='button' onClick={() => setPosition(1)} className={(position === 1 ? 'bg-rose-500' : 'dark:bg-neutral-700 bg-neutral-400') + ` h-5 w-5 border-transparent hover:border-rose-500 border transition-colors duration-150 rounded-sm`}></button>
-                    <button type='button' onClick={() => setPosition(2)} className={(position === 10 ? 'bg-rose-500' : 'dark:bg-neutral-700 bg-neutral-400') + ` h-5 w-5 border-transparent hover:border-rose-500 border transition-colors duration-150 rounded-sm`}></button>
+                    <button type='button' onClick={() => setPosition(2)} className={(position === 2 ? 'bg-rose-500' : 'dark:bg-neutral-700 bg-neutral-400') + ` h-5 w-5 border-transparent hover:border-rose-500 border transition-colors duration-150 rounded-sm`}></button>
                     <button type='button' onClick={() => setPosition(3)} className={(position === 3 ? 'bg-rose-500' : 'dark:bg-neutral-700 bg-neutral-400') + ` h-5 w-5 border-transparent hover:border-rose-500 border transition-colors duration-150 rounded-sm`}></button>
                 </div>
 
