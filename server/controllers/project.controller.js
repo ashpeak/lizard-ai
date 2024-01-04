@@ -1,4 +1,5 @@
 const Project = require('../models/Project');
+const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const connectDB = require('../configs/db');
 
@@ -119,6 +120,48 @@ project.delete = async (req, res) => {
         await User.findByIdAndUpdate(id, { $pull: { projects: req.params.id } });
 
         res.status(200).json({ message: 'Project deleted successfully.' });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: error.message });
+    }
+}
+
+// Save project
+project.update = async (req, res) => {
+    try {
+        const token = req.headers.token;
+        if (!token) return res.status(401).json({ msg: "Unauthorized" });
+
+        const { id } = jwt.verify(token, process.env.JWT_SECRET);
+
+        if (!id) return res.status(401).json({ msg: "Unauthorized" });
+
+        let { script, music, voiceover, subtitlePosition, bgMusic } = req.body;
+
+        if (!script || script.length < 1) return res.status(400).json({ message: 'Add atleast 1 scene.' });
+        if (!bgMusic || !bgMusic.preview || !bgMusic.name) bgMusic = { preview: '', name: '' };
+
+        await connectDB();
+
+        const project = await Project.findById(req.params.id);
+
+        if (!project) return res.status(404).json({ message: 'Project not found.' });
+
+        if (project.user.toString() !== id) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+
+        const updatedProject = await Project.findByIdAndUpdate(req.params.id, {
+            $set: {
+                script,
+                music,
+                voiceover,
+                subtitlePosition,
+                bgMusic
+            }
+        }, { new: true });
+
+        res.status(200).json({ message: 'Project saved successfully.' });
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: error.message });

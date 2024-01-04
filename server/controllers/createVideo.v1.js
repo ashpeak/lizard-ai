@@ -106,7 +106,7 @@ videoController.createVideo = async (req, res) => {
         await Promise.all(downloadPromises);
 
         // Send a success response
-        res.status(200).send({ msg: "Video creation in progress" });
+        res.status(200).send("Video creation in progress");
 
         for (const scene of script) {
             const name = id + projectId + scene.index;
