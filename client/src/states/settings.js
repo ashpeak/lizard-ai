@@ -8,6 +8,11 @@ export const settings = create((set) => ({
         preview: '',
         name: ''
     },
+    voiceoverModel: {
+        name: 'Guy - English',
+        id: 'guy-en'
+    },
+    setVoiceoverModel: (model) => set({ voiceoverModel: model }),
     setMusicVolume: (volume) => set({ music: volume }),
     setVoiceoverVolume: (volume) => set({ voiceover: volume }),
     setSubtitlePosition: (position) => set({ subtitlePosition: position }),

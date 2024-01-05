@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FiArrowRight } from 'react-icons/fi'
 import { MdStopCircle } from "react-icons/md";
 import { useQuery } from '@tanstack/react-query';

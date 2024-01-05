@@ -9,6 +9,7 @@ import StockLibrary from '../StockLibrary';
 import StockMusicLibrary from '../StockMusicLibrary';
 import { GiMagicGate } from "react-icons/gi";
 import YoutubeVideo from '../YoutubeVideo';
+import VoiceOverLibrary from '../VoiceOverLibrary';
 import PropTypes from 'prop-types';
 
 
@@ -23,6 +24,8 @@ export default function Modal({ handleClose, selectImage, mediaQuery, mutation, 
         type: PropTypes.string.isRequired
     };
     const [active, setActive] = useState("stock");
+
+    console.log(type);
 
     return (
         <Backdrop onClick={handleClose}>
@@ -43,10 +46,12 @@ export default function Modal({ handleClose, selectImage, mediaQuery, mutation, 
                                 <IoLibrary size={15} />
                                 <h2>Stock library</h2>
                             </button>
-                            <button onClick={() => setActive("my")} className={(active === "my" ? "border-b border-text-light dark:border-border-light" : "") + ' flex items-center gap-1 opacity-100 px-4 py-2 hover:bg-neutral-300 transition-colors duration-200 cursor-pointer hover:dark:bg-neutral-700'}>
-                                <BiSolidImageAlt size={15} />
-                                <h2>My library</h2>
-                            </button>
+                            {type !== "voiceOver" && (
+                                <button onClick={() => setActive("my")} className={(active === "my" ? "border-b border-text-light dark:border-border-light" : "") + ' flex items-center gap-1 opacity-100 px-4 py-2 hover:bg-neutral-300 transition-colors duration-200 cursor-pointer hover:dark:bg-neutral-700'}>
+                                    <BiSolidImageAlt size={15} />
+                                    <h2>My library</h2>
+                                </button>
+                            )}
                             {type === "media" && (
                                 <button onClick={() => setActive("utube")} className={(active === "utube" ? "border-b border-text-light dark:border-border-light" : "") + ' flex items-center gap-1 opacity-100 px-4 py-2 hover:bg-neutral-300 transition-colors duration-200 cursor-pointer hover:dark:bg-neutral-700'}>
                                     <BiSolidImageAlt size={15} />
@@ -87,6 +92,10 @@ export default function Modal({ handleClose, selectImage, mediaQuery, mutation, 
                             <h1 className='text-lg font-semibold'>Coming soon...</h1>
                             <GiMagicGate size={50} />
                         </div>
+                    )}
+                    {type === "voiceOver" && (
+                        <VoiceOverLibrary
+                            handleClose={handleClose} />
                     )}
                 </div>
             </motion.div>

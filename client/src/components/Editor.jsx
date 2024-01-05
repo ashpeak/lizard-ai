@@ -153,7 +153,8 @@ export default function Editor() {
       music: musicState.music,
       voiceover: musicState.voiceover,
       bgMusic: musicState.bgMusic,
-      subtitlePosition: musicState.subtitlePosition
+      subtitlePosition: musicState.subtitlePosition,
+      voiceoverModel: musicState.voiceoverModel
     };
 
     toast.promise(
@@ -266,9 +267,9 @@ export default function Editor() {
                 <div className='text-xs cursor-pointer invisible hover:opacity-100 transition-opacity duration-200 group-hover:visible opacity-70'>delete</div>
               </div>
               <div className='flex items-center mt-2'>
-                <div className='px-[0.6rem] py-[0.2rem] rounded-2xl text-xs cursor-pointer border border-text-light dark:border-text-dark opacity-70 hover:opacity-100'>
-                  <p>Tony</p>
-                </div>
+                <button type='button' onClick={() => setModal({ open: true, type: 'voiceOver' })} className='px-[0.6rem] py-[0.2rem] rounded-2xl text-xs cursor-pointer border border-text-light dark:border-text-dark opacity-70 hover:opacity-100'>
+                  <p>{musicState.voiceoverModel.name}</p>
+                </button>
               </div>
             </div>
           </div>

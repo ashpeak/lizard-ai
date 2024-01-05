@@ -15,7 +15,8 @@ const createVideo = (script, bgMusic, musicState, id) => {
         speech: musicState.voiceover,
         bgMusic: musicState.music
       },
-      subtitlePosition: musicState.subtitlePosition
+      subtitlePosition: musicState.subtitlePosition,
+      voiceoverModel: musicState.voiceoverModel.id
     };
 
     axios.post(appUri + '/v1/create', data, {
