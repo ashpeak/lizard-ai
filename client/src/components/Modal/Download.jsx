@@ -8,7 +8,7 @@ import { FaArrowRight } from "react-icons/fa6";
 import { useEffect, useState } from 'react';
 
 // eslint-disable-next-line react/prop-types
-export default function Download({ handleClose, exported, createdAt, generate, download, refetch }) {
+export default function Download({ handleClose, exported, createdAt, status, generate, download, refetch }) {
 
     const [clicked, setClicked] = useState(false);
 
@@ -20,6 +20,10 @@ export default function Download({ handleClose, exported, createdAt, generate, d
         // Clear the interval when the component unmounts
         return () => clearInterval(intervalId);
     }, [refetch]);
+
+    useEffect(() => {
+        if (status === "ready") setClicked(false);
+    }, [status]);
 
     return (
         <Backdrop onClick={handleClose} position={"items-center"}>
@@ -39,7 +43,7 @@ export default function Download({ handleClose, exported, createdAt, generate, d
                     </div>
                     <div className='flex flex-col gap-4 w-full p-2 mt-2'>
                         <div className='flex flex-wrap gap-4 items-center'>
-                            {exported ? (
+                            {!clicked && (exported ? (
                                 <div className='w-full gap-y-2 flex flex-col items-center justify-center'>
                                     <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.95 }} onClick={download} type='button' className='w-fit px-3 flex justify-center gap-2 mt-6 items-center py-[0.3rem] rounded-3xl bg-rose-500 text-white hover:bg-rose-600'>
                                         <BiSolidDownload size={20} />
@@ -51,6 +55,13 @@ export default function Download({ handleClose, exported, createdAt, generate, d
                             ) : (
                                 <div className='w-full gap-3 flex-col items-start flex justify-center'>
                                     <p className='text-text-light px-4 text-start dark:text-text-dark opacity-80'>No previous export was found. You can start new export to download the file.</p>
+                                    <p className='text-text-light text-xs px-4 text-start dark:text-text-dark opacity-70'>Note: Credits will not be charged for failed exports</p>
+                                </div>
+                            ))}
+
+                            {clicked && (
+                                <div className='w-full gap-3 flex-col items-start flex justify-center'>
+                                    <p className='text-text-light px-4 text-start dark:text-text-dark opacity-80'>Exporting is in progress. Please wait for it to complete.</p>
                                     <p className='text-text-light text-xs px-4 text-start dark:text-text-dark opacity-70'>Note: Credits will not be charged for failed exports</p>
                                 </div>
                             )}

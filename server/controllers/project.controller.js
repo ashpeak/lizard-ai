@@ -182,7 +182,7 @@ project.update = async (req, res) => {
 
         if (!id) return res.status(401).json({ msg: "Unauthorized" });
 
-        let { script, music, voiceover, subtitlePosition, bgMusic } = req.body;
+        let { script, music, voiceover, subtitlePosition, bgMusic, voiceoverModel } = req.body;
 
         if (!script || script.length < 1) return res.status(400).json({ message: 'Add atleast 1 scene.' });
         if (!bgMusic || !bgMusic.preview || !bgMusic.name) bgMusic = { preview: '', name: '' };
@@ -203,11 +203,15 @@ project.update = async (req, res) => {
                 music,
                 voiceover,
                 subtitlePosition,
-                bgMusic
+                bgMusic,
+                voiceoverModel
             }
         }, { new: true });
 
+        if (!updatedProject) return res.status(500).json({ message: 'Internal server error.' });
+        
         res.status(200).json({ message: 'Project saved successfully.' });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: error.message });

@@ -72,6 +72,16 @@ const ProjectSchema = new mongoose.Schema({
         type: String,
         default: 'English'
     },
+    voiceoverModel: {
+        name: {
+            type: String,
+            default: 'Guy - English'
+        },
+        id: {
+            type: String,
+            default: 'guy-en'
+        }
+    },
     generatedUrl: {
         type: String,
         default: ''

@@ -380,6 +380,7 @@ export default function Editor() {
       {downloadModal && <Download
         handleClose={() => setDownloadModal(false)}
         createdAt={data.createdAt}
+        status={data.status}
         generate={generate}
         download={download}
         refetch={refetch}

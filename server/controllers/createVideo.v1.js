@@ -82,7 +82,7 @@ videoController.createVideo = async (req, res) => {
         return res.status(400).send(msg);
     }
 
-    const { script, bgMusic, volumeMix, subtitlePosition } = req.body;
+    const { script, bgMusic, volumeMix, subtitlePosition, voiceoverModel } = req.body;
     try {
 
         // Iterate over each file in the request
@@ -93,9 +93,9 @@ videoController.createVideo = async (req, res) => {
                 const name = id + projectId + index;
                 // Download the Media
                 downloadPromises.push(downloadMedia(media, name, type, res));
-                downloadPromises.push(text2speech(dialogue, name));
+                downloadPromises.push(text2speech(dialogue, name, voiceoverModel));
             } else {
-                downloadPromises.push(text2speech(dialogue, media));
+                downloadPromises.push(text2speech(dialogue, media, voiceoverModel));
             }
         });
 
