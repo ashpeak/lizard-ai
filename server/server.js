@@ -7,6 +7,8 @@ const image = require("./routes/uploadImage");
 const userAuth = require("./routes/user");
 const media = require("./routes/media");
 const project = require("./routes/project");
+const schedule = require('node-schedule');
+const misc = require('./lib/misc');
 
 const app = express();
 
@@ -28,6 +30,11 @@ app.get("/", (req, res) => {
     res.send("Hello World");
 });
 
+// const job = schedule.scheduleJob('*/10 * * * * *', function () {
+// schedule a job to reset credits every day at 12:30 PM
+const job = schedule.scheduleJob('0 30 12 1/1 * ? *', function () {
+    misc.resetCredits();
+});
 
 // start the server listening for requests
 app.listen(process.env.PORT, () => {
