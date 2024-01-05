@@ -2,14 +2,23 @@ const axios = require('axios');
 const { join } = require("path");
 const { createWriteStream } = require("fs");
 
-
-const voices = {
-    'jenny-en': { "ssml": `<speak><mstts:silence type=\"Sentenceboundary-exact\" value=\"500ms\"></mstts:silence><mstts:silence type=\"Tailing-exact\" value=\"1000ms\"></mstts:silence><mstts:express-as style=\"newscast\"><prosody pitch=\"-2%\" rate=\"15%\">${text}</prosody></mstts:express-as></speak>`, "voice": { "name": "Guy", "engine": "azure", "language": "en-US" }, "forcedAudioFormat": "mp3" },
-    'guy-en': { "ssml": `<speak><mstts:silence type=\"Sentenceboundary-exact\" value=\"500ms\"></mstts:silence><mstts:silence type=\"Tailing-exact\" value=\"1000ms\"></mstts:silence><mstts:express-as style=\"newscast\"><prosody pitch=\"-2%\" rate=\"15%\">${text}</prosody></mstts:express-as></speak>`, "voice": { "name": "Guy", "engine": "azure", "language": "en-US" }, "forcedAudioFormat": "mp3" },
-    'ashish-en': { "ssml": `<speak>${text}</speak>`, "voice": { "name": "PVL:7d6c8060-5513-46ee-9548-a88f451da9da", "engine": "speechify", "language": "en-US" }, "forcedAudioFormat": "mp3" },
-    'ashish-hi': { "ssml": `<speak>${text}</speak>`, "voice": { "name": "PVL:7d6c8060-5513-46ee-9548-a88f451da9da", "engine": "speechify", "language": "en-US" }, "forcedAudioFormat": "mp3" },
-    'madhur-hi': { "ssml": `<speak>${text}</speak>`, "voice": { "name": "Madhur", "engine": "azure", "language": "hi-IN" }, "forcedAudioFormat": "mp3" },
-    'swara-hi': { "ssml": `<speak>${text}</speak>`, "voice": { "name": "Swara", "engine": "azure", "language": "hi-IN" }, "forcedAudioFormat": "mp3" }
+const voices = (text, name) => {
+    switch (name) {
+        case 'jenny-en':
+            return { "ssml": `<speak><mstts:silence type=\"Sentenceboundary-exact\" value=\"500ms\"></mstts:silence><mstts:silence type=\"Tailing-exact\" value=\"1000ms\"></mstts:silence><mstts:express-as style=\"newscast\"><prosody pitch=\"-2%\" rate=\"15%\">${text}</prosody></mstts:express-as></speak>`, "voice": { "name": "Jenny", "engine": "azure", "language": "en-US" }, "forcedAudioFormat": "mp3" };
+        case 'guy-en':
+            return { "ssml": `<speak><mstts:silence type=\"Sentenceboundary-exact\" value=\"500ms\"></mstts:silence><mstts:silence type=\"Tailing-exact\" value=\"1000ms\"></mstts:silence><mstts:express-as style=\"newscast\"><prosody pitch=\"-2%\" rate=\"15%\">${text}</prosody></mstts:express-as></speak>`, "voice": { "name": "Guy", "engine": "azure", "language": "en-US" }, "forcedAudioFormat": "mp3" };
+        case 'ashish-en':
+            return { "ssml": `<speak>${text}</speak>`, "voice": { "name": "PVL:7d6c8060-5513-46ee-9548-a88f451da9da", "engine": "speechify", "language": "en-US" }, "forcedAudioFormat": "mp3" };
+        case 'ashish-hi':
+            return { "ssml": `<speak>${text}</speak>`, "voice": { "name": "PVL:7d6c8060-5513-46ee-9548-a88f451da9da", "engine": "speechify", "language": "en-US" }, "forcedAudioFormat": "mp3" };
+        case 'madhur-hi':
+            return { "ssml": `<speak>${text}</speak>`, "voice": { "name": "Madhur", "engine": "azure", "language": "hi-IN" }, "forcedAudioFormat": "mp3" };
+        case 'swara-hi':
+            return { "ssml": `<speak>${text}</speak>`, "voice": { "name": "Swara", "engine": "azure", "language": "hi-IN" }, "forcedAudioFormat": "mp3" };
+        default:
+            return { "ssml": `<speak>${text}</speak>`, "voice": { "name": "PVL:7d6c8060-5513-46ee-9548-a88f451da9da", "engine": "speechify", "language": "en-US" }, "forcedAudioFormat": "mp3" };
+    }
 }
 
 const text2speech = async (text, name, voiceoverModel) => {
@@ -28,7 +37,7 @@ const text2speech = async (text, name, voiceoverModel) => {
                 "Authorization": `Bearer ${process.env.SPEECHIFY_AUTH_KEY}`
             }
 
-            let bodyContent = JSON.stringify(voices[voiceoverModel]);
+            let bodyContent = JSON.stringify(voices(text, voiceoverModel));
 
             let reqOptions = {
                 url: process.env.SPEECHIFY_API_URL,
