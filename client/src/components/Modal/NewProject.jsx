@@ -9,6 +9,7 @@ export default function NewProject({ handleClose, handleSubmit }) {
         name: '',
         idea: '',
         template: 'empty',
+        language: 'English',
     });
 
     return (
@@ -63,7 +64,7 @@ export default function NewProject({ handleClose, handleSubmit }) {
                                         >
                                             <option className='cursor-pointer bg-neutral-200 hover:bg-neutral-300 dark:bg-neutral-600 hover:dark:bg-neutral-700 transition-colors duration-150 opacity-70 hover:opacity-95' value="empty">Empty</option>
                                             <option className='cursor-pointer bg-neutral-200 hover:bg-neutral-300 dark:bg-neutral-600 hover:dark:bg-neutral-700 transition-colors duration-150 opacity-70 hover:opacity-95' value="idea">Idea to Video</option>
-                                            <option className='cursor-pointer bg-neutral-200 hover:bg-neutral-300 dark:bg-neutral-600 hover:dark:bg-neutral-700 transition-colors duration-150 opacity-70 hover:opacity-95' value="tweet">Tweet to Video</option>
+                                            {/* <option className='cursor-pointer bg-neutral-200 hover:bg-neutral-300 dark:bg-neutral-600 hover:dark:bg-neutral-700 transition-colors duration-150 opacity-70 hover:opacity-95' value="tweet">Tweet to Video</option> */}
                                             {/* Add more options as needed */}
                                         </select>
                                     </div>
@@ -78,8 +79,11 @@ export default function NewProject({ handleClose, handleSubmit }) {
                                             className="border border-gray-400 cursor-pointer rounded-full pr-10 h-10 pl-5 bg-neutral-50 dark:bg-neutral-700 hover:border-gray-300 focus:outline-none appearance-none"
                                             required
                                             id='language'
+                                            value={projectData.language}
+                                            onChange={(e) => setProjectData({ ...projectData, language: e.target.value })}
                                         >
-                                            <option className='cursor-pointer bg-neutral-200 hover:bg-neutral-300 dark:bg-neutral-600 hover:dark:bg-neutral-700 transition-colors duration-150 opacity-70 hover:opacity-95' value="english">English</option>
+                                            <option className='cursor-pointer bg-neutral-200 hover:bg-neutral-300 dark:bg-neutral-600 hover:dark:bg-neutral-700 transition-colors duration-150 opacity-70 hover:opacity-95' value="English">English</option>
+                                            <option className='cursor-pointer bg-neutral-200 hover:bg-neutral-300 dark:bg-neutral-600 hover:dark:bg-neutral-700 transition-colors duration-150 opacity-70 hover:opacity-95' value="Hindi">Hindi</option>
                                             {/* Add more options as needed */}
                                         </select>
                                     </div>

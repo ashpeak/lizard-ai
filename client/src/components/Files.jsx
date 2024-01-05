@@ -28,10 +28,10 @@ export default function Files() {
                 success: (data) => {
                     refetch();
                     setModal(false);
-                    return data.message;
+                    return data;
                 },
-                error: () => {
-                    return "Error while creating project";
+                error: (error) => {
+                    return error || "Error while creating project";
                 },
                 duration: 3000
             }

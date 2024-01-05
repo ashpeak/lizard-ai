@@ -2,8 +2,43 @@ const Project = require('../models/Project');
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const connectDB = require('../configs/db');
+const axios = require('axios');
 
 const project = {};
+
+const generateScript = (idea, language) => {
+    return new Promise((resolve, reject) => {
+        try {
+            let headersList = {
+                "Accept": "*/*",
+                "origin": "https://scripai.com",
+                "pragma": "no-cache",
+                "referer": "https://scripai.com/yt-shorts-script",
+                "sec-ch-ua-platform": '"Windows"',
+                "Content-Type": "application/json"
+            }
+
+            let bodyContent = JSON.stringify({ "prompt": { "title": idea, "description": "", "keywords": "", "language": language, "tone": "Professional", "time": "30-to-60 seconds" }, "slug": "yt-shorts-script" });
+
+            let reqOptions = {
+                url: "https://scripai.com/api/getGPTdata",
+                method: "POST",
+                headers: headersList,
+                data: bodyContent,
+            }
+
+            let response = axios.request(reqOptions)
+                .then((response) => {
+                    resolve(response.data.result);
+                }
+                ).catch((error) => {
+                    reject(error);
+                });
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
 
 project.create = async (req, res) => {
     try {
@@ -11,35 +46,46 @@ project.create = async (req, res) => {
         if (!token) return res.status(401).json({ msg: "Unauthorized" });
         const { id } = jwt.verify(token, process.env.JWT_SECRET);
 
-        if (!id) return res.status(401).json({ msg: "Unauthorized" });
+        if (!id) return res.status(401).json({ message: "Unauthorized" });
 
-        const { name, idea, template } = req.body;
+        const { name, idea, template, language } = req.body;
 
         if (!name || (template !== "empty" && !idea)) {
             return res.status(400).json({ message: 'Missing required fields.' });
         }
 
-        if (template !== "empty") {
-            if (idea.length > 300) {
-                return res.status(400).json({ message: 'Idea must be less than 300 characters.' });
+        let scenes = null;
+        if (template === "idea") {
+            if (idea.length > 600) {
+                return res.status(400).json({ message: 'Idea must be less than 600 characters.' });
             }
 
-            // Handle ai script generation
-            return res.status(200).json({ message: 'Script will be generated shortly.' });
+            const line = await generateScript(idea, language);
+            scenes = line.split(/\n+/);
         }
-
         await connectDB();
 
-        const newProject = await Project.create({
-            name,
-            user: id,
-            script: [{
-                dialogue: '',
+        const script = scenes ? scenes.map((scene) => {
+            return {
+                dialogue: scene,
                 image: '',
                 type: '',
                 download: '',
                 height: 'auto'
-            }],
+            }
+        }) : [{
+            dialogue: '',
+            image: '',
+            type: '',
+            download: '',
+            height: 'auto'
+        }];
+
+        const newProject = await Project.create({
+            name,
+            user: id,
+            script: script,
+            language,
         });
 
         if (!newProject) return res.status(500).json({ message: 'Internal server error.' });

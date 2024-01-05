@@ -68,6 +68,10 @@ const ProjectSchema = new mongoose.Schema({
             },
         }
     ],
+    language: {
+        type: String,
+        default: 'English'
+    },
     generatedUrl: {
         type: String,
         default: ''

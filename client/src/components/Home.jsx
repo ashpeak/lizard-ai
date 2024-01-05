@@ -6,10 +6,12 @@ import { HiCurrencyRupee } from "react-icons/hi2";
 import FeedbackCard from './FeedbackCard';
 import { useQuery } from '@tanstack/react-query';
 import { misc } from '../lib/misc';
+import { auth } from '../states/useAuth';
 
 export default function Home() {
 
   const year = new Date().getFullYear();
+  const user = auth((state) => state.user);
 
   const { data } = useQuery({ queryKey: ['feedback'], queryFn: misc.getTestimonials, refetchOnWindowFocus: false });
 
@@ -34,7 +36,7 @@ export default function Home() {
         </div>
 
         <div className='mt-10'>
-          <Link to='/signup'>
+          <Link to={user ? '/files' : '/signup'}>
             <button className='bg-rose-600 hover:bg-rose-500 flex items-center gap-3 transition-colors duration-150 text-white font-bold py-3 px-8 rounded-full'>Start for free <FaArrowRight /></button>
           </Link>
         </div>
@@ -56,7 +58,7 @@ export default function Home() {
               <svg viewBox="0 0 1000 1000" fill="#00a2c7" width="3rem" height="3rem"><path fillRule="evenodd" clipRule="evenodd" d="M822.945 394.435C822.945 394.435 915 445.086 915 499.694C915 554.303 822.945 604.953 822.945 604.953C822.945 604.953 867.859 699.994 835.773 744.167C803.718 788.296 699.577 775.103 699.577 775.103C699.577 775.103 680.227 878.567 628.273 895.453C576.426 912.305 500 840.372 500 840.372C500 840.372 423.643 912.66 371.727 895.831C319.76 878.984 300.423 775.481 300.423 775.481C300.423 775.481 196.339 788.632 164.227 744.544C131.997 700.294 177.055 604.953 177.055 604.953C177.055 604.953 85.0969 554.303 85.0001 499.694C84.9031 444.975 177.055 394.058 177.055 394.058C177.055 394.058 131.927 298.666 164.227 254.467C196.39 210.456 300.423 223.908 300.423 223.908C300.423 223.908 319.773 120.444 371.727 103.558C423.574 86.7061 500 158.64 500 158.64C500 158.64 576.42 86.7235 628.273 103.558C680.353 120.466 699.577 224.285 699.577 224.285C699.577 224.285 803.718 211.092 835.773 255.221C867.859 299.394 822.945 394.435 822.945 394.435ZM398.59 638.764V360.032C398.59 338.778 421.884 325.863 439.824 337.432L657.776 476.529C674.376 487.291 674.376 511.505 657.776 521.998L439.824 661.363C421.884 672.932 398.59 660.018 398.59 638.764Z"></path></svg>
             </span>
             <h2 className='mt-2 text-[1.2125rem] md:text-[1.4125rem] leading-[1.6125rem] font-bold text-center opacity-90'>Simple Editor</h2>
-            <p className='mt-2 text-[1.125rem] text-center opacity-70'>Bulbul makes creating videos as simple as writing an email with its script based editor.</p>
+            <p className='mt-2 text-[1.125rem] text-center opacity-70'>Blink makes creating videos as simple as writing an email with its script based editor.</p>
           </div>
           <div className='flex items-center justify-center flex-col'>
             <span className='opacity-90'>
@@ -178,16 +180,16 @@ export default function Home() {
         </div>
 
         <div className='w-full text-start mt-12 px-4 md:px-20'>
-          <p className='text-[1.125rem] py-2 px-6 cursor-pointer transition-colors duration-150 opacity-70 hover:opacity-95 hover:dark:bg-[#f3f5f412] hover:bg-[#dbdbdb] rounded-2xl'>Can I use Bulbul for free?</p>
-          <p className='text-[1.125rem] py-2 px-6 cursor-pointer transition-colors duration-150 opacity-70 hover:opacity-95 hover:dark:bg-[#f3f5f412] hover:bg-[#dbdbdb] rounded-2xl'>How does Bulbul differ from other text-to-video and text-to-speech tools in the market?</p>
+          <p className='text-[1.125rem] py-2 px-6 cursor-pointer transition-colors duration-150 opacity-70 hover:opacity-95 hover:dark:bg-[#f3f5f412] hover:bg-[#dbdbdb] rounded-2xl'>Can I use Blink for free?</p>
+          <p className='text-[1.125rem] py-2 px-6 cursor-pointer transition-colors duration-150 opacity-70 hover:opacity-95 hover:dark:bg-[#f3f5f412] hover:bg-[#dbdbdb] rounded-2xl'>How does Blink differ from other text-to-video and text-to-speech tools in the market?</p>
           <p className='text-[1.125rem] py-2 px-6 cursor-pointer transition-colors duration-150 opacity-70 hover:opacity-95 hover:dark:bg-[#f3f5f412] hover:bg-[#dbdbdb] rounded-2xl'>Which languages are supported?</p>
           <p className='text-[1.125rem] py-2 px-6 cursor-pointer transition-colors duration-150 opacity-70 hover:opacity-95 hover:dark:bg-[#f3f5f412] hover:bg-[#dbdbdb] rounded-2xl'>Do I need any special software or equipment to use this tool?</p>
-          <p className='text-[1.125rem] py-2 px-6 cursor-pointer transition-colors duration-150 opacity-70 hover:opacity-95 hover:dark:bg-[#f3f5f412] hover:bg-[#dbdbdb] rounded-2xl'>How does the text to speech feature in Bulbul work?</p>
-          <p className='text-[1.125rem] py-2 px-6 cursor-pointer transition-colors duration-150 opacity-70 hover:opacity-95 hover:dark:bg-[#f3f5f412] hover:bg-[#dbdbdb] rounded-2xl'>What kinds of videos can I make using Bulbul's platform?</p>
+          <p className='text-[1.125rem] py-2 px-6 cursor-pointer transition-colors duration-150 opacity-70 hover:opacity-95 hover:dark:bg-[#f3f5f412] hover:bg-[#dbdbdb] rounded-2xl'>How does the text to speech feature in Blink work?</p>
+          <p className='text-[1.125rem] py-2 px-6 cursor-pointer transition-colors duration-150 opacity-70 hover:opacity-95 hover:dark:bg-[#f3f5f412] hover:bg-[#dbdbdb] rounded-2xl'>What kinds of videos can I make using Blink&apos;s platform?</p>
           <p className='text-[1.125rem] py-2 px-6 cursor-pointer transition-colors duration-150 opacity-70 hover:opacity-95 hover:dark:bg-[#f3f5f412] hover:bg-[#dbdbdb] rounded-2xl'>How do I pay?</p>
-          <p className='text-[1.125rem] py-2 px-6 cursor-pointer transition-colors duration-150 opacity-70 hover:opacity-95 hover:dark:bg-[#f3f5f412] hover:bg-[#dbdbdb] rounded-2xl'>How does Bulbul's payment system work?</p>
-          <p className='text-[1.125rem] py-2 px-6 cursor-pointer transition-colors duration-150 opacity-70 hover:opacity-95 hover:dark:bg-[#f3f5f412] hover:bg-[#dbdbdb] rounded-2xl'>Does Bulbul support Voice Cloning? How can it help me?</p>
-          <p className='text-[1.125rem] py-2 px-6 cursor-pointer transition-colors duration-150 opacity-70 hover:opacity-95 hover:dark:bg-[#f3f5f412] hover:bg-[#dbdbdb] rounded-2xl'>What if I only need Bulbul for a short amount of time?</p>
+          <p className='text-[1.125rem] py-2 px-6 cursor-pointer transition-colors duration-150 opacity-70 hover:opacity-95 hover:dark:bg-[#f3f5f412] hover:bg-[#dbdbdb] rounded-2xl'>How does Blink&apos;s payment system work?</p>
+          <p className='text-[1.125rem] py-2 px-6 cursor-pointer transition-colors duration-150 opacity-70 hover:opacity-95 hover:dark:bg-[#f3f5f412] hover:bg-[#dbdbdb] rounded-2xl'>Does Blink support Voice Cloning? How can it help me?</p>
+          <p className='text-[1.125rem] py-2 px-6 cursor-pointer transition-colors duration-150 opacity-70 hover:opacity-95 hover:dark:bg-[#f3f5f412] hover:bg-[#dbdbdb] rounded-2xl'>What if I only need Blink for a short amount of time?</p>
         </div>
 
       </div>
@@ -195,7 +197,7 @@ export default function Home() {
 
       {/* Footer */}
       <div className='rounded-3xl xl:mx-32 mt-16 md:mt-24 py-8 flex flex-col items-center bg-neutral-300/50 dark:bg-[#26262673] opacity-90'>
-        <p className='cursor-pointer hover:opacity-90 transition-opacity duration-150 text-[1.125rem] text-center opacity-70'>© {year} Bulbul. All rights reserved.</p>
+        <p className='cursor-pointer hover:opacity-90 transition-opacity duration-150 text-[1.125rem] text-center opacity-70'>© {year} Blink. All rights reserved.</p>
         <p className='cursor-pointer hover:opacity-90 transition-opacity duration-150 text-[1.125rem] text-center opacity-70'>Made with ❤️ by Ashish Singh</p>
         <div className='flex items-center justify-center gap-4 mt-3'>
           <Link to='https://www.linkedin.com/in/ashishsingh09dev/?profileId=ACoAADORLc0BWMD-J0FaT_yufN-D-HdTg3Td4JY' target='_blank' className='hover:scale-110 cursor-pointer hover:opacity-90 transition-opacity duration-150 text-[1.125rem] text-center opacity-70'><FaLinkedin size={21} /></Link>

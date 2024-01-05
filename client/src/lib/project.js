@@ -12,9 +12,9 @@ const createProject = async (project) => {
                 token: Cookies.get('token')
             }
         }).then((response) => {
-            resolve(response.data);
+            resolve(response.data.message);
         }).catch((error) => {
-            reject(error);
+            reject(error.response.data.message);
         });
     });
 }
