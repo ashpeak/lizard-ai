@@ -61,7 +61,7 @@ export default function Download({ handleClose, exported, createdAt, status, gen
 
                             {clicked && (
                                 <div className='w-full gap-3 flex-col items-start flex justify-center'>
-                                    <p className='text-text-light px-4 text-start dark:text-text-dark opacity-80'>Exporting is in progress. Please wait for it to complete.</p>
+                                    <p className='text-text-light px-4 text-start dark:text-text-dark opacity-80'>Exporting is in progress. Feel free to close this window, you will be emailed when the export is ready.</p>
                                     <p className='text-text-light text-xs px-4 text-start dark:text-text-dark opacity-70'>Note: Credits will not be charged for failed exports</p>
                                 </div>
                             )}

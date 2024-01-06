@@ -31,7 +31,7 @@ const getAudioDuration = (inputFilePath) => {
                 reject(err);
             }
             const { duration } = info.streams[0];
-            resolve(duration);
+            resolve(Math.round(duration));
         });
     });
 };
@@ -60,8 +60,12 @@ mediaHandler.prepareImage = async (scene, subtitlePosition, inputName, ext, aspe
             ffmpeg()
                 .input(path)
                 .input(speechPath)
-                .inputFPS(1)
-                .outputOptions('-vf', `loop=loop=20,scale=720:1280,subtitles=${subtitlePath}`, '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-c:v', 'libx264', '-r', '27', '-t', audioDuration, '-b:v', '4000k', '-b:a', '128k', '-y')
+                // .outputOptions('-vf', `loop=loop=20,scale=720:1280,subtitles=${subtitlePath}`, '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-c:v', 'libx264', '-r', '27', '-t', audioDuration, '-b:v', '4000k', '-b:a', '128k', '-y')
+                
+                // For top left zoom in
+                // .outputOptions('-vf', `scale=8000:-1,zoompan=z='zoom+0.001':x=0:y=0:d=${audioDuration}*60,scale=720:1280,subtitles=${subtitlePath}`, '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-c:v', 'libx264', '-r', '60', '-t', audioDuration, '-b:v', '5000k', '-b:a', '192k', '-y')
+                
+                .outputOptions('-vf', `scale=8000:-1,zoompan=z='if(lte(zoom,1.0),1.5,max(1.001,zoom-0.0015))':x=iw/2-(iw/zoom/2):y=ih/2-(ih/zoom/2):d=${audioDuration}*60,scale=720:1280,subtitles=${subtitlePath}`, '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-c:v', 'libx264', '-r', '60', '-t', audioDuration, '-b:v', '5000k', '-b:a', '192k', '-y')
                 .output(join(process.cwd(), 'temp', `${inputName}.mp4`))
                 .on('end', () => {
                     console.log('Finished processing', inputName + ext);
@@ -98,7 +102,7 @@ mediaHandler.prepareVideo = async (scene, subtitlePosition, inputName, ext, aspe
             .input(path)
             .input(speechPath)
             .outputOptions('-vf', `crop=in_w-${temp}-${temp}:in_h,scale=720:1280,subtitles=${subtitlePath}`)
-            .outputOptions('-map', '0:v:0', '-map', '1:a:0', '-c:a', 'aac', '-c:v', 'libx264', '-t', audioDuration, '-pix_fmt', 'yuv420p', '-r', '27', '-b:v', '4000k', '-b:a', '128k', '-strict', 'experimental')
+            .outputOptions('-map', '0:v:0', '-map', '1:a:0', '-c:a', 'aac', '-c:v', 'libx264', '-t', audioDuration, '-pix_fmt', 'yuv420p', '-r', '60', '-b:v', '5000k', '-b:a', '192k', '-strict', 'experimental')
             .output(join(process.cwd(), 'temp', `${inputName}.mp4`))
             .on('end', () => {
                 console.log('Finished processing', inputName + ext);
@@ -132,7 +136,7 @@ mediaHandler.prepareYoutube = async (scene, subtitlePosition, aspectRatio) => {
             .input(path)
             .input(speechPath)
             .outputOptions('-vf', `crop=in_w-${temp}-${temp}:in_h,scale=720:1280,subtitles=${subtitlePath}`)
-            .outputOptions('-map', '0:v:0', '-map', '1:a:0', '-c:a', 'aac', '-c:v', 'libx264', '-t', audioDuration, '-pix_fmt', 'yuv420p', '-r', '27', '-b:v', '4000k', '-b:a', '128k', '-strict', 'experimental')
+            .outputOptions('-map', '0:v:0', '-map', '1:a:0', '-c:a', 'aac', '-c:v', 'libx264', '-t', audioDuration, '-pix_fmt', 'yuv420p', '-r', '60', '-b:v', '5000k', '-b:a', '192k', '-strict', 'experimental')
             .output(join(process.cwd(), 'temp', `${scene.media}.mp4`))
             .on('end', () => {
                 console.log('Finished processing', scene.media);

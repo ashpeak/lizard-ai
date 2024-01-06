@@ -36,7 +36,7 @@ const changeStatus = async (id, projectId) => {
         { new: true }
     );
 
-    exportEmail(`${user.firstName} ${user.lastName}`, user.email, project.generatedUrl);
+    exportEmail(`${user.firstName} ${user.lastName}`, user.email, project._id);
 }
 
 myFFmpeg.mergeAudio = (audio1, audio2, name) => {
@@ -96,7 +96,7 @@ myFFmpeg.createVideo = (script, id, projectId, musicPath, volumeMix, outputPath)
 
         command
             .inputOptions('-filter_complex', `${sar}${streams}concat=n=${length}:v=1:a=1[vou][aou];[aou]volume=${volumeMix.speech}[a0];[${length}:a:0]atrim=start=10,volume=${volumeMix.bgMusic}[a1];[a0][a1]amix=inputs=2:duration=shortest[aout]`)
-            .outputOptions('-map', '[vou]', '-map', '[aout]', '-r', '27', '-strict', 'experimental', '-c:v', 'libx264', '-b:v', '4000k', '-b:a', '128k', '-pix_fmt', 'yuv420p')
+            .outputOptions('-map', '[vou]', '-map', '[aout]', '-r', '60', '-strict', 'experimental', '-c:v', 'libx264', '-b:v', '5000k', '-b:a', '192k', '-pix_fmt', 'yuv420p')
             .output(outputPath)
             .on('start', () => {
                 console.log('Final video creation started.....');
