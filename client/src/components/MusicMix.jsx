@@ -3,15 +3,33 @@ import { FaMicrophone, FaPlayCircle } from "react-icons/fa";
 import { FaStopCircle } from "react-icons/fa";
 import { settings } from '../states/settings';
 
-const appUri = import.meta.env.VITE_REACT_APP_API;
+const voiceOverUri = (id) => {
+    switch (id) {
+        case 'guy-en':
+            return 'http://res.cloudinary.com/dhfuu5omv/video/upload/v1704439350/bulbul/j9mhiogeymtcajabbsui.mp3';
+        case 'jenny-en':
+            return 'http://res.cloudinary.com/dhfuu5omv/video/upload/v1704439260/bulbul/ib8jji9oxk46xipjthwh.mp3';
+        case 'ashish-en':
+            return 'http://res.cloudinary.com/dhfuu5omv/video/upload/v1704439318/bulbul/u7xgvfsgcizzr9tqkzjj.mp3';
+        case 'ashish-hi':
+            return 'http://res.cloudinary.com/dhfuu5omv/video/upload/v1704439318/bulbul/u7xgvfsgcizzr9tqkzjj.mp3';
+        case 'madhur-hi':
+            return 'http://res.cloudinary.com/dhfuu5omv/video/upload/v1704439259/bulbul/yfvjxlotb9dzppq0zh2t.mp3';
+        case 'swara-hi':
+            return 'http://res.cloudinary.com/dhfuu5omv/video/upload/v1704439259/bulbul/bqkozr9kokbmt3ujhq6g.mp3';
+        default:
+            return 'http://res.cloudinary.com/dhfuu5omv/video/upload/v1704439350/bulbul/j9mhiogeymtcajabbsui.mp3';
+    }
+}
 
 const Mixer = () => {
     const musicState = settings();
     const voiceover = musicState.voiceover;
     const bgMusic = musicState.music;
     const bgMusic_preview = musicState.bgMusic.preview;
+    const voiceoverId = musicState.voiceoverModel.id;
 
-    const audio1 = new Audio(`${appUri}/media/speech/demo/guy`);
+    const audio1 = new Audio(voiceOverUri(voiceoverId));
     const audio2 = new Audio(bgMusic_preview);
 
     const playAudio = (audio, volume, startTime) => {
