@@ -29,9 +29,7 @@ const generateScript = (idea, language) => {
 
             let response = axios.request(reqOptions)
                 .then((response) => {
-                    const { data } = response;
-                    const result = data.result.slice(1);
-                    resolve(result);
+                    resolve(response.data.result);
                 }
                 ).catch((error) => {
                     reject(error);
@@ -64,6 +62,7 @@ project.create = async (req, res) => {
 
             const line = await generateScript(idea, language);
             scenes = line.split(/\n+/);
+            scenes = scenes.slice(1);
         }
         await connectDB();
 
