@@ -21,9 +21,7 @@ const UserSchema = new mongoose.Schema({
     },
     lastName: {
         type: String,
-        required: true,
-        trim: true,
-        minlength: 3,
+        trim: true
     },
     avatar: {
         type: String,

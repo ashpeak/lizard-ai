@@ -1,6 +1,9 @@
 const transporter = require('../configs/nodemailer');
 
-module.exports = async (name, email, url) => {
+module.exports = async (name, email, id) => {
+
+    const url = `${process.env.BASE_URL}/editor/${id}`;
+
     return new Promise(async (resolve, reject) => {
         try {
             // send mail with defined transport object

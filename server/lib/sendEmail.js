@@ -1,11 +1,6 @@
 const transporter = require('../configs/nodemailer');
 
-const host = import.meta.env.VITE_SELF_URL;
-
-module.exports = async (email, id) => {
-
-    const url = `${host}/editor/${id}`;
-
+module.exports = async (email, url) => {
     return new Promise(async (resolve, reject) => {
         try {
             // send mail with defined transport object

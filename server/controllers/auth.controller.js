@@ -89,7 +89,7 @@ AuthController.login = async (req, res) => {
                 g_id: userInfo.sub,
                 email: userInfo.email,
                 firstName: userInfo.given_name,
-                lastName: userInfo.family_name,
+                lastName: userInfo.family_name || '',
                 avatar: userInfo.picture,
             });
             user = await newUser.save();
