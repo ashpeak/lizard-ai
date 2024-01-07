@@ -12,6 +12,8 @@ export const settings = create((set) => ({
         name: 'Guy - English',
         id: 'guy-en'
     },
+    isOpen: false,
+    setIsOpen: (isOpen) => set({ isOpen: isOpen }),
     setVoiceoverModel: (model) => set({ voiceoverModel: model }),
     setMusicVolume: (volume) => set({ music: volume }),
     setVoiceoverVolume: (volume) => set({ voiceover: volume }),

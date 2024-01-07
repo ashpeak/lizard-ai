@@ -10,8 +10,6 @@ const UserSchema = new mongoose.Schema({
     },
     g_id: {
         type: String,
-        unique: true,
-        trim: true,
     },
     firstName: {
         type: String,

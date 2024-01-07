@@ -4,6 +4,7 @@ import { Toaster, toast } from 'sonner';
 import { useGoogleLogin } from '@react-oauth/google';
 import { auth } from '../states/useAuth';
 import { motion } from 'framer-motion';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Signup() {
 
@@ -13,6 +14,7 @@ export default function Signup() {
         fName: '',
         lName: '',
     });
+    const navigate = useNavigate();
 
     const handleSubmit = async (method, access_token) => {
         toast.promise(
@@ -26,6 +28,7 @@ export default function Signup() {
                         fName: '',
                         lName: '',
                     });
+                    navigate('/login');
                     return data;
                 },
                 error: (err) => {
@@ -117,6 +120,11 @@ export default function Signup() {
                         Submit
                     </motion.button>
                 </form>
+
+                <div className="mt-4 text-sm">
+                    <span className="text-neutral-500 dark:text-neutral-400">Already have an account ?</span>
+                    <Link to="/signup" className="text-rose-500 hover:text-rose-600 transition-colors duration-150 font-bold"> Log in</Link>
+                </div>
 
                 {/* Divider */}
                 <div className="my-4 flex items-center gap-2">
