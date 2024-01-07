@@ -123,7 +123,7 @@ export default function Signup() {
 
                 <div className="mt-4 text-sm">
                     <span className="text-neutral-500 dark:text-neutral-400">Already have an account ?</span>
-                    <Link to="/signup" className="text-rose-500 hover:text-rose-600 transition-colors duration-150 font-bold"> Log in</Link>
+                    <Link to="/login" className="text-rose-500 hover:text-rose-600 transition-colors duration-150 font-bold"> Log in</Link>
                 </div>
 
                 {/* Divider */}

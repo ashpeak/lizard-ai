@@ -29,7 +29,9 @@ const generateScript = (idea, language) => {
 
             let response = axios.request(reqOptions)
                 .then((response) => {
-                    resolve(response.data.result);
+                    const { data } = response;
+                    const result = data.result.slice(1);
+                    resolve(result);
                 }
                 ).catch((error) => {
                     reject(error);
