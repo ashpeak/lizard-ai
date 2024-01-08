@@ -22,7 +22,7 @@ const changeStatus = async (id, projectId) => {
             $set: {
                 status: 'ready',
                 isGenerated: true,
-                generatedUrl: `http://${process.env.SERVER_URL}:${process.env.PORT}/user/video/download/${projectId}`
+                generatedUrl: `http://${process.env.SERVER_URL}/user/video/download/${projectId}`
             }
         },
         { new: true }
@@ -36,7 +36,7 @@ const changeStatus = async (id, projectId) => {
         { new: true }
     );
 
-    exportEmail(`${user.firstName} ${user.lastName}`, user.email, project._id, user._id, project.title);
+    exportEmail(`${user.firstName} ${user.lastName}`, user.email, project._id, user._id, project.name);
 }
 
 myFFmpeg.mergeAudio = (audio1, audio2, name) => {
