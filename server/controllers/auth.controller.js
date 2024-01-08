@@ -319,4 +319,36 @@ AuthController.getVideos = async (req, res) => {
     }
 }
 
+AuthController.getVideos2 = async (req, res) => {
+    const projectId = req.params.name;
+    const id = req.params.id;
+
+    if (!projectId || !id) {
+        return res.status(401).send('Invalid request');
+    }
+
+    try {
+
+        await connectDB();
+
+        const project = await Project.findById(projectId);
+
+        if (!project || project.user.toString() !== id || !project.isGenerated) {
+            return res.status(404).send('Video not found');
+        }
+
+        const videoPath = join(process.cwd(), "created", `${id}${projectId}.mp4`);
+
+        if (!fs.existsSync(videoPath)) {
+            return res.status(404).send('Video not found');
+        }
+
+        return res.status(200).sendFile(videoPath);
+
+    } catch (err) {
+        console.log(err);
+        return res.status(401).send('Not authorized');
+    }
+}
+
 module.exports = AuthController;

@@ -102,7 +102,7 @@ const ProjectSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 ProjectSchema.pre('save', async function (next) {
-    const User = require('./User');
+    // const User = require('./User');
     try {
         const user = await User.findById(this.user);
         user.projects.push(this._id);

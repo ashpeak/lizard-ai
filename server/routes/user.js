@@ -23,5 +23,7 @@ router.get('/images', AuthController.getImages);
 
 router.get('/video/download/:name', AuthController.getVideos);
 
+router.get('/video/download/:name/:id', AuthController.getVideos2);
+
 
 module.exports = router;
