@@ -1,18 +1,34 @@
-import { useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import ThemeSwitcher from './ThemeSwitcher'
 import { FaArrowRight } from "react-icons/fa6";
 import { RxAvatar } from "react-icons/rx";
 import { auth } from '../states/useAuth';
-import { settings } from '../states/settings';
 
 export default function Navbar() {
 
   const user = auth((state) => state.user);
   const { logout } = auth((state) => state);
   const [visible, setVisible] = useState(false);
-  const isOpen = settings((state) => state.isOpen);
-  const setIsOpen = settings((state) => state.setIsOpen);
+  const [isOpen, setIsOpen] = useState(false);
+  const navRef = useRef(null);
+
+  useEffect(() => {
+    const checkIfClickedOutside = e => {
+      // If the menu is open and the clicked target is not within the menu,
+      // then close the menu
+      if (isOpen && navRef.current && !navRef.current.contains(e.target)) {
+        setIsOpen(false)
+      }
+    }
+
+    document.addEventListener("mousedown", checkIfClickedOutside)
+
+    return () => {
+      // Cleanup the event listener
+      document.removeEventListener("mousedown", checkIfClickedOutside)
+    }
+  }, [isOpen])
 
   return (
     <>
@@ -78,7 +94,7 @@ export default function Navbar() {
             </button>
           </div>
 
-          <div className={`flex flex-col py-5 fixed border-b-2 border-[#b5b5b5] dark:border-[#ffffff4d] bg-blur backdrop-blur-lg top-0 left-0 right-0 gap-3 w-full transition duration-500 transform ${isOpen ? 'translate-y-0' : '-translate-y-full'} items-center justify-between`}>
+          <div className={`flex flex-col py-5 fixed border-b-2 border-[#b5b5b5] dark:border-[#ffffff4d] bg-blur backdrop-blur-lg top-0 left-0 right-0 gap-3 w-full transition duration-500 transform ${isOpen ? 'translate-y-0' : '-translate-y-full'} items-center justify-between`} ref={navRef}>
             <div className='flex items-baseline justify-between w-full gap-5 px-7'>
               <Link onClick={() => setIsOpen(!isOpen)} to="/">
                 <h2 className='text-2xl mr-6 font-bold hover:text-rose-500'>Blink.ai</h2>
@@ -94,25 +110,25 @@ export default function Navbar() {
             <ThemeSwitcher />
             {user ? (
               <div className='relative w-full px-16 flex flex-col gap-y-3 items-center'>
-              <div className='gap-1 p-[0.2rem] cursor-pointer border dark:border-border-light rounded-full border-border-dark text-xl font-medium transition-opacity duration-150'>
-                {user?.avatar ? (
-                  <img
-                    onClick={() => setVisible(!visible)}
-                    src={user.avatar}
-                    className='rounded-full opacity-90 hover:opacity-100'
-                    alt="User Profile"
-                    height={45}
-                    width={45} />
-                ) : (
-                  <RxAvatar onClick={() => setVisible(!visible)} size={45} className='opacity-75 hover:opacity-95' />
-                )}
+                <div className='gap-1 p-[0.2rem] cursor-pointer border dark:border-border-light rounded-full border-border-dark text-xl font-medium transition-opacity duration-150'>
+                  {user?.avatar ? (
+                    <img
+                      onClick={() => setVisible(!visible)}
+                      src={user.avatar}
+                      className='rounded-full opacity-90 hover:opacity-100'
+                      alt="User Profile"
+                      height={45}
+                      width={45} />
+                  ) : (
+                    <RxAvatar onClick={() => setVisible(!visible)} size={45} className='opacity-75 hover:opacity-95' />
+                  )}
+                </div>
+                <div className={`w-full right-0 p-2 transition-all duration-150 top-16 gap-1 ${visible ? 'flex' : 'hidden'} flex-col rounded-xl dark:bg-[#22222175] bg-[#958d85]`}>
+                  <Link to="/account" onClick={() => { setVisible(false); setIsOpen(!isOpen); }} className='text-center py-1 rounded-md opacity-80 hover:opacity-95 hover:bg-[#b9b8b8] hover:dark:bg-neutral-600 transition-all duration-150'>Account</Link>
+                  <Link to="/files" onClick={() => { setVisible(false); setIsOpen(!isOpen); }} className='text-center rounded-md opacity-80 hover:opacity-95 hover:bg-[#b9b8b8] py-1 hover:dark:bg-neutral-600 transition-all duration-150'>Files</Link>
+                  <button type='button' className='text-center rounded-md py-1 opacity-80 hover:opacity-95 hover:bg-[#b9b8b8] hover:dark:bg-neutral-600 transition-all duration-150' onClick={() => { logout(); setVisible(false); setIsOpen(!isOpen); }}>Logout</button>
+                </div>
               </div>
-              <div className={`w-full right-0 p-2 transition-all duration-150 top-16 gap-1 ${visible ? 'flex' : 'hidden'} flex-col rounded-xl dark:bg-[#22222175] bg-[#958d85]`}>
-                <Link to="/account" onClick={() => { setVisible(false); setIsOpen(!isOpen); }} className='text-center py-1 rounded-md opacity-80 hover:opacity-95 hover:bg-[#b9b8b8] hover:dark:bg-neutral-600 transition-all duration-150'>Account</Link>
-                <Link to="/files" onClick={() => { setVisible(false); setIsOpen(!isOpen); }} className='text-center rounded-md opacity-80 hover:opacity-95 hover:bg-[#b9b8b8] py-1 hover:dark:bg-neutral-600 transition-all duration-150'>Files</Link>
-                <button type='button' className='text-center rounded-md py-1 opacity-80 hover:opacity-95 hover:bg-[#b9b8b8] hover:dark:bg-neutral-600 transition-all duration-150' onClick={() => { logout(); setVisible(false); setIsOpen(!isOpen); }}>Logout</button>
-              </div>
-            </div>
             ) : (
               <>
                 <Link onClick={() => setIsOpen(!isOpen)} to="/login">

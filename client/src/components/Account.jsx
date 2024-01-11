@@ -52,7 +52,7 @@ export default function Account() {
                     {/* Credits left */}
                     <div>
                         <p className="opacity-80">Credits used: {credits - data?.credit}/{credits} ({percent}%)</p>
-                        <p className="opacity-40 text-sm">(credits will reset on {month} {date}, 12:30 pm)</p>
+                        <p className="opacity-40 text-sm">(credits will reset on {month} {date}, 12:30 am)</p>
                     </div>
                     {/* Files count */}
                     <p className="opacity-80">Active projects: {data?.filesCount}</p>

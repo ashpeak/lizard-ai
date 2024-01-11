@@ -13,13 +13,11 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import { Toaster } from 'sonner';
 import Verify from './components/Verify';
 import Signup from './components/Signup';
-import { settings } from './states/settings';
 
 function App() {
 
   const { checkAuth } = auth();
   const user = auth((state) => state.user);
-  const setIsOpen = settings((state) => state.setIsOpen);
 
   useEffect(() => {
     checkAuth();
@@ -30,7 +28,7 @@ function App() {
       <div className='dark:bg-primary-dark scroll-hide select-none bg-primary-light min-h-screen text-text-light dark:text-text-dark'>
         <Navbar />
         <GoogleOAuthProvider clientId="1066475058855-qldr4edmbv65qvq19pcjj6s181nhsgav.apps.googleusercontent.com">
-          <div onClick={() => setIsOpen(false)} className='px-3 md:px-5'>
+          <div className='px-3 md:px-5'>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/files" element={user ? <Files /> : <Navigate to="/login" />} />
