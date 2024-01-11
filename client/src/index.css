@@ -54,15 +54,18 @@ html {
 }
 
 .circle_blue {
-    background: radial-gradient(50% 50% at 50% 50%, rgba(101, 31, 255, .34) 0, hsla(0, 0%, 100%, 0) 100%);
+    background: linear-gradient(336deg, rgba(101, 31, 255, .34) 0%, rgba(255, 255, 255, 0) 100%);
+    filter: blur(40px);
     border-radius: 100% 100% 100% 88% / 19% 100% 32% 100%;
 }
 .circle_red {
-    background: radial-gradient(50% 50% at 50% 50%,rgba(255,61,0,.22) 0,hsla(0,0%,100%,0) 100%);
+    background: linear-gradient(238deg, rgba(255, 61, 0, .34) 0%, rgba(255, 255, 255, 0) 100%);
+    filter: blur(40px);
     border-radius: 100% 100% 0% 88% / 0% 100% 93% 100%;
 }
 .circle_yellow {
-    background: radial-gradient(50% 50% at 50% 50%,rgba(255,213,79,.1) 0,hsla(0,0%,100%,0) 100%);
+    background: linear-gradient(312deg, rgba(255, 213, 79, .27) 0%, rgba(255, 255, 255, 0) 100%);
+    filter: blur(40px);
     border-radius: 58% 34% 71% 27% / 34% 28% 63% 47%;
 }
 
