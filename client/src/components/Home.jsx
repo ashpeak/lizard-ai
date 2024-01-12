@@ -42,7 +42,7 @@ export default function Home() {
         </div>
 
         <div className='md:px-16 lg:px-32 px-4 mt-20'>
-          <img src='/images/blink.png' alt='lizard' className='h-full w-full rounded-2xl' />
+          <img src='/images/blink.png' alt='lizard' className='h-full w-full rounded-2xl shadow-2xl dark:shadow-secondary-dark' />
         </div>
       </div>
 
