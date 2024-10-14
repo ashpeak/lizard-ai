@@ -37,7 +37,7 @@ function App() {
               <Route path="login/verify" element={user ? <Navigate to="/" /> : <Verify />} />
               <Route path="/editor/:id" element={user ? <Editor /> : <Navigate to="/login" />} />
               <Route path="/test" element={<Mixer />} />
-              <Route path="/feedback" element={user ? <Feedback /> : <Navigate to="/login" />} />
+              <Route path="/feedback" element={<Feedback />} />
               <Route path="/account" element={user ? <Account /> : <Navigate to="/login" />} />
             </Routes>
           </div>

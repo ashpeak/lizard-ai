@@ -28,6 +28,11 @@
 *.ass
 *.srt
 *.mkv
+*.pem
+
+catizen.pem
+server-connect.txt
+/server-connect.txt
 
 npm-debug.log*
 yarn-debug.log*

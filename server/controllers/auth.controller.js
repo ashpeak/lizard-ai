@@ -75,10 +75,11 @@ AuthController.signup = async (req, res) => {
 }
 
 AuthController.login = async (req, res) => {
+    
     const { user: userData, method, access_token } = req.body;
     const { email, code } = userData || {};
 
-    await connectDB();
+    await connectDB();    
 
     let user = null;
     if (method === 'google') {

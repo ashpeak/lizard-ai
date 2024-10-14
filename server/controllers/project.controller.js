@@ -3,37 +3,27 @@ const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const connectDB = require('../configs/db');
 const axios = require('axios');
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 const project = {};
 
 const generateScript = (idea, language) => {
+
+    const prompt = `Create a professional, 60-second YouTube Shorts script titled '${idea}' The output should be an array of objects where each object represents a scene, concise fact. Each object should contain a 'text' field. The tone should be educational and professional, targeted at a general audience. Keep the language simple yet accurate and ensure that the overall length fits within 60 seconds when spoken at a moderate pace.\n\nOutput format:\n\nAn improved and better title with title field and an Array of objects with a Text field containing a short, engaging fact.\n\n-The tone is professional.\n-The script is in ${language}.\n-The duration is 60 seconds.`;
+
     return new Promise((resolve, reject) => {
         try {
-            let headersList = {
-                "Accept": "*/*",
-                "origin": "https://scripai.com",
-                "pragma": "no-cache",
-                "referer": "https://scripai.com/yt-shorts-script",
-                "sec-ch-ua-platform": '"Windows"',
-                "Content-Type": "application/json"
-            }
-
-            let bodyContent = JSON.stringify({ "prompt": { "title": idea, "description": "", "keywords": "", "language": language, "tone": "Professional", "time": "30-to-60 seconds" }, "slug": "yt-shorts-script" });
-
-            let reqOptions = {
-                url: "https://scripai.com/api/getGPTdata",
-                method: "POST",
-                headers: headersList,
-                data: bodyContent,
-            }
-
-            let response = axios.request(reqOptions)
-                .then((response) => {
-                    resolve(response.data.result);
-                }
-                ).catch((error) => {
-                    reject(error);
-                });
+            model.generateContent(prompt)
+            .then(result => {
+                console.log(result.response.text());                
+                let parsed = JSON.parse(result.response.text().slice(7, -3));
+                console.log(parsed);                
+                resolve(parsed);
+            }).catch(error => {
+                reject(error);
+            });
         } catch (error) {
             reject(error);
         }
@@ -54,21 +44,19 @@ project.create = async (req, res) => {
             return res.status(400).json({ message: 'Missing required fields.' });
         }
 
-        let scenes = null;
+        let script = null;
         if (template === "idea") {
             if (idea.length > 600) {
                 return res.status(400).json({ message: 'Idea must be less than 600 characters.' });
             }
 
-            const line = await generateScript(idea, language);
-            scenes = line.split(/\n+/);
-            scenes = scenes.slice(1);
+            script = await generateScript(idea, language);
         }
         await connectDB();
 
-        const script = scenes ? scenes.map((scene) => {
+        const scenes = script ? script.scenes.map((scene) => {
             return {
-                dialogue: scene,
+                dialogue: scene.text,
                 image: '',
                 type: '',
                 download: '',
@@ -83,9 +71,9 @@ project.create = async (req, res) => {
         }];
 
         const newProject = await Project.create({
-            name,
+            name: script ? script.title : name,
             user: id,
-            script: script,
+            script: scenes,
             language,
         });
 
@@ -210,7 +198,7 @@ project.update = async (req, res) => {
         }, { new: true });
 
         if (!updatedProject) return res.status(500).json({ message: 'Internal server error.' });
-        
+
         res.status(200).json({ message: 'Project saved successfully.' });
 
     } catch (error) {

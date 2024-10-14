@@ -331,8 +331,8 @@ export default function Editor() {
         </div>
 
         {/* Player area */}
-        <div className='w-full col-span-4 flex flex-col items-center pb-5 md:pb-0'>
-          <div className='aspect-[9/16] max-h-[31.15rem] w-full max-w-[17.5218rem] bg-neutral-700 rounded-xl border border-border-light dark:border-border-dark'>
+        <div className='w-full col-span-4 flex flex-col items-center pb-5 md:pb-0 h-full'>
+          <div className='aspect-[9/16] max-h-[80%] flex-1 w-full max-w-[17.5218rem] bg-neutral-700 rounded-xl border border-border-light dark:border-border-dark'>
             {script[activeScript]?.image && <img src={script[activeScript]?.image} alt='Scene pic' className='rounded-xl h-full w-full object-cover' />}
           </div>
 

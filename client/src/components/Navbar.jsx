@@ -33,14 +33,14 @@ export default function Navbar() {
   return (
     <>
       {/* Window Navbar */}
-      <div className='pb-5 pt-10 px-20 relative z-10 hidden md:block'>
+      <div className='pb-5 pt-6 px-20 relative z-10 hidden md:block'>
         <div className='flex justify-between items-center'>
           <div className='flex items-baseline justify-between w-fit gap-5'>
             <Link to="/">
               <h2 className='text-2xl mr-6 font-bold hover:text-rose-500 transition-colors duration-150'>Blink.ai</h2>
             </Link>
             <Link to="/feedback" className='text-text-light dark:text-text-dark opacity-80 hover:opacity-95 font-medium text-xl transition-opacity duration-150'>Rate Us</Link>
-            <Link to='https://www.linkedin.com/in/ashishsingh09dev/?profileId=ACoAADORLc0BWMD-J0FaT_yufN-D-HdTg3Td4JY' target='_blank' className='text-text-light dark:text-text-dark opacity-80 hover:opacity-95 font-medium text-xl transition-opacity duration-150'>LinkedIn</Link>
+            <Link to='https://www.linkedin.com/in/ashpeak/?profileId=ACoAADORLc0BWMD-J0FaT_yufN-D-HdTg3Td4JY' target='_blank' className='text-text-light dark:text-text-dark opacity-80 hover:opacity-95 font-medium text-xl transition-opacity duration-150'>LinkedIn</Link>
           </div>
           <div className='flex gap-3 items-center justify-between'>
             <ThemeSwitcher />
@@ -106,7 +106,7 @@ export default function Navbar() {
             </div>
 
             <Link onClick={() => setIsOpen(!isOpen)} to="/feedback" className='text-text-light dark:text-text-dark opacity-80 hover:opacity-95 font-medium text-xl transition-opacity duration-150'>Rate Us</Link>
-            <Link onClick={() => setIsOpen(!isOpen)} to='https://www.linkedin.com/in/ashishsingh09dev/?profileId=ACoAADORLc0BWMD-J0FaT_yufN-D-HdTg3Td4JY' target='_blank' className='text-text-light dark:text-text-dark opacity-80 hover:opacity-95 font-medium text-xl transition-opacity duration-150'>LinkedIn</Link>
+            <Link onClick={() => setIsOpen(!isOpen)} to='https://www.linkedin.com/in/ashpeak/?profileId=ACoAADORLc0BWMD-J0FaT_yufN-D-HdTg3Td4JY' target='_blank' className='text-text-light dark:text-text-dark opacity-80 hover:opacity-95 font-medium text-xl transition-opacity duration-150'>LinkedIn</Link>
             <ThemeSwitcher />
             {user ? (
               <div className='relative w-full px-16 flex flex-col gap-y-3 items-center'>

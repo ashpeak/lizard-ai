@@ -134,7 +134,7 @@ export default function Home() {
           </div>
 
           <div className='w-[19rem] lg:w-[27rem]'>
-            <video className='rounded-xl md:rounded-3xl transition-transform duration-200' muted="true" autoPlay={true} loop={true} playsInline="" src="https://storage.googleapis.com/fliki/public/video/features/hero/avatar.mp4"></video>
+            <video className='rounded-xl md:rounded-3xl transition-transform duration-200' muted={true} autoPlay={true} loop={true} playsInline="" src="https://storage.googleapis.com/fliki/public/video/features/hero/avatar.mp4"></video>
           </div>
         </div>
 
@@ -200,7 +200,7 @@ export default function Home() {
         <p className='cursor-pointer hover:opacity-90 transition-opacity duration-150 text-[1.125rem] text-center opacity-70'>© {year} Blink. All rights reserved.</p>
         <p className='cursor-pointer hover:opacity-90 transition-opacity duration-150 text-[1.125rem] text-center opacity-70'>Made with ❤️ by Ashish Singh</p>
         <div className='flex items-center justify-center gap-4 mt-3'>
-          <Link to='https://www.linkedin.com/in/ashishsingh09dev/?profileId=ACoAADORLc0BWMD-J0FaT_yufN-D-HdTg3Td4JY' target='_blank' className='hover:scale-110 cursor-pointer hover:opacity-90 transition-opacity duration-150 text-[1.125rem] text-center opacity-70'><FaLinkedin size={21} /></Link>
+          <Link to='https://www.linkedin.com/in/ashpeak/?profileId=ACoAADORLc0BWMD-J0FaT_yufN-D-HdTg3Td4JY' target='_blank' className='hover:scale-110 cursor-pointer hover:opacity-90 transition-opacity duration-150 text-[1.125rem] text-center opacity-70'><FaLinkedin size={21} /></Link>
           <Link to='https://github.com/ashish-singh09' target='_blank' className='hover:scale-110 cursor-pointer hover:opacity-90 transition-all duration-150 text-[1.125rem] text-center opacity-70'><FaGithub size={21} /></Link>
         </div>
       </div>
