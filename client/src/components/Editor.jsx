@@ -30,8 +30,9 @@ export default function Editor() {
   const [name, setName] = useState(false);
   const [timeline, setTimeline] = useState(0);
   const [modal, setModal] = useState({
-    open: false,
-    type: 'media'
+    open: true,
+    // type: 'media'
+    type: 'notification'
   });
   const [downloadModal, setDownloadModal] = useState(false);
   const [activeScript, setActiveScript] = useState(0);
@@ -119,18 +120,21 @@ export default function Editor() {
       }
     }
 
-    toast.promise(
-      createVideo(script, bgMusic, musicState, id),
-      {
-        loading: 'Preparing your video... Hang tight!',
-        success: 'Creating your video. You will be emailed when it is ready',
-        error: (error) => {
-          setDownloadModal(false);
-          return error;
-        },
-        duration: 6000
-      }
-    );
+    setDownloadModal(false);
+    setModal({ open: true, type: 'notification' });
+
+    // toast.promise(
+    //   createVideo(script, bgMusic, musicState, id),
+    //   {
+    //     loading: 'Preparing your video... Hang tight!',
+    //     success: 'Creating your video. You will be emailed when it is ready',
+    //     error: (error) => {
+    //       setDownloadModal(false);
+    //       return error;
+    //     },
+    //     duration: 6000
+    //   }
+    // );
   }
 
   const download = async () => {

@@ -16,7 +16,7 @@ export default function StockMusicLibrary({ handleClose }) {
         isPlaying: false,
         link: ''
     });
-    const [audio, setAudio] = useState(new Audio());
+    const [audio, _] = useState(new Audio());
 
 
     const durationToTime = (duration) => {

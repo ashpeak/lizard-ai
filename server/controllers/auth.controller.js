@@ -57,7 +57,7 @@ AuthController.signup = async (req, res) => {
             email: email.toLowerCase(),
             firstName: fName.charAt(0).toUpperCase() + fName.slice(1),
             lastName: lName.charAt(0).toUpperCase() + lName.slice(1),
-            avatar: 'https://res.cloudinary.com/dhfuu5omv/image/upload/f_auto,q_auto/v1/bulbul/gwmnjezsthsil3mstwbo',
+            avatar: `https://api.dicebear.com/5.x/thumbs/png?shapeColor=FD8A8A,F1F7B5,82AAE3,9EA1D4,A084CA,EBC7E8,A7D2CB,F07DEA,EC7272,FFDBA4,59CE8F,ABC270,FF74B1,31C6D4&backgroundColor=554994,594545,495579,395144,3F3B6C,2B3A55,404258,344D67&translateY=5&&seed=${Date.now()}&scale=110&eyesColor=000000,ffffff&faceOffsetY=0`,
             role: 'User',
             updatedAt: Date.now(),
         });
@@ -91,7 +91,7 @@ AuthController.login = async (req, res) => {
                 email: userInfo.email,
                 firstName: userInfo.given_name,
                 lastName: userInfo.family_name || '',
-                avatar: userInfo.picture,
+                avatar: `https://api.dicebear.com/5.x/thumbs/png?shapeColor=FD8A8A,F1F7B5,82AAE3,9EA1D4,A084CA,EBC7E8,A7D2CB,F07DEA,EC7272,FFDBA4,59CE8F,ABC270,FF74B1,31C6D4&backgroundColor=554994,594545,495579,395144,3F3B6C,2B3A55,404258,344D67&translateY=5&&seed=${userInfo.sub}&scale=110&eyesColor=000000,ffffff&faceOffsetY=0`,
             });
             user = await newUser.save();
         }
@@ -152,7 +152,7 @@ AuthController.sendEmail = async (req, res) => {
 
         await sendEmail(email, url);
 
-        return res.status(200).send('Email sent.');
+        return res.status(200).send('Email sent. \nCheck your spam folder also.');
 
     } catch (error) {
         console.log(error);

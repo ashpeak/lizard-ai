@@ -27,6 +27,7 @@ MediaController.getMedia = async (req, res) => {
 
         let { query, type } = req.body;
         if (!type) type = "video";
+        if (!query) query = "";
 
         let reqOptions = {
             url: `https://api.fliki.ai/rpc/mediaStock.list?batch=1&input=%7B%220%22%3A%7B%22text%22%3A%22${query}%22%2C%22type%22%3A%22${type}%22%2C%22page%22%3A1%2C%22playbackId%22%3A%22670d596b3c1bc4ab31a06a96%22%2C%22sceneId%22%3A%22670d596b3c1bc4ab31a06a99%22%2C%22filter%22%3A%22music%22%7D%7D`,
@@ -61,11 +62,12 @@ MediaController.getMusic = async (req, res) => {
             "Authorization": "Bearer " + process.env.FLIKI_AUTH_KEY
         }
 
-        let { query } = req.body;
-        if (!type) type = "video";
+        let { query, filter } = req.body;
+        if (!filter) type = "music";
+        if (!query) query = "";
 
         let reqOptions = {
-            url: `https://api.fliki.ai/rpc/mediaStock.list?batch=1&input=%7B%220%22%3A%7B%22text%22%3A%22${query}%22%2C%22type%22%3A%22music%22%2C%22page%22%3A1%2C%22playbackId%22%3A%22670d596b3c1bc4ab31a06a96%22%2C%22sceneId%22%3A%22670d596b3c1bc4ab31a06a99%22%2C%22filter%22%3A%22music%22%7D%7D`,
+            url: `https://api.fliki.ai/rpc/mediaStock.list?batch=1&input=%7B%220%22%3A%7B%22text%22%3A%22${query}%22%2C%22type%22%3A%22audio%22%2C%22page%22%3A1%2C%22playbackId%22%3A%22670d596b3c1bc4ab31a06a96%22%2C%22sceneId%22%3A%22670d596b3c1bc4ab31a06a97%22%2C%22filter%22%3A%22${filter}%22%7D%7D`,
             method: "GET",
             headers: headersList,
         }

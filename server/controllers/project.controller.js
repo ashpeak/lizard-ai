@@ -9,6 +9,10 @@ const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 const project = {};
 
+const escapeLineBreaks = (jsonString) => {
+    return jsonString.replace(/(?<!\\)"[^"]*?(?<!\\)\n[^"]*?"/g, match => match.replace(/\n/g, " "));
+  }
+
 const generateScript = (idea, language) => {
 
     const prompt = `Create a professional, 60-second YouTube Shorts script titled '${idea}' The output should be an array of objects where each object represents a scene, concise fact. Each object should contain a 'text' field. The tone should be educational and professional, targeted at a general audience. Keep the language simple yet accurate and ensure that the overall length fits within 60 seconds when spoken at a moderate pace.\n\nOutput format:\n\nAn improved and better title with title field and an Array of objects with a Text field containing a short, engaging fact.\n\n-The tone is professional.\n-The script is in ${language}.\n-The duration is 60 seconds.`;
@@ -17,9 +21,8 @@ const generateScript = (idea, language) => {
         try {
             model.generateContent(prompt)
             .then(result => {
-                console.log(result.response.text());                
-                let parsed = JSON.parse(result.response.text().slice(7, -3));
-                console.log(parsed);                
+                let parsed = result.response.text().slice(7, -3);
+                parsed = JSON.parse(escapeLineBreaks(parsed));
                 resolve(parsed);
             }).catch(error => {
                 reject(error);

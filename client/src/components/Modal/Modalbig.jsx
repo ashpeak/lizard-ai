@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import Backdrop from '../Backdrop/Backdrop';
 import { AiOutlineClose } from 'react-icons/ai';
 import { BiSolidImageAlt } from 'react-icons/bi';
-import { IoLibrary } from 'react-icons/io5';
+import { IoLibrary, IoWarningOutline } from 'react-icons/io5';
 import MyLibrary from '../MyLibrary';
 import StockLibrary from '../StockLibrary';
 import StockMusicLibrary from '../StockMusicLibrary';
@@ -25,8 +25,6 @@ export default function Modal({ handleClose, selectImage, mediaQuery, mutation, 
     };
     const [active, setActive] = useState("stock");
 
-    console.log(type);
-
     return (
         <Backdrop onClick={handleClose}>
             <motion.div
@@ -41,24 +39,28 @@ export default function Modal({ handleClose, selectImage, mediaQuery, mutation, 
             >
                 <div className='w-full'>
                     <div className='flex opacity-70 justify-between items-center border-b border-border-light dark:border-border-dark pr-4 bg-[#e7e5e5] dark:bg-[#292928] w-full rounded-t-xl'>
-                        <div className='flex items-center'>
-                            <button onClick={() => setActive("stock")} className={(active === "stock" ? "border-b border-text-light dark:border-border-light" : "") + ' flex items-center gap-1 rounded-ss-xl opacity-100 px-4 py-2 hover:bg-neutral-300 transition-colors duration-200 cursor-pointer hover:dark:bg-neutral-700'}>
-                                <IoLibrary size={15} />
-                                <h2>Stock library</h2>
-                            </button>
-                            {type !== "voiceOver" && (
-                                <button onClick={() => setActive("my")} className={(active === "my" ? "border-b border-text-light dark:border-border-light" : "") + ' flex items-center gap-1 opacity-100 px-4 py-2 hover:bg-neutral-300 transition-colors duration-200 cursor-pointer hover:dark:bg-neutral-700'}>
-                                    <BiSolidImageAlt size={15} />
-                                    <h2>My library</h2>
+                        {type !== "notification" ? (
+                            <div className='flex items-center'>
+                                <button onClick={() => setActive("stock")} className={(active === "stock" ? "border-b border-text-light dark:border-border-light" : "") + ' flex items-center gap-1 rounded-ss-xl opacity-100 px-4 py-2 hover:bg-neutral-300 transition-colors duration-200 cursor-pointer hover:dark:bg-neutral-700'}>
+                                    <IoLibrary size={15} />
+                                    <h2>Stock library</h2>
                                 </button>
-                            )}
-                            {type === "media" && (
-                                <button onClick={() => setActive("utube")} className={(active === "utube" ? "border-b border-text-light dark:border-border-light" : "") + ' flex items-center gap-1 opacity-100 px-4 py-2 hover:bg-neutral-300 transition-colors duration-200 cursor-pointer hover:dark:bg-neutral-700'}>
-                                    <BiSolidImageAlt size={15} />
-                                    <h2>Youtube</h2>
-                                </button>
-                            )}
-                        </div>
+                                {type !== "voiceOver" && (
+                                    <button onClick={() => setActive("my")} className={(active === "my" ? "border-b border-text-light dark:border-border-light" : "") + ' flex items-center gap-1 opacity-100 px-4 py-2 hover:bg-neutral-300 transition-colors duration-200 cursor-pointer hover:dark:bg-neutral-700'}>
+                                        <BiSolidImageAlt size={15} />
+                                        <h2>My library</h2>
+                                    </button>
+                                )}
+                                {type === "media" && (
+                                    <button onClick={() => setActive("utube")} className={(active === "utube" ? "border-b border-text-light dark:border-border-light" : "") + ' flex items-center gap-1 opacity-100 px-4 py-2 hover:bg-neutral-300 transition-colors duration-200 cursor-pointer hover:dark:bg-neutral-700'}>
+                                        <BiSolidImageAlt size={15} />
+                                        <h2>Youtube</h2>
+                                    </button>
+                                )}
+                            </div>
+                        ) : (
+                            <div></div>
+                        )}
                         <motion.button className='p-[0.3rem] transition-colors duration-200 hover:dark:bg-[#535353] hover:text-[#fff] hover:bg-[#4d4d4d] focus:outline-none rounded-full' onClick={handleClose} whileTap={{ translateY: 1.1 }}>
                             <AiOutlineClose size={15} />
                         </motion.button>
@@ -91,6 +93,25 @@ export default function Modal({ handleClose, selectImage, mediaQuery, mutation, 
                         <div className='flex flex-col opacity-70 gap-3 items-center justify-center h-[80vh]'>
                             <h1 className='text-lg font-semibold'>Coming soon...</h1>
                             <GiMagicGate size={50} />
+                        </div>
+                    )}
+
+                    {(type === "notification") && (
+                        <div className='flex flex-col opacity-70 gap-3 items-center justify-center h-[80vh] mx-4 md:mx-8'>
+                            <IoWarningOutline size={70} />
+
+                            <h1 className='text-lg font-semibold w-full text-start'>Dear Users,</h1>
+                            <div>
+                                <p>We have temporarily paused video exporting service due to high server costs. The rendering process, which uses the ffmpeg library, requires significant server resources. To manage costs and maintain the overall performance of our platform, this service is currently on hold.</p>
+                                <br />
+                                <p>
+                                    You can clone the github repo to see the actual working version. We appreciate your understanding and patience during this time.
+                                </p>
+                                <br />
+                                <p>
+                                    - The Blink.ai Team
+                                </p>
+                            </div>
                         </div>
                     )}
                     {type === "voiceOver" && (
